@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Thu Apr  2 01:01:11 2026
+# Process ID         : 24708
+# Current directory  : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_rst_clk_wiz_0_100M_0_synth_1
+# Command line       : vivado.exe -log design_1_rst_clk_wiz_0_100M_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_rst_clk_wiz_0_100M_0.tcl
+# Log file           : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_rst_clk_wiz_0_100M_0_synth_1/design_1_rst_clk_wiz_0_100M_0.vds
+# Journal file       : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_rst_clk_wiz_0_100M_0_synth_1\vivado.jou
+# Running On         : Emanuel
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx  
+# CPU Frequency      : 2096 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 14968 MB
+# Swap memory        : 12884 MB
+# Total Virtual      : 27852 MB
+# Available Virtual  : 4523 MB
+#-----------------------------------------------------------
+source design_1_rst_clk_wiz_0_100M_0.tcl -notrace
