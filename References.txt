@@ -1,0 +1,219 @@
+https://www.researchgate.net/publication/394679184_DPReF_Decentralized_Key_Generation_Using_Physical-Related_Functions
+https://dl.acm.org/doi/10.1145/3762187
+DPReF: Decentralized Key Generation Using Physical-Related Functions
+
+
+https://www.researchgate.net/publication/395614756_Late_Breaking_Results_The_Hidden_Risks_of_Activation_Duration_in_PLPUFs
+https://ieeexplore.ieee.org/document/11132847
+Late Breaking Results: The Hidden Risks of Activation Duration in PLPUFs
+
+
+https://www.researchgate.net/publication/221437407_Pseudo-LFSR_PUF_A_Compact_Efficient_and_Reliable_Physical_Unclonable_Function
+https://ieeexplore.ieee.org/document/6128581
+Pseudo-LFSR PUF: A Compact, Efficient and Reliable Physical Unclonable Function
+
+
+https://www.researchgate.net/publication/387976058_Resilient_Endurance-Aware_NVM-based_PUF_against_Learning-based_Attacks
+https://arxiv.org/abs/2501.06367
+Resilient Endurance-Aware NVM-based PUF against Learning-based Attacks
+
+
+https://www.researchgate.net/publication/391689106_Design_of_Pseudo-LFSR_Based_Physical_Unclonable_Function
+https://tjer.squ.edu.om/journal/vol21/iss2/9/
+Design of Pseudo-LFSR Based Physical Unclonable Function
+
+https://www.researchgate.net/publication/367047819_Designing_a_Strong_Physically_Unclonable_Function_Using_Low_Power_LFSR
+https://ebooks.iospress.nl/doi/10.3233/ATDE221237
+Designing a Strong Physically Unclonable Function Using Low Power LFSR
+
+
+https://www.researchgate.net/publication/333156195_A_Lightweight_LFSR-Based_Strong_Physical_Unclonable_Function_Design_on_FPGA_January_2019
+https://ieeexplore.ieee.org/document/8716727
+A Lightweight LFSR-Based Strong Physical Unclonable Function Design on FPGA>
+
+https://www.researchgate.net/publication/337691693_A_lightweight_and_secure-enhanced_Strong_PUF_design_on_FPGA
+https://www.jstage.jst.go.jp/article/elex/16/24/16_16.20190695/_article
+A lightweight and secure-enhanced Strong PUF design on FPGA
+
+
+https://www.researchgate.net/publication/317272100_Improved_Reliability_of_FPGA-Based_PUF_Identification_Generator_Design
+https://dl.acm.org/doi/10.1145/3053681
+Improved Reliability of FPGA-Based PUF Identiﬁcation Generator Design
+
+
+https://www.researchgate.net/publication/347885455_A_large-scale_comprehensive_evaluation_of_single-slice_ring_oscillator_and_PicoPUF_bit_cells_on_28-nm_Xilinx_FPGAs
+https://link.springer.com/article/10.1007/s13389-020-00244-5?utm_source=researchgate.net&utm_medium=article
+A large-scale comprehensive evaluation of single-slice ring oscillator and PicoPUF bit cells on 28-nm Xilinx FPGAs
+
+
+https://www.researchgate.net/publication/332219171_XOR-based_low-cost_reconfigurable_PUFs_for_IoT_security
+https://dl.acm.org/doi/10.1145/3274666
+XOR-based low-cost reconfigurable PUFs for IoT security
+
+
+https://www.researchgate.net/publication/370447855_An_Efficient_Ring_Oscillator_PUF_Using_Programmable_Delay_Units_on_FPGA
+https://dl.acm.org/doi/10.1145/3593807
+An Efficient Ring Oscillator PUF Using Programmable DelayUnits on FPGA
+
+
+https://www.researchgate.net/publication/338737609_On_the_Confidence_in_Bit-Alias_Measurement_of_Physical_Unclonable_Functions
+https://arxiv.org/abs/2001.07660
+On the Confidence in Bit-Alias Measurement of Physical Unclonable Functions
+
+
+https://www.researchgate.net/publication/375488263_A_Practical_Approach_to_Estimate_the_Min-Entropy_in_PUFs
+https://link.springer.com/article/10.1007/s41635-023-00139-x?utm_source=researchgate.net&utm_medium=article
+A Practical Approach to Estimate the Min-Entropy in PUFs
+
+
+https://www.researchgate.net/publication/338762930_Efficient_Bound_for_Conditional_Min-Entropy_of_Physical_Unclonable_Functions_Beyond_IID
+https://arxiv.org/abs/2001.07994
+Efficient Bound for Conditional Min-Entropy of Physical Unclonable Functions Beyond IID
+
+
+https://dl.acm.org/doi/abs/10.1145/3801570
+A Lightweight PUF With Immunity to Machine Learning AtacksBased on a Weak-PUF-Assisted Reconfigurable LFSR and TemporalFeedback
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926026000106
+Design of a dynamic obfuscation-based strong PUF resistant to modeling attacks and mutual authentication protocol
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926021000766
+FPGA-based Physical Unclonable Functions A comprehensive overview of theory and architectures
+
+
+https://www.sciencedirect.com/science/article/pii/S0167404826000611
+Modeling of physical unclonable functions PUF A systematic literature review
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926019304171
+Implementation of pseudo-linear feedback shift register-based physical unclonable functions on silicon and sufficient Challenge–Response pair acquisition using Built-In Self-Test before shipping
+
+
+https://www.sciencedirect.com/science/article/pii/S1879239125003169
+Authentication scheme resistant to machine learning based on obfuscation of multiple PUF responses
+
+
+https://www.sciencedirect.com/science/article/pii/S002002551930605X
+Physical unclonable functions based secret keys scheme for securing big data infrastructure communication
+
+
+https://www.sciencedirect.com/science/article/pii/S0026271425003543
+A temperature-invariant and ML-resilient, RO PUF design with improved security and performance metrics
+
+
+https://www.sciencedirect.com/science/article/pii/S2214212623001278
+Modeling and physical attack resistant authentication protocol with double PUFs
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926025001956
+Efficient, reliable, and secure PUF architecture with temperature invariance and ML attack resilience
+
+
+https://www.sciencedirect.com/science/article/pii/S1879239126000937
+NLFSR PUF - A lightweight and reliable strong PUF with modeling-attack resistance
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926025001166
+A lightweight general PUF framework for resisting machine learning attacks
+
+
+https://www.sciencedirect.com/science/article/pii/S2214209625001184
+PMF-UAV A lightweight and robust PUF-enabled multi-factor authentication and key agreement protocol for UAV-assisted secure communication
+
+
+https://www.sciencedirect.com/science/article/pii/S0141933116303441
+FPGA implementation of SRAM PUFs based cryptographically secure pseudo-random number generator
+
+
+https://www.sciencedirect.com/science/article/pii/S2542660523003645
+Lightweight encryption with data and device integrity using NLFSR and PUF for the Internet of Medical Things
+
+
+https://www.researchgate.net/publication/357920997_Design_of_Lightweight_and_Configurable_Strong_Physical_Unclonable_Function
+https://www.sciengine.com/JCADC/doi/10.3724/SP.J.1089.2021.18744
+Design of Lightweight and Configurable Strong Physical Unclonable Function
+
+https://www.researchgate.net/publication/331291485_Advanced_PUF_Protocol_A_Machine_Learning_Resilient_PUF-based_Protocol_for_Lightweight_Mutual_Authentication?channel=doi&linkId=5c709868a6fdcc471594215e&showFulltext=true
+Advanced PUF Protocol A Machine Learning Resilient PUF-based Protocol for Lightweight Mutual Authentication
+
+
+https://www.researchgate.net/publication/352008361_A_Lightweight_PUF-Based_Authentication_Protocol_Using_Secret_Pattern_Recognition_for_Constrained_IoT_Devices
+https://ieeexplore.ieee.org/document/9444356
+A Lightweight PUF-Based Authentication Protocol Using Secret Pattern Recognition for Constrained IoT Devices
+
+
+https://www.researchgate.net/publication/313543781_A_PUF-based_paradigm_for_IoT_security
+A PUF-based paradigm for IoT security
+
+
+https://www.researchgate.net/publication/308708405_Study_of_different_silicon_Physical_Unclonable_Functions
+Study of different silicon Physical Unclonable Functions
+
+
+https://www.researchgate.net/publication/261086656_Self-Timed_Physically_Unclonable_Functions
+Self-Timed Physically Unclonable Functions
+
+
+https://www.researchgate.net/publication/226577915_Hardware_Intrinsic_Security_from_Physically_Unclonable_Functions
+Hardware Intrinsic Security from Physically Unclonable Functions
+
+
+https://www.researchgate.net/publication/304934846_Design_of_silicon_Physical_Unclonable_Function_for_authentication_of_a_multicore_device
+Design of silicon Physical Unclonable Function for authentication of a multicore device
+
+
+https://www.researchgate.net/publication/353782618_PUF_Based_Authenticated_Key_Exchange_Protocol_for_IoT_without_Verifiers_and_Explicit_CRPs
+https://ieeexplore.ieee.org/document/9509506
+PUF Based Authenticated Key Exchange Protocol for IoT without Verifiers and Explicit CRPs
+
+
+https://dl.acm.org/doi/10.1145/3591464
+Physical Unclonable Functions (PUF) for IoT Devices
+
+
+https://link.springer.com/chapter/10.1007/978-1-4614-1362-2_11
+https://www.semanticscholar.org/paper/A-Systematic-Method-to-Evaluate-and-Compare-the-of-Maiti-Gunreddy/8af77039fe63c70b1c883870e59b08234b4035a7
+A Systematic Method to Evaluate and Compare the Performance of Physical Unclonable Functions
+
+
+https://www.sciencedirect.com/science/article/pii/S0167926023001554
+CAPUF - Design of a configurable circular arbiter PUF with enhanced security and hardware efficiency
+
+
+https://www.mdpi.com/2410-387X/7/4/55#
+FPGA-Based PUF Designs A Comprehensive Review and Comparative Analysis
+
+
+https://ieeexplore.ieee.org/document/6965637
+Helper Data Algorithms for PUF-Based Key Generation - Overview and Analysis
+
+https://link.springer.com/article/10.1186/s42400-024-00308-7
+Deep neural network modeling attacks on arbiter-PUF-based designs
+https://eprint.iacr.org/2021/555.pdf
+Neural Network Modeling Attacks on Arbiter-PUF-Based Designs
+
+
+https://www.researchgate.net/publication/340228939_PUF-IPA_A_PUF-based_Identity_Preserving_Protocol_for_Internet_of_Things_Authentication
+PUF-IPA - A PUF-based Identity Preserving Protocol for Internet of Things Authentication
+
+
+https://dlnext.acm.org/doi/pdf/10.1145/2593069.2593192
+PUFatt - Embedded Platform Attestation Based on Novel Processor-Based PUFs
+
+
+https://www.semanticscholar.org/paper/Physically-Unclonable-Functions:-A-Survey-and-Our-Katoh-Nakura/d2f89eea2daa71ce3c56d79dd27ce29836b3843c
+Physically Unclonable Functions - A Survey and Our Direction
+
+
+https://www.mdpi.com/2076-3417/14/5/1700
+Strengthening Internet of Things Security Surveying Physical Unclonable Functions for Authentication, Communication Protocols, Challenges, and Applications
+
+
+https://www.preprints.org/manuscript/202501.1559
+Survey on Hardware Security - PUFs, Trojans, and Side-Channel Attacks
+
+
+https://arxiv.org/pdf/1907.12525
+A Survey on Physical Unclonable Function (PUF)-based Security Solutions for Internet of Things
