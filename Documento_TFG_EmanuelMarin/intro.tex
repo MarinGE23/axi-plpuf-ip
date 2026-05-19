@@ -1,0 +1,207 @@
+%% ---------------------------------------------------------------------------
+%% intro.tex
+%% Introducción
+%% ---------------------------------------------------------------------------
+
+\chapter{Introducción}
+\label{chp:intro}
+
+La seguridad en los sistemas embebidos ha adquirido un papel
+fundamental debido al crecimiento acelerado del Internet de las Cosas (IoT), los
+dispositivos móviles y las infraestructuras industriales interconectadas. En este nuevo
+escenario tecnológico, millones de dispositivos operan de forma distribuida y, en muchos
+casos, en entornos físicamente accesibles, lo que incrementa significativamente la
+superficie de ataque \cite{shamsoshoara_2020_puf}. Como consecuencia, garantizar la autenticidad, integridad y
+confiabilidad de cada dispositivo se convierte en un requisito esencial para prevenir
+clonación, falsificación y accesos no autorizados.
+
+Tradicionalmente, la seguridad criptográfica se fundamenta en el uso de claves secretas
+almacenadas en memorias no volátiles. Sin embargo, este enfoque introduce una debilidad
+estructural: la información sensible permanece físicamente almacenada dentro del
+dispositivo, quedando expuesta a ataques invasivos y semi-invasivos capaces de extraer
+las claves directamente del hardware \cite{hou_2019_lightweight}. Esta problemática es
+especialmente crítica en plataformas embebidas de bajo costo y recursos limitados, donde
+la incorporación de mecanismos avanzados de protección física resulta compleja o
+económicamente inviable.
+
+Ante esta limitación, las Funciones Físicas No Clonables (PUFs, por sus siglas en inglés
+\textit{Physical Unclonable Functions}) han emergido como una alternativa prometedora
+para el establecimiento de raíces de confianza en hardware. Las PUFs explotan las
+variaciones físicas inherentes al proceso de fabricación de los
+circuitos integrados para generar respuestas únicas e irrepetibles, eliminando la
+necesidad de almacenar claves criptográficas de forma permanente. Gracias a esta
+propiedad, las PUFs permiten implementar mecanismos de autenticación, identificación de
+dispositivos y generación dinámica de claves con un nivel elevado de resistencia frente
+a ataques físicos \cite{handschuh_2011_hardware, shamsoshoara_2020_puf}.
+
+Dentro de las múltiples arquitecturas existentes, la variante
+PLPUF (\textit{Pseudo Linear Feedback Shift Register PUF}) representa una solución
+particularmente atractiva para plataformas reconfigurables. A diferencia de otras
+implementaciones basadas en retardos o elementos de memoria, el PLPUF emplea lógica
+combinacional para generar respuestas multibit a partir de un único desafío, logrando
+una implementación compacta, eficiente en área y altamente parametrizable
+\cite{hori_2011_pseudolfsr}. Estas características lo convierten en un candidato idóneo
+para su integración en sistemas embebidos modernos basados en FPGA.
+
+En este contexto, el presente trabajo propone el diseño, implementación e integración
+de un módulo PLPUF programable como periférico dentro de un
+\textit{System-on-Chip} (SoC) basado en FPGA. El módulo se conecta mediante la interfaz
+estándar AXI y es controlado por el procesador suave MicroBlaze~V sobre la plataforma
+Basys3 con FPGA Artix-7. Este enfoque elimina la dependencia de almacenamiento persistente de claves,
+fortaleciendo la seguridad a nivel físico, y provee una plataforma experimental
+para evaluar esquemas de autenticación y generación dinámica de claves
+en sistemas embebidos con recursos limitados.
+
+De esta manera, el proyecto se posiciona en la intersección entre el diseño de sistemas
+embebidos y la seguridad de hardware, contribuyendo al desarrollo de soluciones abiertas,
+reconfigurables y reproducibles orientadas a fortalecer la seguridad desde el propio
+nivel físico del dispositivo.
+
+% ---------------------------------------------------------------------------
+\section{Antecedentes del proyecto}
+
+\subsection{Descripción de la institución}
+
+El Instituto Tecnológico de Costa Rica (TEC) es una institución pública de educación
+superior fundada en 1971 con el propósito de impulsar el desarrollo científico y
+tecnológico del país. A lo largo de su trayectoria, el TEC se ha consolidado como un
+referente nacional en formación profesional e investigación aplicada, destacándose por
+su enfoque en innovación tecnológica, excelencia académica y compromiso con el desarrollo
+sostenible \cite{TEC_general}.
+
+El presente proyecto se desarrolla en la Escuela de Ingeniería en Computadores, unidad
+académica orientada a la integración de conocimientos en Electrónica y Ciencias de la
+Computación. Esta escuela promueve activamente la participación estudiantil en proyectos
+de investigación y desarrollo en áreas como diseño digital, sistemas embebidos,
+verificación de hardware, inteligencia artificial y seguridad informática.
+
+\subsection{Área de conocimiento del proyecto}
+
+El trabajo se enmarca dentro del área de Sistemas Embebidos, al involucrar el diseño e
+implementación de un módulo hardware sobre una arquitectura reconfigurable (FPGA) y su
+integración dentro de un System-on-Chip (SoC) con procesador y periféricos de
+comunicación.
+
+Paralelamente, el proyecto se vincula con la Seguridad de Hardware mediante la
+implementación de una Función Física No Clonable (PUF) como raíz de confianza,
+orientada a la generación de identificadores únicos, protección de datos y autenticación
+de dispositivos sin requerir almacenamiento permanente de claves criptográficas.
+
+\subsection{Trabajos similares}
+
+% ---------------------------------------------------------------------------
+\section{Planteamiento del problema}
+
+\subsection{Contexto del problema}
+
+La implementación de sistemas seguros en plataformas reconfigurables, como las FPGAs,
+se ha convertido en una necesidad crítica frente al incremento de amenazas relacionadas
+con clonación de dispositivos, falsificación de hardware y accesos no autorizados.
+Los mecanismos criptográficos convencionales dependen de claves almacenadas en memorias
+no volátiles, tales como EEPROM, Flash o SRAM con respaldo de batería. Sin embargo,
+estas tecnologías no garantizan protección frente a ataques físicos capaces de extraer
+información sensible directamente del dispositivo \cite{hou_2019_lightweight}.
+
+Esta situación resulta especialmente crítica en el contexto del IoT y sistemas embebidos
+desplegados en entornos abiertos, donde los dispositivos operan con restricciones de
+energía, área y capacidad computacional. La incorporación de módulos adicionales de
+seguridad puede representar una sobrecarga significativa de recursos, dificultando la
+adopción de soluciones robustas \cite{shamsoshoara_2020_puf, alhamarneh_2024_strengthening}.
+
+Durante la fabricación de circuitos integrados surgen variaciones físicas inevitables,
+tales como diferencias en el voltaje de umbral o el espesor del óxido de compuerta.
+Aunque estas variaciones no afectan la funcionalidad lógica del circuito, constituyen
+una fuente de entropía reproducible que puede explotarse para generar
+identificadores únicos de hardware \cite{sudhanya_2016_silicon}.
+
+\subsection{Justificación del problema}
+
+Actualmente no se dispone de un módulo PUF de código abierto, programable y compatible
+con el procesador suave MicroBlaze~V mediante la interfaz AXI. Muchas implementaciones
+reportadas en la literatura presentan limitaciones de accesibilidad, flexibilidad o
+integración dentro de arquitecturas modernas de sistemas embebidos, restringiendo su uso
+en entornos académicos y de investigación \cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}.
+
+El desarrollo de un módulo PLPUF programable e integrable directamente en un SoC permite
+eliminar la dependencia de almacenamiento persistente de secretos, mejorar la seguridad
+a nivel físico y habilitar plataformas experimentales para la evaluación de técnicas
+criptográficas emergentes \cite{delvaux_2015_helper, farha_2019_physical}. Asimismo,
+facilita su adopción en contextos educativos y prototipos de investigación dentro del
+ámbito nacional.
+
+\subsection{Enunciado del problema}
+
+Existe una vulnerabilidad crítica en sistemas embebidos basados en FPGA con procesadores
+suaves debido a la dependencia de claves criptográficas almacenadas en memorias no
+volátiles, las cuales pueden ser extraídas mediante ataques físicos. Esta vulnerabilidad
+se ve agravada por la ausencia de módulos de seguridad de hardware abiertos,
+programables y fácilmente integrables mediante estándares como AXI en arquitecturas
+basadas en MicroBlaze~V dentro de FPGAs de la familia Artix-7.
+
+
+% ---------------------------------------------------------------------------
+\section{Objetivos del proyecto}
+
+\subsection{Objetivo general}
+
+Diseñar un módulo PLPUF programable compatible con el procesador MicroBlaze~V y la
+interfaz AXI, mediante lenguajes de descripción de hardware y herramientas de síntesis
+en FPGA, para su integración en sistemas embebidos orientados a la seguridad.
+
+\subsection{Objetivos específicos}
+
+\begin{enumerate}
+\item Implementar el módulo PLPUF en HDL con ancho parametrizable que genere
+identificadores únicos aprovechando variaciones físicas del hardware mediante
+síntesis en FPGA con AMD Vivado.
+
+\item Desarrollar una interfaz AXI-\textit{slave} que permita el control del módulo
+desde el procesador MicroBlaze~V mediante registros de control y estado.
+
+\item Integrar el módulo dentro de un sistema embebido completo con MicroBlaze~V,
+memoria y UART, utilizando AMD Vitis para el desarrollo del software de control.
+
+\item Evaluar el PLPUF mediante métricas de seguridad como uniformidad, unicidad y
+confiabilidad utilizando pruebas automatizadas de desafío-respuesta y análisis
+estadístico.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\section{Alcances, entregables y limitaciones}
+
+\subsection{Alcances}
+
+El proyecto comprende el diseño, implementación e integración de un módulo PLPUF
+programable en la placa Basys3 con FPGA Artix-7 (XC7A35T-1CPG236C). El módulo será
+incorporado como periférico AXI-\textit{slave} dentro de un sistema SoC con procesador
+MicroBlaze~V, memoria local y comunicación UART. Se desarrollará además el firmware de
+control en lenguaje C utilizando AMD Vitis y se realizará la evaluación estadística del
+módulo mediante métricas estándar de PUFs: uniformidad, unicidad y confiabilidad
+\cite{maiti_2012_systematic, wilde_2020_confidence}.
+
+\subsection{Entregables}
+
+\begin{enumerate}
+\item Código HDL del módulo PLPUF parametrizable con reportes de síntesis.
+\item Módulo AXI-\textit{slave} funcional con documentación del mapa de registros.
+\item Sistema SoC completo con diseño en Vivado, \textit{bitstream} y software de control.
+\item \textit{Dataset} de pares desafío-respuesta e informe de evaluación estadística.
+\end{enumerate}
+
+\subsection{Limitaciones}
+
+\begin{itemize}
+\item El diseño está condicionado por los recursos disponibles en la FPGA Artix-7
+asignada, lo que puede limitar parámetros como el ancho del PLPUF.
+
+\item Las herramientas utilizadas serán exclusivamente AMD Vivado y AMD Vitis.
+
+\item La evaluación estadística se realizará sobre un único dispositivo FPGA, por lo
+que los resultados pueden no generalizarse a otros lotes de fabricación
+\cite{wilde_2020_confidence}.
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

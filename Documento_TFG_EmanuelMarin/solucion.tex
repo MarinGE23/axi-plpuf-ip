@@ -1,0 +1,358 @@
+
+
+%%%%%%%%%%%%%%%%%%%%%% Remember to put everything together and get this done%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Marco metodológico}
+\label{ch:solucion}
+
+Este capítulo explica lo referente a la metodología de implementación usada para la solución. Esto incluye herramientas utilizadas, pasos a seguir para la solución, propuestas de diseño, entre otros. Es importante resaltar que por motivos de confidencialidad ciertas características y detalles serán omitidos en texto y/o diagramas.
+
+A continuación en la tabla \ref{tab:metodology} se muestra un resumen de de la relación entre los objetivos, las herramientas y las propuestas metodológicas.
+
+
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Objetivo Específico}                                                                                                                                                                                   & \textbf{Propuesta Metodológica}                                                                                                                                                                                                                             & \textbf{Herramientas Utilizadas}                                                                                                                        \\ \hline
+\begin{tabular}[c]{@{}l@{}}Desarrollar un “software” que \\ pueda reconocer fallos en los \\ globos de los catéteres cardiacos \\ por medio del procesamiento de \\ imágenes por computadora.\end{tabular}     & \begin{tabular}[c]{@{}l@{}}Propuesta de diseño del motor de decisión \\ - red neuronal convolucional.\\ Proceso de aprendizaje de la red \\ neuronal convolucional.\\ Validación del Modelo de Deep \\ Learning  (Red neuronal convolucional).\end{tabular} & \begin{tabular}[c]{@{}l@{}}Tensorflow 2.0 con API de Keras\\ Numpy\\ OpenCV\end{tabular}                                                                \\ \hline
+\begin{tabular}[c]{@{}l@{}}Implementar un “hardware” que\\  permita realizar el proceso de \\ selección de forma satisfactoria.\end{tabular}                                                                   & Propuesta de diseño del prototipo - hardware                                                                                                                                                                                                                & \begin{tabular}[c]{@{}l@{}}Arduino UNO R3\\ Microscopio de mano Celestron Capture Pro 5MP USB\\ Motor a pasos BYJ-48 y Controlador ULN2003\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Implementar un “hardware” que \\ pueda manipular los globos sin \\ causar daños estructurales.\end{tabular}                                                                         & Propuesta de diseño del prototipo - hardware                                                                                                                                                                                                                & \begin{tabular}[c]{@{}l@{}}Arduino UNO R3\\ Motor a pasos BYJ-48 y Controlador ULN2003\end{tabular}                                                     \\ \hline
+\begin{tabular}[c]{@{}l@{}}Construir un sistema integrado \\ que realice todo el proceso de \\ reconocimiento y detección de \\ los fallos, que indique al usuario \\ si la unidad es defectuosa.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Propuesta de diseño del programa \\ - interfaz de usuario.\\ Diagrama general de la solución.\\ Validación del cumplimiento de los\\  requisitos para el proyecto.\end{tabular}                                                  & \begin{tabular}[c]{@{}l@{}}OpenCV\\ Python QT5\end{tabular}                                                                                             \\ \hline
+\end{tabular}%
+}
+\caption{Propuesta metodológica por objetivo específico}
+\label{tab:metodology}
+\end{table}
+
+
+
+\section{Herramientas de desarrollo}
+
+A continuación se listan todas las herramientas incluidas en el desarrollo de este proyecto y una breve explicación de su uso u objetivo. Posteriormente se procederá a explicar, con detalle, lo utilizado de cada herramienta.
+
+Cabe resaltar que estas herramientas son definidas desde el comienzo del proyecto a base de reuniones de requerimientos con el supervisor del proyecto. Aquello que se lista fue revisado y aceptado por el supervisor del proyecto y pudo haber sido sugerido por el desarrollador, por el supervisor o por regulación interna de la empresa. 
+
+Para cada herramienta (\textit{software}, \textit{hardaware}, etc) se debe realizar una consulta con el departamento competente encargado de certificar que estas se encuentran dentro de las aceptadas por la empresa. 
+
+\begin{enumerate}
+    \item Windows 10: Debido a regulaciones internas de la empresa, se debió utilizar este sistema operativo.
+    \item Python 3: Este lenguaje de programación fue elegido por si extensa compatibilidad con otros lenguajes, herramientas y bibliotecas. Además, este lenguaje es de fácil comprensión (otras personas no tan versadas en el desarrollo de software podría comprender de forma rápida el código fuente) y permite desarrollo de programas de forma rápida. La versión aprobada para este proyecto es la distribución Anaconda con Python 3.7.6 y el \textit{IDE} (ambiente de desarrollo integrado) Spyder 4.0.1.
+    \item PyQT 5: Esta consiste en un \textit{wrapper} (o envoltorio) para la versión de C++ de QT que se incluye cómo una biblioteca en la distribución de Anaconda. Esta biblioteca permite el desarrollo de interfaces gráficas altamente responsivas.
+    \item NumPy: Esta biblioteca consiste en un grupo de funciones y clases para rápido desarrollo de aplicaciones con una amplia componente matemática. 
+    \item Tensorflow - Keras: Biblioteca para el desarrollo de modelos de \textit{machine learning}, este posee un \textit{API} llamado Keras para el desarrollo, entrenamiento y validación ágil y simplificada de modelos de \textit{deep learning}. La única versión permitida es Tensorflow 2.0.
+    \item OpenCV: Biblioteca que provee métodos para desarrollo ágil de programas para visión por computadora. Esta biblioteca permite realizar una manipulación ágil de los dispositivos de captura de vídeo/imagen así cómo de les imágenes como tales.
+    \item Celestron Capture Pro: Consiste en un microscopio de mano manejable por USB. Este es propiedad del departamento en el que se realiza el proyecto y está validado para uso.
+    \item Arduino UNO R3: Plataforma de prototipado de \textit{hardware} simple, esta ofrece un arreglo de componentes que permiten simplificar la confección de los prototipos, pues desde su propio lenguaje (una versión especifica del lenguaje de programación \textit{C}) se pueden controlar sus salidas, así cómo realizar comunicación con una computadora por medio de un puerto serial. Fue elegido debido a su ''transparencia'' (facilidad de conocimiento de los elementos que lo componen), ya que se desea posteriormente pasar el proyecto a un departamento exterior de investigación y desarrollo debe ser posible saber, en su totalidad, que componentes de este fueron utilizados para posterior desarrollo e implementación propietaria.
+    \item Motor paso a paso BYJ-48 y controlador ULN2003: Consiste en un motor de 360 grados y su respectivo controlador. Utilizado por su bajo consumo energético y capacidad de girar 360 grados, además de su simpleza de control.
+    \item LaTex: Lenguaje de descripción de formato de texto para la confección de documentos a base de \textit{script}, utilizado para la confección de la documentación correspondiente al proyecto. Se utilizó Overleaf versión 2.
+
+\end{enumerate}
+
+
+\subsection{Numpy}
+Numpy consiste en un paquete (biblioteca) para el lenguaje de programación Python. Este fue desarrollado para utilizarse en computación científica, contiene métodos y funciones para procesamiento matemático de alga velocidad, entre otros. \cite{numpy_learn}
+
+De esta biblioteca se utilizaron los métodos:
+
+\begin{itemize}
+    \item numpy.expand\_dims(array,axis): Este método permite ampliar la dimensionalidad de un arreglo. La nueva dimensión aparecerá en la posición de eje del array expandido \cite{numpy_learn}.
+    \item numpy.average: este método permite calcular el promedio de los valores en un arreglo.  \cite{numpy_learn}.
+\end{itemize}
+
+\subsection{TensorFlow - Keras}
+"TensorFlow es una plataforma de código abierto de extremo a extremo para el aprendizaje automático. Cuenta con un ecosistema integral y flexible de herramientas, bibliotecas y recursos de la comunidad que les permite a los investigadores impulsar un aprendizaje automático innovador y, a los desarrolladores, compilar e implementar con facilidad aplicaciones con tecnología de AA." Extraído de \cite{tensorflow_main}
+
+Cómo indica el extracto anterior, TensorFlow es una plataforma para el desarrollo de aprendizaje automático (\textit{machine learning}, \textit{deep learning}, etc). Esta provee una forma rápida, ágil, con una curva de aprendizaje manejable, muchos recursos de referencia en linea y una amplia comunidad de desarrolladores al rededor del mundo.
+
+Tensorflow está principalmente desarrollado para utilizarse en el lenguaje de programación Python, sin embargo con el tiempo ha sido liberado en versiones para C++, Java, JavaScript y Go. \cite{tensorflow_docs}
+
+Además, se realizó la integración del API (\textit{Application Programming Interface} o interfaz de programación de aplicaciones) de Keras.
+
+\subsubsection{\textit{API} de Keras}
+
+Keras consiste en un API de alto nivel para el desarrollo de \textit{Deep Learning}, esta provee una forma de codificar, entrenar y validar redes neuronales. Provee desde paquetes de datos para entrenar, cómo modelos de capas, modelos de aprendizaje y la capacidad de desarrollar cualquiera de estos de forma personalizada. Esta fue desarrollada sobre tensorflow y ahora es parte de las versiones oficiales de TensorFlow \cite{keras_main}.
+
+
+\subsection{OpenCV}
+
+OpenCV consiste en una biblioteca de métodos para visión por computadora, entre otras herramientas. Este ofrece una amplia gama de funciones que permiten utilizar todo tipo de dispositivos de vídeo, manipular imágenes y realizar procesamiento de estas mismas de forma rápida, ágil, simple y con una cantidad extensa de fuentes de referencia en su sitio \textit{web}. Se encuentra disponible originalmente para C++ sin embargo existen versiones oficiales para Python y Java. \cite{opencv_about}.
+
+
+\subsubsection{Control de Cámaras y procesamiento de imágenes}
+
+Los métodos utilizados fueron:
+
+\begin{itemize}
+    \item cv2.VideoCapture(deviceID): Este método permite acceder de forma directa y sin mayor complicación al dispositivo de vídeo de identificador numérico dado por \textit{deviceID}, y así extraer cada cuadro grabado utilizado el método \textit{read()} el cual devuelve un indicador de conexión y el cuadro que se encuentra en memoria en ese instante. \cite{opencv_docs}
+    \item cv2.imwrite(path): Este método permite almacenar en la dirección indicada por \textit{path} la imagen. Cabe resaltar que en \textit{path} se incluye el nombre y formato de la imagen.\cite{opencv_docs}
+    \item cv2.cvtColor(numpy\_array, color\_format): Este método permite cambiar el modelo de color de una imagen cargada en memoria cómo un arreglo numérico de \textit{numpy}, indicándolo en la entrada \textit{color\_format}.\cite{opencv_docs}
+    
+\end{itemize}
+
+
+\subsection{Python QT5}
+
+PyQT consiste en un envoltorio (\textit{wrapper}) para el \textit{framework} de desarrollo de aplicaciones QT (originalmente para C++). Este permite hacer uso de todos los métodos y herramientas del QT estándar desde el lenguaje de programación Python. \cite{pyQt_about}
+
+De este \textit{Framework} se utilizaron los siguientes elementos:
+
+\begin{itemize}
+    \item QtWidgets: Se emplearon diversos elementos tipo \textit{widgets} para agregar elementos a la interfaz de usuario. Desde \textit{labels}, campos de texto editables, estilos, botones, selectores, entre otros.
+    \item QtGui: Se emplearon diversos elementos para la confección de ventanas y pintado de imágenes en interfaz.
+    \item QtCore: Se emplearon diversos métodos para mejora de la experiencia de usuario y agilidad de la aplicación.
+\end{itemize}
+
+\subsection{Microscopio de mano Celestron Capture Pro 5MP USB}
+
+Se empleó un microscopio de mano Celestron Capture Pro de 5 Mega píxeles compatible con USB cómo cámara de captura para el sistema. Este provee una taza de captura de 30 cuadros por segundo \cite{celestron}. Al ser compatible con USB es posible realizar uso de este cómo si de una cámara \textit{web} estándar se tratase.El dispositivo es mostrado en la figura \ref{fig:celestron}. 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=8cm]{fig/celestron.jpg}
+\caption[Microscopio de mano Celestron Capture Pro 5 MP USB]{Microscopio de mano Celestron Capture Pro 5 MP USB, Referencia \cite{celestron}}
+\label{fig:celestron}
+\end{figure}
+
+
+
+\subsection{Arduino UNO R3}
+
+Arduino es una plataforma de prototipado de \textit{hardware} simple y eficaz. Esta consiste en una herramienta programable a través de su propia interfaz de usuario (en una computadora personal) \cite{duino}.
+En este caso en especifico se hizo uso del Arduino UNO Rev3 (R3) que posee las siguientes características relevantes a este proyecto (extraído de \cite{duino}):
+
+\begin{itemize}
+    \item Microcontrolador: ATmega328P.
+    \item Pines de entrada salida digital: 14 en total, 6 para manejo de alimentación de energía.
+    \item Memoria Flash de 32 KB (0.5 Kb para arranque).
+    \item SRAM de 2 KB (ARmega328P).
+    \item Velocidad de Reloj de 16MHz.
+    \item Voltaje de Operación: 5 V.
+    \item EEPROM de 1 KB (ARmega328P).
+\end{itemize}
+
+El dispositivo se muestra en la figura \ref{fig:duino}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=8cm]{fig/duino.jpg}
+\caption[Plataforma Arduino UNO R3]{Plataforma Arduino UNO R3, Referencia \cite{duino}}
+\label{fig:duino}
+\end{figure}
+
+Para la comunicación de la computadora del sistema al Arduino se emplearon los siguientes métodos:
+
+\begin{itemize}
+    \item encode(): Permite codificar una hilera de caracteres para enviarse por comunicación UART.
+    \item serial.serial(device\_name,port,timeout): Permite conectarse conectarse al dispositivo indicado por \textit{device\_name}, utilizando el puerto indicado por \textit{port} y esperando máximo una respuesta por el tiempo en segundos indicado por \textit{timeout}. Devuelve un objeto descriptor.
+    \item write(): este método permite escribir al puerto serial descrito por el objeto que retorna el método serial.serial.
+\end{itemize}
+
+Para la comunicación del Arduino a la computadora del sistema se emplearon los siguientes métodos: (extraídos de \cite{stepper})
+
+\begin{itemize}
+    \item serial.begin(port): Permite realizar la conección al puerto serial.
+    \item stepper(steps, out1,out2,out3,out4): es el constructor del objeto para el manejo del motor a pasos. Recibe la cantidad de pasos necesaria para girar un grado, así cómo los pines que se utilizaran para el controlador.
+    \item stepper.setSpeed(speed): permite configurar la rapidez de giro del motor. En otras palabras: que tan velozmente se darán los pasos.
+    \item serial.println(msg): utilizado para enviar un mensaje (\textit{msg}) a través del puerto serial, incluyendo un indicador de finalización de linea. 
+\end{itemize}
+
+
+\subsection{Motor paso a paso BYJ-48 y controlador ULN2003}
+
+Se empleó un motor a pasos BYJ-48 cómo parte de la base para sujetar las unidades a fotografíar. Para simplificar su uso se empleó un controlador especial ULN2003 \cite{prometec}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm, height=6cm]{fig/motor_controller.jpg}
+\caption[Motor a pasos BYJ-48 y su controlador ULN2003]{Motor a pasos BYJ-48 y su controlador ULN2003, Referencia \cite{prometec}}
+\label{fig:duino}
+\end{figure}
+
+
+\section{Propuesta de diseño del prototipo - \textit{hardware}}
+
+En esta sección se busca describir la propuesta utilizada para el diseño de la solución.
+En la figura \ref{fig:generalDiag} se muestra un diagrama del diseño general del prototipo de la herramienta. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=8cm]{fig/generalDiag.png}
+\caption[Diagrama General del Prototipo]{Diagrama General del Prototipo, Referencia propia}
+\label{fig:generalDiag}
+\end{figure}
+
+Se utiliza el programa corriendo en la computadora para el control de los dispositivos de hardware. Por medio de este se le ordena al Arduino activar el controlador del motor para que este gire 90 grados, y capturar una fotografía de las cuatro perspectivas principales del \textit{balloon}, para obtener la información de las tensiones internas de las paredes de la unidad, para garantizar que no hayan desfases entre el giro y la toma de fotografía (captura en medio giro) se propuso un sistema por mensaje y respuesta, en el cual el programa corriendo en la computadora ordena el giro, al este terminar recibe un mensaje para realizar la captura de la fotografía y se repite el proceso hasta completar la vuelta de 360 grados. La captura de fotografías se realiza por medio por medio de la cámara (microscopio). Posteriormente las fotografías capturadas son analizadas por el programa con la presión de un botón en la interfaz de usuario.
+
+Para garantizar que no se le causen daños a las unidades en el proceso de manipulación se propone coordinar con el departamento competente de la empresa que se encarga de impresión tri-dimensional de bases, sujetadores y otras herramientas para que se realice la confección de una base y sujetador que cumplan con las regulaciones internas de la empresa en lo que respecta a la manipulación de unidades de \textit{balloon}.
+
+\section{Propuesta de diseño del programa - interfaz de usuario}
+
+En la figura \ref{fig:usecases} se muestran los casos de uso definidos para el programa.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=10cm]{fig/useCases.png}
+\caption[Casos de uso del programa]{Casos de uso del programa, Referencia propia}
+\label{fig:usecases}
+\end{figure}
+
+Otras características necesarias del programa se presentan a continuación:
+
+\begin{itemize}
+    \item Respuestas visuales ante interacciones (captura de fotos, apertura de fotos, análisis de fotos).
+    \item Almacenado de datos (imágenes tomadas, cargadas y analizadas) de forma ordenada y trazable (jerarquía de carpetas).
+    \item Al cargar imágenes previamente analizadas esta debe recordar el resultado e identificador de la imagen.
+    \item Estable, ágil y responsivo.
+    \item Cumplir con requerimientos y regulaciones internas de la empresa (colores, ergonomía, etc).
+    \item El código fuente debe ser mantenible y ordenado (buenas prácticas de codificación y documentación interna). Se propone seguir la guía de estilo para código python: PEP 8 \cite{pep8}.
+\end{itemize}
+
+Para la interfaz de usuario se presentó el siguiente \textit{mockUp}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16cm, height=8cm]{fig/mockUp.png}
+\caption[\textit{Mockup} de la interfaz de usuario]{\textit{Mockup} de la interfaz de usuario, Referencia propia}
+\label{fig:mockup}
+\end{figure}
+
+Se presentó el siguiente \textit{mockup} para la ventana de estadísticas:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm, height=10cm]{fig/statsmockup.png}
+\caption[\textit{Mockup} de la ventana de estadísticas]{\textit{Mockup} de la ventana de estadísticas, Referencia propia}
+\label{fig:mockup_estats}
+\end{figure}
+
+Para la la ventana de toma de fotografías se presentó el siguiente \textit{mockUp}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16cm, height=10cm]{fig/picsmockup.png}
+\caption[\textit{Mockup} de la ventana de toma de fotografías]{\textit{Mockup} de la ventana de toma de fotografías, Referencia propia}
+\label{fig:mockup_pics}
+\end{figure}
+
+Los \textit{mockup} de las figuras \ref{fig:mockup}, \ref{fig:mockup_estats} y \ref{fig:mockup_pics} fueron aprobados por el supervisor del proyecto.
+
+\section{Propuesta de diseño del motor de decisión - red neuronal convolucional}
+
+El motor de decisión no es más que el algoritmo que se encargará de analizar la fotografía y determinar si esta corresponde a una unidad que pasa o que no pasa los requerimientos.
+
+Debido a los resultados obtenidos por la investigación realizada antes de la concepción de este proyecto se concluyó que no se debía realizar un método matemático explicito pues se ''topó con pared''.
+Por esta razón se tomó la decisión de desarrollar un modelo de aprendizaje de maquina que permitiera de forma no explicita inferir la relación entre las características presentes en las fotografías de las unidades para poder decidir si las unidades cumplen, o no, con los requerimientos de presión soportable.
+
+Por lo antes mencionado se optó por desarrollar una red neuronal convolucional. Gracias a su funcionamiento es posible para esta aprender características significativas de las imágenes que permiten clasificarlas en las categorías deseadas. En nuestro caso queremos poder clasificar las imágenes en dos categorías: pasa o falla. Esto referente a si pasa el mínimo de de presión que debería soportar antes de reventar, o si falla esta prueba.
+
+Ahora, debido a la naturaleza de las redes neuronales no es determinista decir que un modelo que sirve para una aplicación será el mejor para otra o siquiera servirá para esta. Además, los diferentes parámetros a utilizar para la red (función de activación, tamaño de kernel, cantidad de capas, cantidad de neuronas, función de perdida, normalización de datos, cantidad de épocas, tamaño de lote y tamaño de muestra, entre otros) no necesariamente serán los mejores para una aplicación simplemente porque funcionaron para otra. \cite{khanbook}
+
+Por esto se propone trabajar bajo un método iterativo de prueba. Donde se obtengan resultados, se analicen y se realizan cambios en el modelo para intentar obtener mejores resultados, esto hasta que se obtengan resultados satisfactorios. Por supuesto se debe partir de un modelo básico que tenga sentido para la aplicación que se busca.
+
+Se propone comenzar con el siguiente modelo (basado en un ejemplo básico provisto por la documentación de TensorFlow), pues este es utilizado para obtener un buen resultado en la clasificación de animales que aunque no se adapte a nuestro problema (y por lo antes mencionado) muestra que tiene una buena capacidad de representación de problemas, por lo que es considerado un buen lugar para comenzar:
+
+\begin{itemize}
+    \item Modelo secuencial.
+    \item Datos en RGB de 300x300, con cada píxel multiplicado por un factor de 1/255 para obtener valores entre 0 y 1. Se propone trabajar en RGB y no en escala de grises para no perder ningún tipo de información por más mínima que pueda ser.
+    \item Tres capas convolucionales de dos dimensiones, con unidad lineal rectificada de activación.
+    \item kernel de tamaño 3x3 en todas las capas convolucionales.
+    \item Tres capas de \textit{pooling} de máximos, cada una después de una capa convolucional.
+    \item La primer capa convolucional de 16 neuronas, las dos siguientes de 32 y 64 respectivamente.
+    \item Luego de las capas convolucionales y de \textit{pooling} una capa de aplanado (flatten).
+    \item Antes de la capa de salida una capa densa (densamente conectada) de 512 neuronas, activación \textit{ReLu}.
+    \item Cómo capa de salida una capa densa de una neurona, activación \textit{softmax}. Esto pues el \textit{softmax} produce salidas entre 0 y 1, siendo 0 una categoría y 1 la otra. Entre más cercano de uno u otro así de ''segura'' estará la red de la categoría.
+    \item Cómo optimizador una función \textit{Adam} con un \textit{learning rate} de 0.001 (para evitar cambios muy grandes en los valores que puedan ser contraproducentes).
+    \item Y para calcular la perdida: una función de entropía cruzada binaria. Esto pues esta es especial para problemas de clasificación binaria.
+    \item Modelo sin regularización.
+\end{itemize}
+
+La red neuronal a utilizar se puede apreciar en la figura \ref{fig:initial_model}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm, height=8cm]{fig/initial_model.PNG}
+\caption[Visualización en terminal del modelo inicial]{Visualización en terminal del modelo inicial, Referencia propia}
+\label{fig:initial_model}
+\end{figure}
+
+\subsection{Proceso de aprendizaje de la red neuronal convolucional}
+
+El proceso de aprendizaje será estandarizado bajo los siguientes pasos:
+
+\begin{itemize}
+    \item Entrenar el modelo actual con los datos de entrenamiento.
+    \item Probar el modelo con los datos de validación.
+    \item Utilizar un salvador de estados, ara que se almacene el modelo con los mejores valores de perdida en validación. Así si el mejor modelo es obtenido antes de que se completen la totalidad de las épocas este sea almacenado y no se vea sobre escrito por los obtenidos en épocas posteriores que serán inferiores en rendimiento.
+    \item Obtener una matriz de confusión con la distribución de predicciones para cada categoría.
+    \item Calcular los valores para precisión, \textit{recall} y \textit{f-score}.
+    \item Si los resultados para estos valores no son deseables según lo que se estipula más adelante en la sección de validación el modelo debe ser sometido a modificaciones para repetir este proceso.
+    \item Una vez obtenidos resultados deseables el modelo puede ser sometido a otras modificaciones con la intención de mejorar los resultados.
+\end{itemize}
+
+Para los cambios al modelo se contemplan los siguientes parámetros y características:
+
+\begin{itemize}
+    \item Épocas: Consiste en la cantidad de iteraciones que se realizaran sobre el conjunto de datos de aprendizaje. Se propone utilizar: 10, 30, 50, 80 y 100 épocas.
+    \item Inicializador de Kernel: Este consiste en los valores iniciales que tendrán los kernel contenidos en el modelo. Se propone probar con inicializadores con distribución normal y distribución uniforme.
+    \item Regularización: La regularización consiste en un valor de penalización extra en el calculo del error, que permite evitar que el modelo se sobre ajuste a la población de entrenamiento. Se propone utilizar valores cómo: 0.1, 0.01 y 0.001, esto en el caso de que se obtenga sobre ajuste, para ambos tipos: L1 y L2.
+    \item Activación: Se propone utilizar las funciones de activación más comunes: \textit{ReLu}, \textit{TanH}, \textit{Sigmoid} y \textit{LeakyReLu}. Comenzando por \textit{ReLu} y en caso de que los resultados no sean deseables probar con otras. En caso de los resultados no muestren cambios entre una y otra, se propone elegir cualquiera arbitrariamente.
+    \item Tamaño de lote: Consiste en la cantidad de imágenes que se alimentan a la red ''al mismo tiempo''. Se proponen lotes a conveniencia, el valor observado más comúnmente es de 32 pero se propone probar con valores en el rango de 1 a 50 imágenes.
+    \item Normalización de datos: se propone utilizar normalización por división por 255.0 (todos los valores de píxel entre 0 y 1), división por desviación estándar para muestra y resta de media para muestra.
+    \item Tamaños de imagen: Se propone emplear tamaños de 100, 150, 300 y 500 píxeles de alto y ancho. Esto para probar tamaños que permitan pruebas más rápidas sin que se pierda la información relevante en la reducción de la escala.
+    \item \textit{Pooling}: Esta consiste en una capa que permite reducir la dimensionalidad de los datos manteniendo la relación entre estos. Se propone utilizar \textit{pooling} basado en la función \textit{max} (valor máximo), conocida cómo \textit{pooling}.
+    \item Normalización por lote: En casos donde se cuenta con sobre ajuste es posible utilizar normalización por lote para reducirlo. Esta consiste en una capa que normaliza las salidas de la capa anterior antes de pasarlas a la siguiente capa.
+\end{itemize}
+
+El objetivo de cambiar estas características y parámetros es buscar un modelo que se adapte mejor al problema y que los resultados sean más deseables. Debido a la gran cantidad de combinaciones posibles se propone utilizar \textit{early stopping} o \textit{parada temprana}, la cual consiste en que al pasar cierta cantidad de épocas y no verse un cambio (mejora) en una métrica establecida (en este caso perdida de validación) con una precisión establecida (valor arbitrario elegido por el programador) se interrumpe el proceso de aprendizaje. Se propone utilizar una espera de 10 épocas con una precisión al tercer valor decimal (0,001).
+
+Cómo un tipo de apéndice a este proceso se propone también que en caso de que se dude de la ''correctitud'' del modelo, o sea, se sospecha que existen errores en su código cómo que se estén perdiendo valores de pesos o siendo sobrescritos, etc, se realicen pruebas sobre un paquete de datos ya probado y que corresponda a un problema complejo. En este caso se propone el paquete de datos llamado: \textit{horses\_and\_humans}.
+
+Para el entrenamiento se tiene un grupo de imágenes inicial provistas por la empresa, sin embargo este paquete de datos corresponde a 60 imágenes en total, por lo que al dividirlo en paquete de entrenamiento y validación se tendrían muy pocas imágenes por lo que se sospecha que no se obtendrán buenos resultados, considerando que una solución por redes neuronales convolucionales suele requerir un alto número de datos de entrenamiento y una cantidad de imágenes de validación que sea representativa de las posibles entradas obtenidas durante una ejecución final del proyecto. Se propone separar el paquete inicial en 50 imágenes de entrenamiento y 10 de validación, estas siendo: 40 unidades que cumplen y 10 que no en entrenamiento; 7 que cumplen y 3 que no en validación, pues esta es la forma más efectiva que se encontró para su división haciendo bastante clara la necesidad de más datos de entrenamiento. 
+
+Por ende, se propone planear un proceso de extracción de datos, el cual permita obtener una cantidad considerable de datos de entrenamiento y validación, esta realizada por medio de extraer unidades del proceso real de producción, ser fotografiadas bajo la luz polarizada y pasar a un proceso de ''ruptura'' en el cual se revientan las unidades y se determina el valor exacto de presión al que se provocó la ruptura y se determina si la unidad cumplía o no. Cabe mencionar que debido a la efectividad del proceso se espera que sea complicado obtener muchas unidades defectuosas, por lo que se propone coordinar una ejecución de producción bajo variables que provoquen que las unidades no cumplan, para esto se utilizaran documentos internos existentes donde se especifican investigaciones que determinaron cuales variables (y sus valores) suelen producir unidades que no cumplen los requerimientos.
+
+Debido a la naturaleza de este proyecto (prototipo) la cantidad de unidades que se pueden pedir es limitada (por razones de capacidad y demanda de producción), este valor corresponde a 400 unidades en total, para un total de 1600 fotografías, además a este proceso se le agrega que otros factores pueden provocar que las unidades no funcionen para el objetivo del proyecto por defectos de otras índoles que descartan la unidades antes de esta etapa de revisión; por lo que la cantidad de datos puede ser menos a 1600 fotografías.
+
+Es importante estandarizar las condiciones en las que se toman los datos y que además estas sean representativas de las condiciones en las que se llevará a cabo el uso final del prototipo, por lo que se debe realizar la captura de las fotografías con el prototipo final de la misma forma en la que se tomarían las fotografías de las unidades en una ejecución de prueba o final (producción real).
+
+A continuación en la sección de validación del modelo se propone una distribución porcentual de la cantidad de datos para entrenar y validar, esta buscando que se cumpla lo mencionado: gran cantidad de datos de entrenamiento y validación que además sean descriptivos del problema).
+
+
+\subsection{Validación del Modelo de \textit{Deep Learning}  (Red neuronal convolucional)}
+
+La validación del modelo es una de las partes más importantes pues es con lo que se prueba que el modelo diseñado funciona para el problema.
+
+Para validar el modelo se propone:
+
+\begin{itemize}
+    \item Comenzar probando el rendimiento del modelo en paquetes de datos para problemas ''simples''. El objetivo de esto es comprobar que el modelo es capaz de ''aprender'' problemas más simples y, sobre todo, comprobar que el modelo aprende. Esto permite realizar \textit{debugging} del código del modelo.
+    \item Una vez se compruebe que el modelo no posee errores en su código se debe proceder a alimentar los datos de entrenamiento preliminares (paquete de datos brindado al comienzo del proyecto por la empresa), este paquete es pequeño pero sirve como previa del problema.
+    \item Una vez obtenidos los datos de entrenamiento y validación finales estos deben ser alimentados al modelo para comprobar su efectividad en el problema y realizar el proceso iterativo mencionado anteriormente.
+    \item Se propone utilizar un 10\%, como mínimo, del total de los datos  para crear el paquete de datos de validación. Estos deben ser representativos de los 3 grupos principales en los que se pueden dividir las unidades (muy buenas, muy malas y valores cercanos al limite entre las categorías).
+    \item Se propone utilizar \textit{TensorBoard} y/ola biblioteca \textit{MatPlotLib} para visualizar los resultados del modelo de forma gráfica.
+    \item Se espera que este prototipo (al funcionar cómo prueba de concepto) tenga una precisión no menor al \textbf{85\%} en validación, el \textit{recall} no debe ser inferior a un \textbf{90\%} y el \textit{f-score} no puede ser inferior a \textbf{87.4\%}, para que sea aceptable y se pueda considerar el concepto como probado. Debido a la naturaleza delicada del negocio (médico) se toma positivo cómo las unidades que fallan y las unidades que pasan cómo negativos. Esto para que el \textit{recall} refleje la delicadeza de una unidad que falla pasando cómo buena.
+    
+\end{itemize}
+
+
+\section{Diagrama general de la solución}
+
+En la figura \ref{fig:general_sol_model} se muestra el diagrama general de los módulos que componen la solución. La interfaz de usuario es usada cómo módulo principal en el cual se ''importan'' los demás módulos para ser llamados.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16cm, height=10cm]{fig/general_block_diagram.png}
+\caption[Diagrama general de la solución]{Diagrama general de la solución, Referencia propia}
+\label{fig:general_sol_model}
+\end{figure}
+
+
+
+\section{Validación del cumplimiento de los requisitos para el proyecto}
+
+Debido a la naturaleza jerárquica de la empresa y que este proyecto responde ante un supervisor se decide que la validación de cada requisito para el proyecto será validado bajo una reunión con el supervisor donde este podrá comprobar el cumplimiento. Además, el supervisor podrá pedir que se realicen pruebas de uso con personal objetivo para comprobar cualquier requerimiento.
+
