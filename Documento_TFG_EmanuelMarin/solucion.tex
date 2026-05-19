@@ -1,8 +1,860 @@
-
-
-%%%%%%%%%%%%%%%%%%%%%% Remember to put everything together and get this done%%%%%%%%%%%%%%%%%%%%%%
-
+%% ---------------------------------------------------------------------------
+%% solucion.tex
+%% Marco metodológico
+%% ---------------------------------------------------------------------------
 
 \chapter{Marco metodológico}
 \label{ch:solucion}
 
+Este capítulo describe la metodología empleada para el diseño,
+implementación, integración y evaluación del módulo PLPUF como
+periférico AXI dentro de un \textit{System-on-Chip} basado en MicroBlaze~V.
+Se detalla, en primer lugar, la relación entre los objetivos específicos y
+las actividades realizadas; a continuación, las herramientas de desarrollo
+utilizadas; luego, las decisiones de diseño en cada etapa del proyecto
+(módulo HDL, interfaz AXI, integración SoC y software); y, finalmente, el
+protocolo de evaluación estadística del PLPUF.
+
+% ============================================================================
+\section{Propuesta metodológica por objetivo}
+\label{sec:metodologia_obj}
+% ============================================================================
+
+El desarrollo del proyecto se organizó en cuatro etapas alineadas con los
+objetivos específicos definidos en la Sección~\ref{chp:intro}. La
+Tabla~\ref{tab:metodologia} resume la relación entre cada objetivo, las
+actividades principales, los entregables esperados, las herramientas
+empleadas y las estrategias de verificación.
+
+\begin{table}[htbp]
+\centering
+\caption{Propuesta metodológica por objetivo específico.}
+\label{tab:metodologia}
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{3.0cm}|p{3.0cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Objetivo específico} &
+\textbf{Actividades principales} &
+\textbf{Entregables} &
+\textbf{Herramientas} &
+\textbf{Verificación} \\
+\hline
+
+OE1: Implementar el módulo PLPUF en HDL con ancho parametrizable. &
+Definir arquitectura PLPUF.\newline
+Implementar en Verilog.\newline
+Simulación y síntesis.\newline
+Optimización de recursos. &
+Código HDL del PLPUF.\newline
+Reportes de síntesis.\newline
+Resultados de simulación. &
+Vivado.\newline
+Verilog.\newline
+\textit{Testbenches}. &
+Simulación funcional.\newline
+Revisión de tiempos y uso de recursos. \\
+\hline
+
+OE2: Desarrollar una interfaz AXI-\textit{slave} para el control del módulo. &
+Diseño del mapa de registros.\newline
+Implementación AXI-\textit{slave}.\newline
+Integración preliminar.\newline
+Pruebas de lectura/escritura. &
+Módulo AXI-\textit{slave} funcional.\newline
+Mapa de registros documentado. &
+Vivado IP Integrator.\newline
+Plantilla AXI4-Lite. &
+Validación con simulación AXI.\newline
+Pruebas de comunicación con software. \\
+\hline
+
+OE3: Integrar el módulo en un sistema embebido completo con MicroBlaze~V. &
+Construcción del SoC.\newline
+Conexión del PLPUF vía AXI.\newline
+Generación del \textit{bitstream}.\newline
+Desarrollo de software en Vitis. &
+Sistema SoC funcional.\newline
+Software de control.\newline
+\textit{Bitstream} final. &
+Vivado.\newline
+Vitis.\newline
+UART.\newline
+MicroBlaze~V. &
+Comunicación serial exitosa.\newline
+Depuración con Vitis. \\
+\hline
+
+OE4: Evaluar el PLPUF con métricas de seguridad. &
+Pruebas masivas de desafío-respuesta.\newline
+Automatización de recolección.\newline
+Análisis estadístico.\newline
+Comparación con métricas esperadas. &
+\textit{Dataset} de respuestas.\newline
+Informe de evaluación.\newline
+Gráficos y análisis. &
+\textit{Scripts} en C.\newline
+Python.\newline
+Software de prueba. &
+Verificación repetida de muestras.\newline
+Análisis estadístico.\newline
+Revisión de consistencia. \\
+\hline
+\end{tabular}
+\end{table}
+
+% ============================================================================
+\section{Herramientas de desarrollo}
+\label{sec:herramientas}
+% ============================================================================
+
+A continuación se describen las herramientas de hardware y software empleadas
+en el proyecto. La selección de cada herramienta se fundamenta en los
+requisitos del diseño y en la disponibilidad de recursos proporcionados por
+la Escuela de Ingeniería en Computadores del TEC.
+
+% ---------------------------------------------------------------------------
+\subsection{Hardware: placa Basys\,3}
+\label{sec:hw_basys3}
+
+La plataforma de desarrollo seleccionada es la placa Basys\,3 de Digilent,
+descrita en la Sección~\ref{sec:artix7}. Su FPGA Artix-7
+(\texttt{XC7A35T-1CPG236C}) ofrece recursos suficientes para instanciar el
+procesador MicroBlaze~V junto con el periférico PLPUF y los módulos
+auxiliares (UART, controlador de memoria, gestión de reloj). El oscilador de
+100\,MHz integrado en la placa proporciona la frecuencia base del sistema, y
+el puerto USB-UART permite la comunicación serial con el computador anfitrión
+para la extracción de datos de prueba~\cite{basys3rm}.
+
+La placa fue proporcionada por la Escuela de Ingeniería en Computadores y
+constituye la única plataforma física de evaluación, lo que implica que los
+resultados experimentales corresponden a un único dispositivo FPGA
+\cite{wilde_2020_confidence}.
+
+% ---------------------------------------------------------------------------
+\subsection{AMD Vivado Design Suite}
+\label{sec:hw_vivado}
+
+AMD Vivado Design Suite (versión 2025.1) se utilizó para
+todas las tareas de diseño de hardware: creación del \textit{block design}
+con IP~Integrator, empaquetado del IP personalizado del PLPUF, síntesis
+lógica, implementación física (\textit{place and route}), verificación de
+restricciones temporales y generación del \textit{bitstream}~\cite{ug994}.
+Vivado también se empleó para la definición de restricciones de síntesis
+específicas del PLPUF (lazos combinacionales, atributos \texttt{DONT\_TOUCH})
+mediante archivos XDC~\cite{ug1037}.
+
+% ---------------------------------------------------------------------------
+\subsection{AMD Vitis}
+\label{sec:hw_vitis}
+
+AMD Vitis Unified Software Platform (versión 2025.1) se empleó para el
+desarrollo del software embebido. A partir del archivo \texttt{.xsa}
+exportado por Vivado, Vitis genera automáticamente la plataforma de hardware,
+el \textit{Board Support Package} (BSP) y los controladores de periféricos
+\cite{ug1701}. Las aplicaciones de prueba se desarrollaron en lenguaje~C,
+compiladas con la cadena de herramientas \texttt{riscv64-unknown-elf-gcc}
+incluida en Vitis. La carga del \textit{bitstream} y del ejecutable en la
+FPGA se realizó a través de JTAG mediante el puerto USB~J4 de la
+Basys\,3~\cite{ug1701}.
+
+% ---------------------------------------------------------------------------
+\subsection{Terminal serial y Python}
+\label{sec:hw_terminal}
+
+La comunicación entre la FPGA y el computador anfitrión se realizó mediante
+el periférico AXI UART~Lite configurado a 9\,600~baudios. Para la captura de
+los datos de salida del sistema se utilizó un emulador de terminal serial
+(PuTTY). Los datos recolectados en formato texto fueron
+procesados posteriormente con \textit{scripts} en Python para generar
+gráficos y cálculos estadísticos complementarios.
+
+% ============================================================================
+\section{Diseño del módulo PLPUF en HDL}
+\label{sec:diseno_plpuf}
+% ============================================================================
+
+Esta sección describe las decisiones de diseño adoptadas para la
+implementación del núcleo PLPUF en Verilog, correspondiente al archivo
+\texttt{plpuf\_core.v}. El diseño sigue la arquitectura propuesta por
+Hori~et~al.~\cite{hori_2011_pseudolfsr} y descrita en la
+Sección~\ref{sec:plpuf}.
+
+% ---------------------------------------------------------------------------
+\subsection{Parámetros del diseño}
+\label{sec:parametros}
+
+El módulo \texttt{plpuf\_core} se implementó con cinco parámetros
+configurables que permiten adaptar el diseño a diferentes anchos y polinomios
+primitivos sin modificar la lógica del módulo. La Tabla~\ref{tab:params}
+resume los parámetros y sus valores por defecto.
+
+\begin{table}[htbp]
+\centering
+\caption{Parámetros configurables del módulo \texttt{plpuf\_core}.}
+\label{tab:params}
+\begin{tabular}{llp{7cm}}
+\hline
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Descripción} \\
+\hline
+\texttt{WIDTH}          & 128 & Ancho en bits del PLPUF (tamaño del desafío y la respuesta). \\
+\texttt{DURATION\_BITS} & 16  & Ancho del contador de duración de activación, permite hasta $2^{16}-1 = 65\,535$ ciclos. \\
+\texttt{TAP\_1}         & 125 & Posición del primer \textit{tap} XOR (corresponde al término $x^{126}$ del polinomio). \\
+\texttt{TAP\_2}         & 101 & Posición del segundo \textit{tap} XOR ($x^{102}$). \\
+\texttt{TAP\_3}         & 98  & Posición del tercer \textit{tap} XOR ($x^{99}$). \\
+\hline
+\end{tabular}
+\end{table}
+
+Las posiciones de \textit{tap} corresponden al polinomio primitivo
+$p(x) = x^{128} + x^{126} + x^{102} + x^{99} + 1$ utilizado
+por~\cite{hori_2011_pseudolfsr}. La interfaz del módulo comprende las
+señales de entrada \texttt{clk}, \texttt{rst\_n}, \texttt{challenge[127:0]},
+\texttt{activation\_duration[15:0]} y \texttt{start}; y las señales de
+salida \texttt{response[127:0]}, \texttt{done} (pulso de un ciclo) y
+\texttt{busy}.
+
+% ---------------------------------------------------------------------------
+\subsection{Cadena de inversores y retroalimentación}
+\label{sec:cadena}
+
+La estructura central del PLPUF es un arreglo de 128~celdas generadas
+mediante un bloque \texttt{generate} de Verilog (denominado
+\texttt{gen\_core}). Cada celda~$i$ ($0 \leq i \leq 127$) contiene dos
+elementos:
+
+\begin{enumerate}
+  \item \textbf{Multiplexor:} selecciona entre el bit de desafío
+    \texttt{challenge[i]} (cuando \texttt{enable}$\,=0$, fase de carga) o la
+    señal de retroalimentación del vecino (cuando \texttt{enable}$\,=1$, fase
+    activa). En Verilog:
+
+    \texttt{core\_in[i] = enable ? feedback : challenge[i]}
+
+  \item \textbf{Inversor:} aplica la negación lógica a la señal del
+    multiplexor, constituyendo la fuente de entropía física del PLPUF:
+
+    \texttt{core\_out[i] = NOT core\_in[i]}
+
+    Este inversor lleva el atributo
+    \texttt{(\,*\,DONT\_TOUCH\,=\,"TRUE"\,*\,)} para evitar que la
+    herramienta de síntesis optimice o elimine la celda.
+\end{enumerate}
+
+La señal de retroalimentación (\texttt{feedback}) se calcula según la
+posición de la celda dentro de la cadena:
+
+\begin{itemize}
+  \item \textbf{Celda 127} (cierre del lazo):
+    \texttt{feedback = core\_out[0]}.
+  \item \textbf{Celdas en posiciones de \textit{tap}} ($i \in \{125, 101, 98\}$):
+    \texttt{feedback = core\_out[i+1] \^{} core\_out[0]}.
+  \item \textbf{Demás celdas:}
+    \texttt{feedback = core\_out[i+1]}.
+\end{itemize}
+
+Esta topología reproduce la estructura de retroalimentación Fibonacci de un
+LFSR de 128~bits, pero implementada como un lazo puramente combinacional
+(sin registros de desplazamiento), tal como describe
+\cite{hori_2011_pseudolfsr}.
+
+% ---------------------------------------------------------------------------
+\subsection{Máquina de estados finitos}
+\label{sec:fsm_impl}
+
+El control del PLPUF se implementó mediante una FSM de cuatro estados
+codificada en 2~bits (ver Figura~\ref{fig:plpuf_fsm}):
+
+\begin{enumerate}
+  \item \textbf{\texttt{S\_IDLE} (00):} estado de reposo. La señal
+    \texttt{enable} permanece en cero. Al detectar \texttt{start}$\,=1$, la
+    FSM almacena el desafío y la duración de activación, activa
+    \texttt{busy} y transiciona a \texttt{S\_LOAD}.
+
+  \item \textbf{\texttt{S\_LOAD} (01):} fase de carga del desafío. Con
+    \texttt{enable}$\,=0$, el multiplexor de cada celda selecciona
+    \texttt{challenge[i]}, propagando el desafío a través de la cadena de
+    inversores. Esta fase dura exactamente un ciclo de reloj y permite que
+    la cadena se estabilice en un estado determinado por el desafío.
+
+  \item \textbf{\texttt{S\_ACTIVE} (10):} fase de oscilación libre. La señal
+    \texttt{enable} se activa, cerrando el lazo de retroalimentación. El
+    circuito oscila libremente durante \texttt{activation\_duration} ciclos de
+    reloj, contados por un contador descendente. En el último ciclo activo
+    (cuando el contador alcanza~1), el estado de la cadena se captura en el
+    registro de respuesta mediante asignación no bloqueante.
+
+  \item \textbf{\texttt{S\_DONE} (11):} la señal \texttt{done} emite un
+    pulso de un ciclo, \texttt{busy} se desactiva y la FSM retorna a
+    \texttt{S\_IDLE}.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\subsection{Restricciones de síntesis}
+\label{sec:constraints}
+
+El lazo combinacional del PLPUF genera violaciones DRC (\texttt{LUTLP-1}) en
+Vivado, ya que la herramienta identifica correctamente la existencia de
+caminos combinacionales cíclicos. Para permitir la síntesis y la
+implementación sin errores, se definieron las siguientes restricciones en el
+archivo \texttt{plpuf.xdc}:
+
+\begin{enumerate}
+  \item \textbf{\texttt{ALLOW\_COMBINATORIAL\_LOOPS}:} aplicado a las redes
+    del lazo (\texttt{*plpuf\_core\_inst/core\_in*}) para permitir que Vivado
+    acepte el ciclo combinacional.
+
+  \item \textbf{\texttt{DONT\_TOUCH}:} aplicado a todas las celdas del
+    núcleo (\texttt{*plpuf\_core\_inst*}) para prevenir la optimización o
+    eliminación de inversores y multiplexores durante la síntesis.
+
+  \item \textbf{\texttt{set\_false\_path}:} aplicado a las mismas redes del
+    lazo para indicar al motor de temporización que no analice estos caminos,
+    ya que no representan rutas de datos síncronas convencionales.
+\end{enumerate}
+
+Los \textit{wildcards} utilizan nombres de redes post-síntesis
+(\texttt{core\_in[N]}, \texttt{core\_in\_inferred\_i\_N}) y no los nombres
+del bloque \texttt{generate} (\texttt{gen\_core}), ya que estos últimos no
+se preservan tras la síntesis.
+
+% ============================================================================
+\section{Diseño de la interfaz AXI4-Lite}
+\label{sec:diseno_axi}
+% ============================================================================
+
+Para integrar el PLPUF como periférico controlable por software, se
+implementó una interfaz AXI4-Lite esclava siguiendo la plantilla estándar
+generada por Vivado~\cite{ug1037}. Esta interfaz permite al procesador
+MicroBlaze~V configurar el desafío y la duración de activación, iniciar la
+evaluación y leer la respuesta mediante operaciones de lectura/escritura
+sobre registros mapeados en memoria~\cite{ihi0022h}.
+
+% ---------------------------------------------------------------------------
+\subsection{Mapa de registros}
+\label{sec:regmap}
+
+El periférico expone 11~registros activos dentro de un espacio de direcciones
+de 64~bytes (\texttt{C\_S\_AXI\_ADDR\_WIDTH\,=\,6}, equivalente a
+16~ranuras de 32~bits). La Tabla~\ref{tab:regmap} describe el mapa de
+registros completo.
+
+\begin{table}[htbp]
+\centering
+\caption{Mapa de registros del periférico AXI PLPUF.}
+\label{tab:regmap}
+\small
+\begin{tabular}{cllp{6.5cm}}
+\hline
+\textbf{Offset} & \textbf{Nombre} & \textbf{R/W} & \textbf{Descripción} \\
+\hline
+0x00 & CTRL     & R/W & {[0]} \texttt{start}: inicia evaluación (auto-limpia). {[1]} \texttt{soft\_reset}: reinicio del núcleo (auto-limpia). \\
+0x04 & STATUS   & R   & {[0]} \texttt{busy}: evaluación en curso. {[1]} \texttt{done}: evaluación completada (persistente). \\
+0x08 & DURATION & R/W & {[15:0]} Duración de activación en ciclos de reloj. \\
+0x0C & CHAL\_0  & R/W & Bits {[31:0]} del desafío. \\
+0x10 & CHAL\_1  & R/W & Bits {[63:32]} del desafío. \\
+0x14 & CHAL\_2  & R/W & Bits {[95:64]} del desafío. \\
+0x18 & CHAL\_3  & R/W & Bits {[127:96]} del desafío. \\
+0x1C & RESP\_0  & R   & Bits {[31:0]} de la respuesta. \\
+0x20 & RESP\_1  & R   & Bits {[63:32]} de la respuesta. \\
+0x24 & RESP\_2  & R   & Bits {[95:64]} de la respuesta. \\
+0x28 & RESP\_3  & R   & Bits {[127:96]} de la respuesta. \\
+\hline
+\end{tabular}
+\end{table}
+
+% ---------------------------------------------------------------------------
+\subsection{Lógica del esclavo AXI}
+\label{sec:axi_logic}
+
+El módulo \texttt{axi\_plpuf\_slave\_lite\_v1\_0\_S00\_AXI} implementa la
+lógica completa del esclavo AXI4-Lite y la instanciación del
+\texttt{plpuf\_core}. Las características principales del diseño son:
+
+\begin{itemize}
+  \item \textbf{Máquinas de estado AXI:} se mantuvieron las FSM de la
+    plantilla de Vivado para los canales de escritura (estados \texttt{Idle},
+    \texttt{Waddr}, \texttt{Wdata}) y lectura (\texttt{Idle}, \texttt{Raddr},
+    \texttt{Rdata}), garantizando conformidad con el protocolo
+    \textit{handshake} \texttt{VALID}/\texttt{READY}~\cite{ihi0022h}.
+
+  \item \textbf{Escritura con tres niveles de prioridad:} en un único bloque
+    \texttt{always} con asignaciones no bloqueantes, se definen tres capas de
+    escritura donde la última asignación prevalece:
+    \begin{enumerate}
+      \item Auto-limpieza de los bits \texttt{CTRL[1:0]} (prioridad baja).
+      \item Escrituras del maestro AXI con \textit{byte strobes}
+        (\texttt{WSTRB}) (prioridad media).
+      \item Actualización de registros STATUS y RESP por el hardware del
+        PLPUF (prioridad alta).
+    \end{enumerate}
+
+  \item \textbf{Bandera \texttt{done} persistente (\textit{sticky}):} el bit
+    \texttt{done} en STATUS se activa con el pulso \texttt{plpuf\_done} y
+    permanece activo hasta que el software escribe un nuevo \texttt{start} o
+    un \texttt{soft\_reset}.
+
+  \item \textbf{Registros de solo lectura:} los registros RESP\_0 a RESP\_3
+    se actualizan exclusivamente desde el hardware; cualquier escritura AXI a
+    estas direcciones es sobrescrita en el mismo ciclo por la capa de
+    prioridad alta, garantizando la integridad de la respuesta.
+\end{itemize}
+
+La interconexión entre los registros y el núcleo PLPUF se realiza de la
+siguiente manera: el desafío de 128~bits se forma concatenando los registros
+CHAL\_3 a CHAL\_0 (\texttt{\{slv\_reg6, slv\_reg5, slv\_reg4, slv\_reg3\}});
+la duración de activación se toma de los 16~bits inferiores de DURATION; y la
+señal de \textit{reset} del núcleo combina el \textit{reset} global del bus
+AXI con el bit de \texttt{soft\_reset} del registro CTRL.
+
+% ---------------------------------------------------------------------------
+\subsection{Empaquetado del IP}
+\label{sec:ip_packager}
+
+Para que el módulo PLPUF sea reutilizable dentro de cualquier \textit{block
+design} de Vivado, se empaquetó como un IP (\textit{Intellectual Property})
+mediante el flujo de IP~Packager de Vivado~\cite{ug1037}. El proceso genera
+un descriptor IP-XACT (\texttt{component.xml}) que encapsula:
+
+\begin{itemize}
+  \item Los tres archivos HDL: \texttt{axi\_plpuf.v}, \texttt{axi\_plpuf\_slave\_lite\_v1\_0\_S00\_AXI.v}
+    (esclavo AXI + núcleo) y \texttt{plpuf\_core.v}.
+  \item El \textit{driver} en C (\texttt{axi\_plpuf.h}, \texttt{axi\_plpuf.c})
+    para generación automática del \textit{Board Support Package} (BSP) en Vitis.
+  \item Los parámetros de la interfaz de reloj
+    (\texttt{A\_BUSIF\,=\,S00\_AXI},
+    \texttt{A\_RESET\,=\,s00\_axi\_aresetn},
+    \texttt{FREQ\_HZ\,=\,100000000}), necesarios para que el SmartConnect
+    verifique la compatibilidad de dominios de reloj.
+\end{itemize}
+
+La jerarquía de módulos del IP se compone de tres niveles: el
+\textit{wrapper} \texttt{axi\_plpuf} expone la interfaz AXI4-Lite al
+exterior; el módulo \texttt{S00\_AXI} implementa la lógica del esclavo y los
+registros; y el módulo \texttt{plpuf\_core} contiene la cadena de inversores
+y la FSM. Ver figura \ref{fig:plpuf_hierarchy}.
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{fig/plpuf_hierarchy}
+  \caption{Jerarquía de módulos del IP AXI PLPUF.}
+  \label{fig:plpuf_hierarchy}
+\end{figure}
+
+% ============================================================================
+\section{Integración del sistema SoC}
+\label{sec:integracion}
+% ============================================================================
+
+Esta sección describe la construcción del sistema completo dentro de Vivado
+IP~Integrator, el flujo de síntesis e implementación, y la exportación del
+diseño hacia Vitis para el desarrollo de software.
+
+% ---------------------------------------------------------------------------
+\subsection{Diseño de bloques en Vivado}
+\label{sec:block_design}
+
+El sistema SoC se construyó como un \textit{block design} en Vivado
+IP~Integrator~\cite{ug994}. Los núcleos IP instanciados y sus funciones
+dentro del sistema son los siguientes (ver figura \ref{fig:block_design}):
+
+\begin{itemize}
+  \item \textbf{Clocking Wizard (\texttt{clk\_wiz\_0}):} genera la señal de
+    reloj de 100\,MHz a partir del oscilador de la placa (pin~\texttt{W5}).
+
+  \item \textbf{MicroBlaze~V (\texttt{microblaze\_riscv\_0}):} procesador
+    suave RISC-V configurado con la ISA base \texttt{RV32I}, \textit{pipeline} de 5~etapas,
+    depuración habilitada e interfaces AXI de datos
+    (\texttt{M\_AXI\_DP})~\cite{ug1629}.
+
+  \item \textbf{Memoria local (BRAM + LMB):} bloque de memoria RAM, 32\,KB para instrucciones y 32\,KB para datos, conectado al
+    procesador mediante el bus local de memoria (LMB)~\cite{ug1711}.
+
+  \item \textbf{MicroBlaze Debug Module~V (\texttt{mdm\_1}):} módulo de
+    depuración que permite la conexión JTAG para carga de programas y
+    depuración paso a paso~\cite{ug1629}.
+
+  \item \textbf{Processor System Reset (\texttt{rst\_clk\_wiz\_0\_100M}):}
+    genera las señales de \textit{reset} sincronizadas para el procesador y
+    los periféricos.
+
+  \item \textbf{AXI SmartConnect (\texttt{axi\_smc}):} interconexión AXI con
+    un puerto maestro y dos puertos esclavos: uno para el UART y otro para el
+    PLPUF. Realiza la traducción de protocolo y el arbitraje de
+    direcciones~\cite{ug1037}.
+
+  \item \textbf{AXI UART Lite (\texttt{axi\_uartlite\_0}):} periférico UART
+    conectado al puerto USB-UART de la Basys\,3, configurado a 9\,600~baudios
+    para la comunicación serial con el computador anfitrión.
+
+  \item \textbf{AXI PLPUF (\texttt{axi\_plpuf\_0}):} el periférico PLPUF
+    desarrollado en este proyecto, conectado al segundo puerto esclavo del
+    SmartConnect.
+\end{itemize}
+
+La asignación de direcciones del sistema se resume en la
+Tabla~\ref{tab:addrmap}.
+
+\begin{table}[htbp]
+\centering
+\caption{Mapa de direcciones del sistema SoC.}
+\label{tab:addrmap}
+\begin{tabular}{llr}
+\hline
+\textbf{Periférico} & \textbf{Dirección base} & \textbf{Rango} \\
+\hline
+BRAM local (datos e instrucciones) & \texttt{0x00000000} & 32\,KB \\
+AXI UART Lite                      & \texttt{0x40600000} & 64\,KB \\
+AXI PLPUF                          & \texttt{0x44A00000} & 64\,KB \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig/block_design.pdf}
+  \caption{Diseño de bloques del sistema SoC en Vivado IP Integrator.}
+  \label{fig:block_design}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+\subsection{Flujo de síntesis e implementación}
+\label{sec:synth_flow}
+
+El flujo de construcción del \textit{bitstream} siguió los pasos estándar de
+Vivado~\cite{ug994}:
+
+\begin{enumerate}
+  \item \textbf{Generación de productos de salida:} se generaron los
+    productos de salida de todos los IPs del \textit{block design},
+    incluyendo los \textit{wrappers} HDL.
+
+  \item \textbf{Síntesis lógica:} Vivado sintetiza el diseño completo. En
+    esta etapa se producen las advertencias DRC \texttt{LUTLP-1} por el lazo
+    combinacional del PLPUF, las cuales son resueltas por las restricciones
+    XDC descritas en la Sección~\ref{sec:constraints}.
+
+  \item \textbf{Implementación:} Vivado realiza el \textit{placement} y
+    \textit{routing} del diseño sobre los recursos de la FPGA Artix-7. Las
+    restricciones \texttt{DONT\_TOUCH} aseguran que las celdas del PLPUF no
+    sean reubicadas ni optimizadas.
+
+  \item \textbf{Verificación de temporización:} se verificó que todas las
+    rutas de datos síncronas cumplan las restricciones temporales. Las rutas
+    del lazo combinacional están excluidas del análisis mediante
+    \texttt{set\_false\_path}.
+
+  \item \textbf{Generación del \textit{bitstream}:} se habilitó la
+    compresión del \textit{bitstream} para reducir el tiempo de
+    carga.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\subsection{Exportación a Vitis}
+\label{sec:export_xsa}
+
+Una vez generado el \textit{bitstream}, se exportó el hardware desde Vivado
+en formato \texttt{.xsa} (\textit{Xilinx Support Archive}), que incluye:
+
+\begin{itemize}
+  \item La descripción del hardware (mapa de direcciones, IPs instanciados,
+    parámetros).
+  \item El \textit{bitstream} de la FPGA.
+  \item Los metadatos necesarios para que Vitis genere el BSP con los
+    controladores de los periféricos~\cite{ug1701}.
+\end{itemize}
+
+En Vitis, se creó una plataforma de hardware a partir del archivo
+\texttt{.xsa} y se configuró el procesador MicroBlaze~V como objetivo de
+compilación. El BSP generado automáticamente incluye el \textit{driver}
+del periférico PLPUF (\texttt{axi\_plpuf.h} y \texttt{axi\_plpuf.c}), gracias
+a que estos archivos fueron incluidos en el paquete IP durante el proceso de
+empaquetado descrito en la Sección~\ref{sec:ip_packager}~\cite{ug1701}.
+
+% ============================================================================
+\section{Desarrollo del software de control}
+\label{sec:software}
+% ============================================================================
+
+El software embebido se organizó en tres componentes: un \textit{driver}
+reutilizable para el periférico PLPUF, una aplicación de validación básica
+y una aplicación de evaluación exhaustiva.
+
+% ---------------------------------------------------------------------------
+\subsection{Driver en C para el PLPUF}
+\label{sec:driver}
+
+Se desarrolló un \textit{driver} en C siguiendo las convenciones del
+ecosistema AMD/Xilinx (macros \texttt{Xil\_In32}/\texttt{Xil\_Out32},
+aserciones \texttt{Xil\_Assert}). El \textit{driver} expone una API
+estructurada en tres niveles:
+
+\begin{enumerate}
+  \item \textbf{Inicialización y \textit{reset}:}
+    \texttt{Plpuf\_Initialize()} configura la dirección base del periférico,
+    ejecuta un \textit{soft reset} y establece la duración de activación por
+    defecto ($c = 5$). \texttt{Plpuf\_SoftReset()} reinicia el núcleo PLPUF
+    mediante el bit~1 del registro CTRL.
+
+  \item \textbf{Configuración y control:}
+    \texttt{Plpuf\_SetDuration()} escribe la duración de activación;
+    \texttt{Plpuf\_SetChallenge()} escribe los 128~bits del desafío en los
+    cuatro registros CHAL; \texttt{Plpuf\_Start()} inicia la evaluación
+    escribiendo el bit~0 del registro CTRL.
+
+  \item \textbf{Lectura de resultados:}
+    \texttt{Plpuf\_IsBusy()} y \texttt{Plpuf\_IsDone()} consultan el registro
+    STATUS; \texttt{Plpuf\_WaitDone()} realiza un ciclo de espera activa hasta
+    que la evaluación finalice; \texttt{Plpuf\_GetResponse()} lee los cuatro
+    registros RESP y almacena la respuesta de 128~bits.
+\end{enumerate}
+
+Adicionalmente, la función de conveniencia \texttt{Plpuf\_Evaluate()} encapsula
+el ciclo completo de evaluación (configurar desafío $\rightarrow$ iniciar
+$\rightarrow$ esperar $\rightarrow$ leer respuesta) en una sola llamada,
+simplificando el código de las aplicaciones de prueba.
+
+El siguiente fragmento muestra la implementación de esta función:
+
+\begin{minted}[fontsize=\footnotesize, frame=single, linenos]{c}
+void Plpuf_Evaluate(axi_plpuf_t *inst,
+                    u32 C0, u32 C1, u32 C2, u32 C3,
+                    u32 Response[4])
+{
+    Plpuf_SetChallenge(inst, C0, C1, C2, C3);
+    Plpuf_Start(inst);
+    Plpuf_WaitDone(inst);
+    Plpuf_GetResponse(inst, Response);
+}
+\end{minted}
+
+% ---------------------------------------------------------------------------
+\subsection{Aplicación de validación básica (\texttt{test\_app1})}
+\label{sec:test_app1}
+
+La primera aplicación de prueba (\texttt{plpuf\_test\_app1}) se diseñó como
+una validación funcional rápida del sistema, verificando que todos los
+componentes (procesador, bus AXI, periférico PLPUF, UART) operan
+correctamente. Las pruebas realizadas son:
+
+\begin{enumerate}
+  \item \textbf{Lectura/escritura de registros:} se escribe un valor conocido
+    en DURATION y CHAL y se verifica que la lectura retorne el mismo valor.
+
+  \item \textbf{Evaluación individual:} se ejecuta una evaluación con un
+    desafío conocido y se verifica que la respuesta sea no nula (128~bits
+    $\neq 0$).
+
+  \item \textbf{Repetibilidad:} se ejecuta el mismo desafío 5~veces
+    consecutivas y se comparan las respuestas. Se espera que sean idénticas o
+    muy similares (dependiendo de la duración de activación).
+
+  \item \textbf{Unicidad inter-desafío:} se evalúan dos desafíos diferentes y
+    se verifica que las respuestas sean distintas.
+
+  \item \textbf{Barrido de duración:} se evalúa un mismo desafío con
+    duraciones $c = 1, \ldots, 10$ y se imprimen todas las respuestas por
+    UART para verificar que varían con~$c$.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\subsection{Aplicación de evaluación exhaustiva (\texttt{test\_app2})}
+\label{sec:test_app2}
+
+La segunda aplicación (\texttt{plpuf\_test\_app2}) implementa el protocolo
+completo de evaluación estadística del PLPUF, ejecutando aproximadamente
+14\,000 evaluaciones sobre el hardware. Los parámetros de configuración son:
+
+\begin{itemize}
+  \item 20~desafíos aleatorios (generados por un PRNG \texttt{xorshift32}
+    con semilla \texttt{0xDEADBEEF} para reproducibilidad).
+  \item 50~repeticiones por par desafío-duración (para votación por mayoría).
+  \item 10~duraciones de activación ($c = 1, \ldots, 10$).
+  \item 32~posiciones de bit para pruebas de efecto avalancha.
+  \item 9~evaluaciones con votación por mayoría para las respuestas
+    \textit{golden} del efecto avalancha.
+\end{itemize}
+
+La aplicación calcula las siguientes métricas directamente en el dispositivo
+utilizando aritmética de punto fijo (multiplicación por 100 o 10\,000 y
+división entera para obtener dos decimales):
+
+\begin{itemize}
+  \item \textbf{Uniformidad} por desafío y promedio por duración.
+  \item \textbf{Confiabilidad} (100\,\% $-$ BER) respecto a una respuesta de
+    referencia obtenida por votación por mayoría
+    (\texttt{golden\_from\_counts}).
+  \item \textbf{BER} (\textit{Bit Error Rate}) promedio.
+  \item \textbf{Distancia de Hamming intra-dispositivo} (entre repeticiones
+    del mismo desafío).
+  \item \textbf{Distancia de Hamming inter-desafío} (entre respuestas
+    \textit{golden} de desafíos diferentes con la misma duración).
+  \item \textbf{Mapa de estabilidad de bits}: para cada posición de bit, se
+    califica de~0 (siempre inestable) a~9 (máxima estabilidad), basado en la
+    fracción de repeticiones que coinciden con la respuesta \textit{golden}.
+  \item \textbf{Efecto avalancha}: se aplican cambios de un solo bit en el
+    desafío y se mide la distancia de Hamming respecto a la respuesta
+    \textit{golden} original~\cite{maiti_2012_systematic}.
+\end{itemize}
+
+Todos los resultados se imprimen por UART en formato legible para su captura
+y procesamiento posterior.
+
+% ============================================================================
+\section{Protocolo de evaluación del PLPUF}
+\label{sec:protocolo}
+% ============================================================================
+
+El protocolo de evaluación sigue las recomendaciones de
+Maiti~et~al.~\cite{maiti_2012_systematic} y los criterios experimentales
+empleados por Hori~et~al.~\cite{hori_2011_pseudolfsr} en la evaluación
+original del PLPUF. La evaluación se realizó sobre un único dispositivo FPGA
+(Basys\,3), por lo que las métricas reportadas corresponden a una evaluación
+intra-dispositivo~\cite{wilde_2020_confidence}.
+
+% ---------------------------------------------------------------------------
+\subsection{Recolección de pares desafío-respuesta}
+\label{sec:crp_collect}
+
+La recolección de datos se estructuró de la siguiente manera:
+
+\begin{enumerate}
+  \item Para cada duración de activación $c \in \{1, 2, \ldots, 10\}$:
+  \begin{enumerate}
+    \item Se generan 20~desafíos pseudoaleatorios de 128~bits mediante el
+      generador \texttt{xorshift32} con semilla fija.
+    \item Para cada desafío, se ejecutan 50~evaluaciones consecutivas,
+      obteniendo 50~respuestas de 128~bits.
+    \item Se construye la respuesta de referencia (\textit{golden}) mediante
+      votación por mayoría bit a bit: para cada posición, el valor del bit
+      \textit{golden} es el que aparece en más de 25 de las 50~repeticiones.
+  \end{enumerate}
+  \item Total de evaluaciones: $10 \times 20 \times 50 = 10\,000$
+    evaluaciones principales, más las evaluaciones adicionales para el efecto
+    avalancha.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\subsection{Cálculo de métricas}
+\label{sec:metricas_calc}
+
+A partir de los datos recolectados, se calculan las métricas definidas en
+la Sección~\ref{sec:metricas} de la siguiente manera:
+
+\begin{itemize}
+  \item \textbf{Uniformidad:} para cada respuesta \textit{golden}, se calcula
+    el peso de Hamming (\textit{Hamming weight}) y se divide entre~128 para
+    obtener la proporción de unos. El valor ideal es 50\,\%
+    \cite{maiti_2012_systematic}.
+
+  \item \textbf{Confiabilidad y BER:} para cada par desafío-duración, se
+    calcula la distancia de Hamming fraccional entre cada una de las
+    50~respuestas y la respuesta \textit{golden}, obteniendo el BER
+    promedio. La confiabilidad se define como $100\,\% - \text{BER}$
+    \cite{maiti_2012_systematic}.
+
+  \item \textbf{Distancia de Hamming intra-dispositivo:} promedio de las
+    distancias de Hamming entre todas las repeticiones y la respuesta
+    \textit{golden} para un mismo desafío. El valor ideal es~0
+    \cite{hori_2011_pseudolfsr}.
+
+  \item \textbf{Distancia de Hamming inter-desafío:} al disponer de un solo
+    dispositivo, la métrica de unicidad inter-dispositivo no puede calcularse
+    directamente. Como aproximación, se calcula la distancia de Hamming
+    fraccional promedio entre las respuestas \textit{golden} de los
+    20~desafíos diferentes para una misma duración. Un valor cercano a 50\,\%
+    indica que el PLPUF genera respuestas suficientemente diversas ante
+    desafíos distintos~\cite{hori_2011_pseudolfsr}.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\subsection{Efecto avalancha}
+\label{sec:avalanche}
+
+El efecto avalancha mide la sensibilidad de la PUF a cambios mínimos en el
+desafío: al modificar un solo bit del desafío, idealmente el 50\,\% de los
+bits de la respuesta debería cambiar~\cite{maiti_2012_systematic}. El
+protocolo implementado es:
+
+\begin{enumerate}
+  \item Se selecciona un desafío base y se obtiene su respuesta \textit{golden}
+    con votación por mayoría (9~repeticiones).
+  \item Para cada una de las primeras 32~posiciones de bit del desafío:
+    \begin{enumerate}
+      \item Se genera un desafío modificado invirtiendo únicamente el bit en
+        la posición~$j$.
+      \item Se obtiene la respuesta \textit{golden} del desafío modificado
+        (9~repeticiones con votación por mayoría).
+      \item Se calcula la distancia de Hamming fraccional entre la respuesta
+        original y la modificada.
+    \end{enumerate}
+  \item Se reporta el promedio de las 32~distancias como el efecto avalancha
+    del PLPUF.
+\end{enumerate}
+
+Cabe señalar que el PLPUF, al basarse en una estructura LFSR con difusión
+limitada, exhibe típicamente un efecto avalancha inferior al 50\,\% ideal.
+Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs} documentaron esta limitación
+y su relación con la duración de activación.
+
+% ============================================================================
+\section{Diagrama general de la solución}
+\label{sec:diagrama_general}
+% ============================================================================
+
+La Figura~\ref{fig:system_diagram} presenta el diagrama general de la
+solución desarrollada, mostrando la interacción entre todos los componentes
+del sistema: el computador anfitrión, la comunicación UART, el procesador
+MicroBlaze~V, la interconexión AXI y el periférico PLPUF.
+
+% [FIGURA PENDIENTE: diagrama general del sistema]
+% Instrucción: construir con draw.io o TikZ un diagrama que muestre:
+% PC (terminal serial) <--> USB-UART <--> FPGA Basys3 [
+%   Clocking Wizard -> MicroBlaze V (RISC-V) -> AXI SmartConnect
+%     -> AXI UART Lite (-> USB-UART)
+%     -> AXI PLPUF (plpuf_core: 128 inversores + FSM)
+%   LMB -> BRAM (32KB x 2)
+%   MDM V (JTAG debug)
+% ]
+% Guardar como fig/system_diagram.png.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig/system_diagram}
+  \caption{Diagrama general de la solución: sistema SoC con PLPUF integrado.}
+  \label{fig:system_diagram}
+\end{figure}
+
+El flujo de operación del sistema es el siguiente:
+
+\begin{enumerate}
+  \item El software embebido, ejecutándose en MicroBlaze~V, genera un
+    desafío de 128~bits y una duración de activación~$c$.
+
+  \item A través del bus AXI4-Lite, el software escribe el desafío en los
+    registros CHAL\_0 a CHAL\_3, la duración en DURATION y el bit de inicio
+    en CTRL.
+
+  \item El núcleo \texttt{plpuf\_core} ejecuta la secuencia FSM:
+    \texttt{LOAD} (1~ciclo) $\rightarrow$ \texttt{ACTIVE} ($c$~ciclos)
+    $\rightarrow$ \texttt{DONE} (1~ciclo), capturando la respuesta de
+    128~bits.
+
+  \item El software lee la respuesta desde los registros RESP\_0 a RESP\_3 y
+    la transmite al computador anfitrión a través de la UART.
+
+  \item En el computador anfitrión, los datos son capturados por un emulador
+    de terminal serial y procesados con \textit{scripts} de Python para
+    generar las métricas de evaluación y los gráficos correspondientes.
+\end{enumerate}
+
+Este flujo se repite de forma automatizada para todas las combinaciones de
+desafíos y duraciones definidas en el protocolo de evaluación
+(Sección~\ref{sec:protocolo}), permitiendo la recolección sistemática de los
+datos necesarios para la caracterización completa del PLPUF.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
