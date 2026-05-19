@@ -89,6 +89,57 @@ de dispositivos sin requerir almacenamiento permanente de claves criptográficas
 
 \subsection{Trabajos similares}
 
+La arquitectura Pseudo-LFSR PUF (PLPUF) fue propuesta originalmente por
+Hori~et~al.~\cite{hori_2011_pseudolfsr}, quienes demostraron que una cadena
+de inversores con retroalimentación tipo Fibonacci —equivalente a un LFSR
+implementado de forma puramente combinacional— es capaz de generar respuestas
+multibit compactas y eficientes en área sobre FPGAs Xilinx Spartan-3E. Su
+diseño alcanzó niveles competitivos de uniformidad y unicidad con un consumo
+reducido de recursos lógicos. Más recientemente,
+Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs} analizaron los riesgos
+ocultos de la duración de activación en PLPUFs, evidenciando que una
+selección inadecuada de este parámetro puede comprometer la calidad de las
+respuestas y, por ende, la seguridad del sistema.
+
+Diversas investigaciones han explorado variantes de PUFs basadas en
+registros de desplazamiento y lógica reconfigurable sobre FPGAs.
+Srilakshmi~et~al.~\cite{srilakshmi_2023_puf_lfsr} propusieron una PUF fuerte
+construida con un LFSR de bajo consumo, orientada a dispositivos con
+restricciones de energía. Hou~et~al.~\cite{hou_2019_lightweight} presentaron
+una PUF LFSR ligera con seguridad mejorada implementada en FPGA, mientras que
+Huang~et~al.~\cite{huang_2024_nlfsr} extendieron el concepto hacia registros
+de desplazamiento no lineales (NLFSR PUF) para aumentar la resistencia frente
+a ataques de modelado por aprendizaje automático.
+Liu~et~al.~\cite{liu_2019_xor} exploraron PUFs reconfigurables basadas en
+compuertas XOR como solución de bajo costo para seguridad en IoT. Las
+revisiones exhaustivas de Lata y
+Cenkeramaddi~\cite{lata_2023_fpgapuf} y de Anandakumar~et~al.
+\cite{anandakumar_2021_fpgapufs} ofrecen un panorama amplio del estado del
+arte en diseños de PUFs sobre FPGAs, abarcando desde arquitecturas basadas en
+retardos hasta implementaciones basadas en memoria.
+
+En el ámbito de la integración de PUFs dentro de sistemas embebidos y
+protocolos de seguridad para IoT, Chen~et~al.~\cite{chen_2016_fpga}
+implementaron generadores de números pseudoaleatorios criptográficamente
+seguros basados en SRAM PUFs sobre FPGA.
+Idriss~et~al.~\cite{idriss_2021_lightweight} propusieron un protocolo de
+autenticación ligero basado en PUFs para dispositivos IoT con recursos
+limitados, mientras que Hou~et~al.~\cite{hou_2023_modeling} desarrollaron un
+protocolo de autenticación con doble PUF resistente a ataques de modelado
+físico. Estos trabajos evidencian una tendencia creciente hacia la
+incorporación de primitivas PUF como raíces de confianza en arquitecturas
+embebidas.
+
+No obstante, a pesar de los avances descritos, no se identificó en la
+literatura un módulo PLPUF de código abierto, parametrizable y empaquetado
+como núcleo IP compatible con la interfaz AXI4-Lite y el procesador
+MicroBlaze~V. La mayoría de las implementaciones reportadas se limitan a
+evaluaciones aisladas del núcleo PUF sin ofrecer integración dentro de un SoC
+completo ni controladores de software reutilizables. El presente proyecto
+aborda este vacío al proporcionar una solución integrada —desde el diseño HDL
+hasta el software de evaluación— orientada a entornos académicos y de
+investigación.
+
 % ---------------------------------------------------------------------------
 \section{Planteamiento del problema}
 
