@@ -1,14 +1,87 @@
 \chapter{Anexo 1 - Implicaciones sociales y éticas del proyecto}
 
-%En un proyecto de esta índole, se ven muchos factores incluidos. La vida humana, la calidad de la vida humana, el nombre de una empresa, el nombre de un ingeniero, la conciencia de un ser humano, el precio de la vida y la importancia de la responsabilidad que lleva realizar un trabajo que pueda afectar una.
-%En un proceso el cual tiene cómo objetivo crear un producto del cual dependen vidas no es algo simple, o aleatorio. Es un proceso importante, delicado y digno de recibir toda la atención que amerita la dependencia de la vida de un ser humano en el resultado de este proceso.
-%¿Que es más importante? ¿El dinero? ¿La productividad? o ¿la vida humana?
-%En repetidas ocasiones se han visto decisiones tomadas por corporaciones y entes que terminan por indicar que para estos los primeros dos eran la respuesta.
-%Con mi proyecto se buscaba demostrar la importancia de la ultima, de la vida humana. Un proyecto con el objetivo de mejorar la forma en la que se determina la calidad de un producto y al mismo tiempo mejorar la ganancia monetaria. Porque al fin y al cabo ambos son un objetivo, sólo que el segundo nunca debería opacar al primero.
-%Un error de mi parte, podría significar la muerte de una persona, lo cual no es una responsabilidad menor, y con toda la responsabilidad profesional y todo el deber humano de cuidar los unos de los otros debe ser tratada.
-%Mi deber como ingeniero, es cumplir con mi trabajo con la mayor de mis capacidades y con la mayor responsabilidad. Mi conocimiento está al servicio de la humanidad.
+La seguridad no es un concepto abstracto. Detrás de cada dispositivo conectado
+a una red hay una persona, una familia, una institución o una comunidad que
+confía en que sus datos, su identidad y su integridad estarán protegidos. Cuando
+un ingeniero diseña un módulo de seguridad para sistemas embebidos, no está
+simplemente manipulando compuertas lógicas y registros: está asumiendo una
+responsabilidad directa sobre la confianza que otros depositarán en ese
+hardware. Este proyecto me confrontó con esa realidad desde el primer día.
 
-%Un factor, también importante, que muchas veces es omitido es el factor de la automatización sobre el proceso humano. Automatizar un proceso, volver más efectivo y confiable que con las personas aunque sea una necesidad y un objetivo imperativo, tiene consecuencias posibles. Ya que al retirar a un humano de su puesto para ser reemplazado por una maquina se causa que alguien pierda su ingreso monetario, y pueda terminar en una situación de desdicha y necesidad. Para mi tranquilidad, mi proyecto aunque busque reducir el componente humano no lo elimina completamente, pues aquellos que lo utilizarán no verán su trabajo retirado si no que simplificado.
+El Internet de las Cosas ha transformado la vida cotidiana de formas que hace
+dos décadas habrían parecido ciencia ficción. Dispositivos médicos que monitorean
+signos vitales, sensores industriales que controlan procesos críticos, cerraduras
+inteligentes que protegen hogares y sistemas vehiculares que toman decisiones en
+fracciones de segundo. Todos ellos comparten una característica común: operan en
+entornos físicamente accesibles, donde un atacante con las herramientas adecuadas
+puede intentar extraer claves, clonar identidades o manipular el comportamiento
+del dispositivo. La consecuencia de una falla de seguridad en estos contextos no
+se mide solamente en pérdidas económicas, sino en riesgos reales para la
+salud, la privacidad y la seguridad de las personas.
 
-%Para concluir esta reflexión, deseo hacer énfasis en la necesidad del progreso, en la necesidad de la mejora a base de la automatización, pero al mismo tiempo hacer énfasis en la humanidad de nuestra profesión, en la responsabilidad moral y profesional que tenemos con nuestros semejantes, y en la belleza de aquello que hacemos para ayudarlos.
+Las Funciones Físicamente No Clonables representan un cambio de paradigma en la
+forma de abordar la seguridad del hardware. Al eliminar la necesidad de almacenar
+claves criptográficas en memorias que pueden ser leídas o copiadas, las PUFs
+ofrecen una capa de protección fundamentada en la física misma del silicio,
+imposible de replicar incluso por el fabricante original. Sin embargo, esta
+promesa tecnológica conlleva una responsabilidad ética significativa. Quien diseña
+e implementa una PUF debe ser riguroso en la evaluación de sus propiedades
+estadísticas, honesto en la comunicación de sus limitaciones y consciente de que
+una evaluación incompleta o sesgada puede generar una falsa sensación de
+seguridad con consecuencias potencialmente graves.
 
+Durante el desarrollo de este proyecto, una de las decisiones más difíciles fue
+aceptar y documentar abiertamente las limitaciones de la evaluación realizada. La
+ausencia de pruebas inter-dispositivo impide afirmar con certeza que el módulo
+PLPUF implementado sea capaz de distinguir chips individuales en un escenario de
+autenticación real. Habría sido tentador omitir esta limitación o minimizar su
+importancia, pero hacerlo habría comprometido la integridad del trabajo y,
+potencialmente, la seguridad de quienes en el futuro pudieran utilizar este
+módulo. La honestidad intelectual no es un lujo en ingeniería de seguridad: es
+un requisito ético fundamental.
+
+Otro aspecto que merece reflexión es la decisión de desarrollar este proyecto
+como una solución de código abierto. En el ámbito de la seguridad informática
+existe un debate permanente entre quienes abogan por la seguridad mediante la
+oscuridad y quienes defienden la transparencia como principio fundamental. Mi
+convicción, respaldada por décadas de experiencia en la comunidad criptográfica,
+es que un diseño de seguridad solo puede considerarse confiable cuando ha sido
+sometido al escrutinio público. Al publicar el código HDL, los controladores de
+software y los datos de evaluación, este proyecto invita a la comunidad académica
+a verificar, reproducir y mejorar los resultados. Esta apertura no debilita la
+seguridad; la fortalece.
+
+No obstante, la publicación de herramientas y conocimientos relacionados con la
+seguridad del hardware plantea inevitablemente el dilema del uso dual. El mismo
+conocimiento que permite diseñar una PUF robusta puede emplearse para identificar
+sus debilidades y explotarlas. Este dilema no es exclusivo de este proyecto ni de
+este campo; es inherente a toda la investigación en seguridad. La postura que
+adopto es que la contribución neta del conocimiento abierto es positiva: los
+defensores siempre necesitan más información que los atacantes, y la
+transparencia permite que la comunidad identifique y corrija vulnerabilidades
+antes de que sean explotadas.
+
+Desde una perspectiva social más amplia, este proyecto contribuye a la
+democratización de la seguridad del hardware. Las soluciones comerciales de
+seguridad en silicio suelen estar protegidas por patentes y licencias que las
+hacen inaccesibles para instituciones educativas, pequeñas empresas y países en
+desarrollo. Al proporcionar una plataforma completa, documentada y gratuita, se
+abre la posibilidad de que estudiantes e investigadores de cualquier parte del
+mundo puedan experimentar con técnicas de seguridad de hardware sin depender de
+costosas licencias o hardware propietario. En un contexto como el
+costarricense, donde la formación de ingenieros capaces de diseñar sistemas
+seguros es una necesidad estratégica, esta contribución adquiere un valor que
+trasciende lo puramente técnico.
+
+Finalmente, deseo reflexionar sobre el rol del ingeniero en la sociedad digital
+contemporánea. Vivimos en una era en la que la confianza en la tecnología es un
+pilar de la convivencia social. Cada vez que una persona utiliza un dispositivo
+conectado, está depositando implícitamente su confianza en los ingenieros que lo
+diseñaron, fabricaron y programaron. Esta confianza no debe tomarse a la ligera.
+Mi deber como ingeniero en computadores no se agota en la correcta
+implementación de un circuito o la optimización de una métrica: se extiende a la
+responsabilidad de garantizar que mi trabajo contribuya al bienestar de las
+personas y no se convierta, por negligencia o deshonestidad, en un instrumento
+de vulnerabilidad. Con este proyecto, he intentado honrar esa responsabilidad
+con rigor técnico, transparencia en los resultados y compromiso con la comunidad
+que algún día podría beneficiarse de este trabajo.
