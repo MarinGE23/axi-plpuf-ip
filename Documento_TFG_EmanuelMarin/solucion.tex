@@ -432,13 +432,30 @@ La jerarquía de módulos del IP se compone de tres niveles: el
 \textit{wrapper} \texttt{axi\_plpuf} expone la interfaz AXI4-Lite al
 exterior; el módulo \texttt{S00\_AXI} implementa la lógica del esclavo y los
 registros; y el módulo \texttt{plpuf\_core} contiene la cadena de inversores
-y la FSM. Ver figura \ref{fig:plpuf_hierarchy}.
-
+y la FSM. La Figura~\ref{fig:plpuf_hierarchy} ilustra esta jerarquía de
+tres niveles y las señales internas que conectan cada módulo. En la parte
+superior se encuentra el \textit{wrapper} \texttt{axi\_plpuf}, que expone los
+puertos AXI4-Lite hacia el exterior del IP. Este módulo instancia al esclavo
+\texttt{S00\_AXI}, que contiene la lógica de decodificación de direcciones,
+los \textit{handshakes} de los cinco canales AXI (AW, W, B, AR, R), los
+16~registros de 32~bits (de los cuales 11~están activos), y las máquinas de
+estado de escritura (\texttt{Idle}~$\rightarrow$~\texttt{Waddr}~$\rightarrow$~\texttt{Wdata}) y lectura
+(\texttt{Idle}~$\rightarrow$~\texttt{Raddr}~$\rightarrow$~\texttt{Rdata}). En la parte inferior, el módulo
+\texttt{plpuf\_core} recibe del esclavo AXI las señales de desafío
+(\texttt{challenge[127:0]}), duración de activación
+(\texttt{activation\_duration[15:0]}), inicio (\texttt{start}) y
+\textit{reset} (\texttt{soft\_rst}), y retorna la respuesta
+(\texttt{response[127:0]}) junto con las banderas \texttt{busy} y
+\texttt{done}. Internamente, el núcleo se compone de la cadena de
+128~inversores con retroalimentación XOR, un contador de duración descendente
+y la FSM de cuatro estados descrita en la Sección~\ref{sec:fsm_impl}.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{fig/plpuf_hierarchy}
-  \caption{Jerarquía de módulos del IP AXI PLPUF.}
+  \includegraphics[width=0.9\textwidth]{fig/plpuf_hierarchy}
+  \caption{Jerarquía de módulos del IP AXI PLPUF: \textit{wrapper} de nivel
+    superior, esclavo AXI4-Lite con mapa de registros y máquinas de estado, y
+    núcleo PLPUF con cadena de inversores, contador y FSM.}
   \label{fig:plpuf_hierarchy}
 \end{figure}
 
@@ -456,8 +473,13 @@ diseño hacia Vitis para el desarrollo de software.
 \label{sec:block_design}
 
 El sistema SoC se construyó como un \textit{block design} en Vivado
-IP~Integrator~\cite{ug994}. Los núcleos IP instanciados y sus funciones
-dentro del sistema son los siguientes (ver figura \ref{fig:block_design}):
+IP~Integrator~\cite{ug994}. La Figura~\ref{fig:block_design} muestra el
+diagrama de bloques completo del sistema tal como aparece en el entorno
+gráfico de IP~Integrator, donde cada rectángulo representa un núcleo IP con
+sus puertos de entrada y salida, y las líneas de interconexión representan
+los buses AXI, las señales de reloj, \textit{reset} y depuración. Los
+núcleos IP instanciados y sus funciones dentro del sistema son los
+siguientes:
 
 \begin{itemize}
   \item \textbf{Clocking Wizard (\texttt{clk\_wiz\_0}):} genera la señal de
@@ -515,7 +537,11 @@ AXI PLPUF                          & \texttt{0x44A00000} & 64\,KB \\
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{fig/block_design.pdf}
-  \caption{Diseño de bloques del sistema SoC en Vivado IP Integrator.}
+  \caption{Diseño de bloques del sistema SoC en Vivado IP Integrator,
+    mostrando la interconexión entre el procesador MicroBlaze~V, la memoria
+    local (BRAM/LMB), el módulo de depuración (MDM~V), el AXI SmartConnect,
+    el periférico UART~Lite y el periférico PLPUF desarrollado en este
+    proyecto.}
   \label{fig:block_design}
 \end{figure}
 

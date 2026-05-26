@@ -67,7 +67,26 @@ opcionalmente cachés de instrucciones y datos con políticas configurables
 (\textit{write-back} o \textit{write-through}), soporte de depuración
 mediante el módulo MDM~V (\textit{MicroBlaze Debug Module~V}), y capacidades
 de tolerancia a fallos como operación en \textit{lockstep} y redundancia
-modular triple (TMR)~\cite{ug1629}. Ver figura \ref{fig:microblaze_block}.
+modular triple (TMR)~\cite{ug1629}.
+
+Como se muestra en la Figura~\ref{fig:microblaze_block}, la arquitectura
+interna de MicroBlaze~V se organiza en torno a un decodificador de
+instrucciones central que alimenta la ALU, el \textit{barrel shifter}, el
+multiplicador y el divisor (estos dos últimos opcionales). El banco de
+32~registros de propósito general y los registros de control y estado (CSR)
+están conectados directamente al decodificador. En el lado de instrucciones,
+un búfer de instrucciones recibe datos desde el bus local de instrucciones
+(ILMB) o desde la caché de instrucciones (\texttt{M\_AXI\_IC}); un
+decodificador de instrucciones comprimidas (extensión~\texttt{C}) procesa
+opcionalmente las instrucciones de 16~bits. En el lado de datos, el
+procesador accede a la BRAM mediante el bus local de datos (DLMB) y a los
+periféricos mediante el puerto AXI de datos (\texttt{M\_AXI\_DP}); la caché
+de datos (\texttt{M\_AXI\_DC}) es configurable como \textit{write-back} o
+\textit{write-through}. La unidad de punto flotante (FPU), la unidad de
+gestión de memoria (MMU con TLBs) y la caché de predicción de saltos
+(\textit{Branch Target Cache}) aparecen sombreadas en el diagrama, indicando
+que son características opcionales habilitables mediante parámetros de
+configuración.
 
 \begin{figure}[h]
   \centering
@@ -99,34 +118,36 @@ PLB y FSL utilizados en generaciones anteriores~\cite{ug1037}.
 
 El protocolo AXI define cinco canales independientes que operan de forma
 desacoplada mediante un mecanismo de \textit{handshake} basado en señales
-\texttt{VALID} y \texttt{READY} (ver figura \ref{fig:axi_channels_writes} y \ref{fig:axi_channels_reads})~\cite{ihi0022h}:
+\texttt{VALID} y \texttt{READY}~\cite{ihi0022h}. La
+Figura~\ref{fig:axi_channels_writes} ilustra los tres canales involucrados en
+una transacción de escritura: el canal de dirección de escritura (AW), por el
+que la interfaz maestra (\textit{Manager}) envía la dirección y las señales de
+control; el canal de datos de escritura (W), que transporta las palabras de
+datos desde el maestro hacia la interfaz subordinada
+(\textit{Subordinate}); y el canal de respuesta de escritura (B), por el que
+el subordinado retorna el estado de finalización de la transacción. De forma
+análoga, la Figura~\ref{fig:axi_channels_reads} muestra los dos canales de
+lectura: el canal de dirección de lectura (AR), por el que el maestro emite
+la dirección solicitada, y el canal de datos de lectura (R), por el que el
+subordinado retorna los datos leídos junto con su estado. Las flechas en
+ambos diagramas indican la dirección del flujo de información entre las
+interfaces.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\textwidth]{fig/channel_writes.png}
-  \caption{Canales de escritura del protocolo AXI \cite{ihi0022h}.}
+  \caption{Canales de escritura del protocolo AXI: canal de dirección (AW),
+    canal de datos (W) y canal de respuesta (B)~\cite{ihi0022h}.}
   \label{fig:axi_channels_writes}
 \end{figure}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\textwidth]{fig/channel_reads.png}
-  \caption{Canales de lectura del protocolo AXI \cite{ihi0022h}.}
+  \caption{Canales de lectura del protocolo AXI: canal de dirección (AR) y
+    canal de datos (R)~\cite{ihi0022h}.}
   \label{fig:axi_channels_reads}
 \end{figure}
-
-\begin{itemize}
-  \item \textbf{Canal de dirección de escritura (AW):} transporta la
-    dirección y las señales de control para transacciones de escritura.
-  \item \textbf{Canal de datos de escritura (W):} transporta los datos a
-    escribir y las señales de \textit{strobe} por byte.
-  \item \textbf{Canal de respuesta de escritura (B):} retorna el estado de
-    la transacción de escritura al maestro.
-  \item \textbf{Canal de dirección de lectura (AR):} transporta la dirección
-    y las señales de control para transacciones de lectura.
-  \item \textbf{Canal de datos de lectura (R):} retorna los datos leídos y
-    el estado de la transacción al maestro.
-\end{itemize}
 
 La variante AXI4-Lite es una simplificación del protocolo AXI4 completo
 orientada a periféricos de control con mapas de registros accesibles mediante
@@ -196,7 +217,20 @@ pulsadores, un \textit{display} de 7~segmentos de 4~dígitos, un puerto
 USB-UART para comunicación serial, conectores Pmod para expansión y un puerto
 VGA de 12~bits~\cite{basys3rm}. El reloj principal del sistema es un
 oscilador de 100\,MHz conectado al pin~\texttt{W5} de la
-FPGA~\cite{basys3rm}. Ver figura \ref{fig:basys3}.
+FPGA~\cite{basys3rm}.
+
+La Figura~\ref{fig:basys3} muestra la disposición física de la placa
+Basys\,3 con sus componentes numerados. En la parte central se encuentra el
+chip FPGA Artix-7, rodeado por los periféricos de entrada/salida: los
+16~interruptores y los 16~LEDs se ubican en el borde inferior de
+la placa; los 5~pulsadores se sitúan a la derecha junto a los conectores Pmod
+para expansión; el \textit{display} de 7~segmentos de 4~dígitos se encuentra
+en la zona inferior izquierda. En el borde superior se localizan el conector
+VGA, el puerto USB compartido para UART y JTAG (marcado como \textit{Shared
+UART/JTAG USB port}), el conector USB \textit{host} y los controles de
+alimentación. El puerto USB-UART compartido (conector~J4) es el que se
+utiliza en este proyecto tanto para la carga del \textit{bitstream} vía JTAG
+como para la comunicación serial con el computador anfitrión.
 
 La configuración de la FPGA se realiza mediante archivos \textit{bitstream}
 generados por Vivado. El \textit{bitstream} del \texttt{XC7A35T} tiene un
@@ -382,51 +416,91 @@ carga) o la señal de retroalimentación del vecino (durante la fase activa), y
 un inversor cuyo retardo de propagación constituye la fuente de entropía
 física. Los inversores llevan el atributo \texttt{DONT\_TOUCH} para evitar
 que las herramientas de síntesis optimicen o eliminen el lazo
-combinacional. Ver figura \ref{fig:plpuf_arch} y \ref{fig:plpuf_core_logic}.
+combinacional.
+
+La Figura~\ref{fig:plpuf_arch} presenta la estructura completa del PLPUF de
+128~bits. La cadena está formada por celdas de lógica central (\textit{Core
+logic}) conectadas en serie: la salida \texttt{Dout[128]} alimenta la entrada
+de la siguiente celda, y así sucesivamente hasta \texttt{Dout[1]}. La línea
+de retroalimentación conecta \texttt{Dout[1]} de vuelta a la entrada de la
+primera celda, cerrando el lazo. En las posiciones de \textit{tap} (celdas
+127, 102 y 100, correspondientes a los términos del polinomio primitivo) se
+insertan compuertas XOR ($\oplus$) que combinan la señal de
+retroalimentación con la salida del vecino adyacente, introduciendo la no
+linealidad necesaria para la difusión de la entropía.
+
+La Figura~\ref{fig:plpuf_core_logic} detalla la estructura interna de una
+celda individual. Cada celda recibe dos entradas: \texttt{Din} (señal de
+retroalimentación del vecino durante la fase activa) y \texttt{Dinit} (bit
+de desafío correspondiente durante la fase de carga). La señal de
+selección \texttt{SEL} controla
+un multiplexor que elige entre ambas entradas. La señal seleccionada pasa a
+través de un inversor, cuyo retardo de propagación (determinado por las variaciones del proceso de fabricación) constituye la
+fuente de entropía física. La salida \texttt{Dout} alimenta la siguiente
+celda de la cadena.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.80\textwidth]{fig/plpuf1.png}
-  \caption{Estructura del Pseudo-LFSR PUF \cite{hori_2011_pseudolfsr}.}
+  \caption{Estructura del Pseudo-LFSR PUF de 128~bits: cadena de celdas de
+    lógica central con compuertas XOR en las posiciones de \textit{tap} y
+    retroalimentación desde \texttt{Dout[1]} hacia la primera
+    celda~\cite{hori_2011_pseudolfsr}.}
   \label{fig:plpuf_arch}
 \end{figure}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.50\textwidth]{fig/plpuf2.png}
-  \caption{Estructura de la lógica central \cite{hori_2011_pseudolfsr}.}
+  \caption{Estructura interna de una celda de lógica central: multiplexor
+    controlado por \texttt{SEL} e inversor como fuente de
+    entropía~\cite{hori_2011_pseudolfsr}.}
   \label{fig:plpuf_core_logic}
 \end{figure}
 
 \subsubsection{Operación del PLPUF}
 
 El funcionamiento del PLPUF se controla mediante una máquina de estados
-finitos (FSM) con cuatro estados (ver figura \ref{fig:plpuf_fsm})~\cite{hori_2011_pseudolfsr}:
+finitos (FSM) con cuatro estados, ilustrada en la
+Figura~\ref{fig:plpuf_fsm}~\cite{hori_2011_pseudolfsr}. El diagrama muestra
+las transiciones entre estados y las señales de control asociadas a cada uno:
 
 \begin{enumerate}
-  \item \textbf{\texttt{IDLE}:} el módulo está inactivo, esperando la señal
-    de inicio.
-  \item \textbf{\texttt{LOAD}:} el desafío de $n$~bits se propaga a través de
-    los inversores con la señal de habilitación desactivada
-    (\texttt{enable}$\,=0$), permitiendo que la cadena se estabilice en un
-    estado determinado por el desafío. Esta fase dura un solo ciclo de reloj.
-  \item \textbf{\texttt{ACTIVE}:} la señal de habilitación se activa
-    (\texttt{enable}$\,=1$), cerrando el lazo de retroalimentación. El
-    circuito oscila libremente a una frecuencia determinada por los retardos
-    acumulados de propagación de cada inversor y compuerta XOR, retardos que
-    son únicos para cada chip fabricado. Esta fase dura exactamente
-    $c$~ciclos de reloj, donde $c$ es la \textbf{duración de activación}
-    configurable por software.
-  \item \textbf{\texttt{DONE}:} el estado oscilante de la cadena se captura
-    en \textit{flip-flops}, formando la respuesta de $n$~bits. La señal
-    \texttt{done} emite un pulso de un ciclo.
+  \item \textbf{\texttt{IDLE}} (\texttt{enable\,=\,0}, \texttt{busy\,=\,0},
+    \texttt{done\,=\,0}): el módulo está inactivo, esperando la señal
+    de inicio. Al recibir \texttt{start\,=\,1}, la FSM activa
+    \texttt{busy\,=\,1} y transiciona a \texttt{LOAD}.
+  \item \textbf{\texttt{LOAD}} (1~ciclo): el desafío de $n$~bits se propaga
+    a través de los inversores con la señal de habilitación desactivada
+    (\texttt{enable\,=\,0}), permitiendo que la cadena se estabilice en un
+    estado determinado por el desafío. Como se observa en la figura, en este
+    estado el desafío (\texttt{challenge}) se propaga por la cadena mientras
+    \texttt{enable} permanece en cero. Esta fase dura un solo ciclo de reloj,
+    tras lo cual \texttt{enable} pasa a~1 y la FSM avanza a \texttt{ACTIVE}.
+  \item \textbf{\texttt{ACTIVE}} (\texttt{enable\,=\,1}): el lazo de
+    retroalimentación se cierra y el circuito oscila libremente a una
+    frecuencia determinada por los retardos acumulados de propagación de cada
+    inversor y compuerta XOR, retardos que son únicos para cada chip
+    fabricado. Esta fase dura exactamente $c$~ciclos de reloj, donde $c$ es
+    la \textbf{duración de activación} configurable por software. Cuando el
+    contador descendente alcanza \texttt{duration\,$-$\,1}, el estado de la
+    cadena se captura en el registro de respuesta
+    (\texttt{response\,$\leftarrow$\,core\_out}) y la FSM transiciona a
+    \texttt{DONE}.
+  \item \textbf{\texttt{DONE}} (1~ciclo, \texttt{done\,=\,1},
+    \texttt{busy\,=\,0}): la señal \texttt{done} emite un pulso de un ciclo,
+    indicando que la respuesta de $n$~bits está disponible en los registros de
+    salida. La FSM retorna automáticamente a \texttt{IDLE}, quedando lista
+    para una nueva evaluación.
 \end{enumerate}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.4\textwidth]{fig/plpuf_fsm}
   \caption{Máquina de estados del PLPUF: ciclo de evaluación
-           desafío-respuesta.}
+           desafío-respuesta con las señales de control y las condiciones de
+           transición entre los estados \texttt{IDLE}, \texttt{LOAD},
+           \texttt{ACTIVE} y \texttt{DONE}.}
   \label{fig:plpuf_fsm}
 \end{figure}
 
