@@ -1,3 +1,455 @@
+%% ---------------------------------------------------------------------------
+%% resultados.tex
+%% Descripción del trabajo realizado (Resultados y análisis)
+%% ---------------------------------------------------------------------------
+
 \chapter{Descripción del trabajo realizado}
 \label{ch:trabajo}
 
+Este capítulo presenta los resultados experimentales obtenidos a partir de la
+evaluación intra-dispositivo del módulo PLPUF implementado en la placa
+Basys\,3. Se ejecutaron 10~corridas independientes de la aplicación de
+evaluación exhaustiva (\texttt{test\_app2}, descrita en la
+Sección~\ref{sec:test_app2}) sobre el mismo dispositivo FPGA, acumulando un
+total de aproximadamente 140\,000 evaluaciones del PLPUF. Cada corrida
+ejecutó 20~desafíos pseudoaleatorios con 50~repeticiones por par
+desafío-duración para 10~duraciones de activación ($c = 1, \ldots, 10$), más
+las evaluaciones adicionales para el análisis detallado y el efecto avalancha.
+
+Es importante señalar que todas las pruebas corresponden a una evaluación
+\textbf{intra-dispositivo}: se realizaron sobre un único chip FPGA
+(Artix-7 \texttt{XC7A35T-1CPG236C}). No se dispuso de placas adicionales
+para evaluar métricas inter-dispositivo, por lo que la unicidad se estima
+indirectamente mediante la distancia de Hamming inter-desafío, como se
+fundamentó en la Sección~\ref{sec:metricas} y se definió en el protocolo de
+la Sección~\ref{sec:protocolo}. Esta limitación fue declarada en la
+Sección~\ref{chp:intro} y es consistente con las observaciones de
+Wilde y Pehl~\cite{wilde_2020_confidence} sobre la necesidad de múltiples
+dispositivos para estimaciones estadísticamente robustas del alias de bit y
+la unicidad.
+
+Los valores reportados a continuación corresponden a la media $\pm$
+desviación estándar calculadas sobre las 10~corridas independientes, salvo
+indicación contraria.
+
+% ============================================================================
+\section{Validación funcional del sistema}
+\label{sec:res_funcional}
+% ============================================================================
+
+Antes de la evaluación estadística, cada corrida ejecutó dos pruebas de
+validación funcional:
+
+\begin{enumerate}
+  \item \textbf{Lectura/escritura de registros:} se verificó la correcta
+    escritura y lectura de los registros DURATION y CHAL, así como la
+    condición de solo lectura de los registros RESP. Las 10~corridas
+    reportaron \texttt{ALL PASS}.
+
+  \item \textbf{\textit{Soft reset}:} se verificó que tras ejecutar una
+    evaluación (STATUS con \texttt{done\,=\,1}), un \textit{soft reset}
+    limpiara correctamente la bandera \texttt{done}. Las 10~corridas
+    reportaron \texttt{[PASS]}.
+\end{enumerate}
+
+Estos resultados confirman que la interfaz AXI4-Lite, el mapa de registros y
+la lógica de \textit{reset} del periférico operan correctamente, validando
+los objetivos específicos OE1 (módulo HDL funcional), OE2 (interfaz AXI) y
+OE3 (integración SoC).
+
+% ============================================================================
+\section{Resultados del barrido de duración}
+\label{sec:res_sweep}
+% ============================================================================
+
+La Tabla~\ref{tab:sweep_results} resume los resultados del barrido de
+duración para las cinco métricas principales, promediados sobre las
+10~corridas independientes. La Figura~\ref{fig:res_summary} presenta estos
+mismos datos de forma gráfica.
+
+\begin{table}[htbp]
+\centering
+\caption{Resultados del barrido de duración (media $\pm$ desviación estándar,
+  $n=10$ corridas, 20~desafíos $\times$ 50~repeticiones por corrida).}
+\label{tab:sweep_results}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c r@{$\,\pm\,$}l r@{$\,\pm\,$}l r@{$\,\pm\,$}l
+                  r@{$\,\pm\,$}l r@{$\,\pm\,$}l}
+\hline
+$c$ &
+\multicolumn{2}{c}{Unif.\,(\%)} &
+\multicolumn{2}{c}{Conf.\,(\%)} &
+\multicolumn{2}{c}{BER\,(\%)} &
+\multicolumn{2}{c}{Intra-HD (bits)} &
+\multicolumn{2}{c}{Inter-HD\,(\%)} \\
+\hline
+ 1 & 47.10 & 0.04 & 98.97 & 0.03 &  1.03 & 0.03 &  1.31 & 0.06 & 48.48 & 0.06 \\
+ 2 & 48.68 & 0.09 & 97.09 & 0.07 &  2.91 & 0.07 &  3.92 & 0.30 & 46.03 & 0.07 \\
+ 3 & 47.93 & 0.19 & 96.81 & 0.06 &  3.19 & 0.06 &  4.63 & 0.24 & 45.63 & 0.10 \\
+ 4 & 49.27 & 0.13 & 95.13 & 0.15 &  4.87 & 0.15 &  6.73 & 0.34 & 44.04 & 0.16 \\
+ 5 & 50.14 & 0.14 & 93.38 & 0.13 &  6.62 & 0.13 &  9.40 & 0.52 & 42.55 & 0.14 \\
+ 6 & 51.07 & 0.19 & 92.66 & 0.23 &  7.34 & 0.23 & 10.72 & 0.72 & 41.93 & 0.16 \\
+ 7 & 47.30 & 0.19 & 91.99 & 0.12 &  8.01 & 0.12 & 11.72 & 0.47 & 40.81 & 0.17 \\
+ 8 & 49.95 & 0.23 & 89.89 & 0.30 & 10.11 & 0.30 & 13.39 & 0.54 & 39.53 & 0.18 \\
+ 9 & 49.20 & 0.22 & 89.64 & 0.34 & 10.36 & 0.34 & 14.35 & 0.41 & 39.39 & 0.23 \\
+10 & 49.24 & 0.17 & 88.65 & 0.23 & 11.36 & 0.23 & 15.62 & 0.54 & 37.93 & 0.29 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig/res_summary_4panel.pdf}
+  \caption{Resumen de métricas del PLPUF en función de la duración de
+    activación~$c$. Las barras de error representan $\pm 1\sigma$ sobre
+    10~corridas independientes. (a)~Uniformidad, (b)~confiabilidad,
+    (c)~HD intra-dispositivo, (d)~HD inter-desafío.}
+  \label{fig:res_summary}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+\subsection{Uniformidad}
+\label{sec:res_uniformidad}
+
+La uniformidad mide la proporción de unos en la respuesta \textit{golden}
+del PLPUF; el valor ideal es 50\,\%, lo que indica máxima entropía por
+bit~\cite{maiti_2012_systematic}. Como se muestra en la
+Figura~\ref{fig:res_uniformity}, la uniformidad promedio se mantiene entre
+47.10\,\% ($c = 1$) y 51.07\,\% ($c = 6$) a lo largo de todas las duraciones
+de activación, con una desviación estándar inferior a 0.25 puntos
+porcentuales en todos los casos.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig/res_uniformity.pdf}
+  \caption{Uniformidad del PLPUF en función de la duración de activación~$c$
+    (media $\pm 1\sigma$, $n=10$). La línea discontinua roja indica el valor
+    ideal de 50\,\%.}
+  \label{fig:res_uniformity}
+\end{figure}
+
+Estos valores se encuentran dentro del rango aceptable reportado en la
+literatura para PLPUFs. Hori~et~al.~\cite{hori_2011_pseudolfsr} no
+reportaron uniformidad explícitamente, pero los datos experimentales de su
+evaluación sobre 16~FPGAs Virtex-5 son consistentes con distribuciones
+cercanas al 50\,\%. La ligera desviación observada (máximo sesgo de
+$\sim$3\,\% respecto al ideal) indica que el PLPUF implementado no presenta
+un sesgo estructural significativo hacia ceros o unos, lo cual es deseable
+para aplicaciones de generación de claves y
+autenticación~\cite{maiti_2012_systematic}.
+
+% ---------------------------------------------------------------------------
+\subsection{Confiabilidad y tasa de error de bit (BER)}
+\label{sec:res_confiabilidad}
+
+La confiabilidad cuantifica la reproducibilidad de las respuestas ante el
+mismo desafío, definida como $100\,\% - \text{BER}$
+(Sección~\ref{sec:metricas})~\cite{maiti_2012_systematic}. La
+Figura~\ref{fig:res_reliability_ber} muestra la evolución de ambas métricas
+en función de la duración de activación.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig/res_reliability_ber.pdf}
+  \caption{Confiabilidad (eje izquierdo) y BER (eje derecho) en función de la
+    duración de activación~$c$ (media $\pm 1\sigma$, $n=10$).}
+  \label{fig:res_reliability_ber}
+\end{figure}
+
+Se observa una relación inversa entre la duración de activación y la
+confiabilidad: para $c = 1$, la confiabilidad alcanza
+$98.97 \pm 0.03$\,\%, mientras que para $c = 10$ desciende a
+$88.65 \pm 0.23$\,\%. Este comportamiento es consistente con los
+resultados de Hori~et~al.~\cite{hori_2011_pseudolfsr}, quienes reportaron
+una distancia de Hamming intra-dispositivo de apenas 1.76~bits para $c = 1$
+en FPGAs Virtex-5, creciendo progresivamente con~$c$.
+
+Para $c \leq 4$, la confiabilidad se mantiene por encima del 95\,\%, umbral
+considerado aceptable para aplicaciones de identificación de
+dispositivos~\cite{hori_2011_pseudolfsr, maiti_2012_systematic}. En
+particular, la configuración $c = 1$ exhibe un BER de apenas
+$1.03 \pm 0.03$\,\%, equivalente a $\sim$1.31~bits de los 128 que difieren
+entre evaluaciones, lo que la convierte en la opción más confiable.
+
+La degradación de la confiabilidad con el aumento de~$c$ se explica por la
+naturaleza del lazo combinacional: a medida que el circuito oscila durante
+más ciclos de reloj, la acumulación de ruido térmico y las variaciones de
+temporización incrementan la probabilidad de que bits individuales cambien de
+estado entre evaluaciones~\cite{hori_2011_pseudolfsr,
+alsharkawy_2024_plpufs}.
+
+% ---------------------------------------------------------------------------
+\subsection{Distancia de Hamming intra-dispositivo}
+\label{sec:res_intra_hd}
+
+La distancia de Hamming intra-dispositivo mide la variabilidad de las
+respuestas del PLPUF ante el mismo desafío en evaluaciones sucesivas. El
+valor ideal es 0~bits (respuestas perfectamente
+reproducibles)~\cite{hori_2011_pseudolfsr}. La
+Figura~\ref{fig:res_intra_hd} muestra la evolución de esta métrica.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig/res_intra_hd.pdf}
+  \caption{Distancia de Hamming intra-dispositivo promedio en función de la
+    duración de activación~$c$ (media $\pm 1\sigma$, $n=10$).}
+  \label{fig:res_intra_hd}
+\end{figure}
+
+Para $c = 1$, la HD intra-dispositivo promedio es de $1.31 \pm 0.06$~bits
+sobre 128, lo que representa apenas el 1.02\,\% de la respuesta. Este valor
+es comparable al reportado por Hori~et~al.~\cite{hori_2011_pseudolfsr} de
+1.76~bits promedio para $c = 1$ en Virtex-5 (operando a 24\,MHz). La
+diferencia puede atribuirse a las características de la familia Artix-7 y a
+la frecuencia de operación de 100\,MHz utilizada en este proyecto.
+
+A medida que~$c$ aumenta, la HD intra crece de forma aproximadamente lineal
+hasta alcanzar $15.62 \pm 0.54$~bits ($\sim$12.2\,\%) para $c = 10$. Este
+comportamiento confirma la relación directa entre la duración de activación y
+la variabilidad de las respuestas, documentada tanto por
+Hori~et~al.~\cite{hori_2011_pseudolfsr} como por
+Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs}.
+
+% ---------------------------------------------------------------------------
+\subsection{Distancia de Hamming inter-desafío}
+\label{sec:res_inter_hd}
+
+Dado que la evaluación se realizó sobre un único dispositivo, la métrica de
+unicidad inter-dispositivo (Ecuación~\ref{eq:uniqueness}) no puede calcularse
+directamente~\cite{wilde_2020_confidence}. Como alternativa, se calculó la
+distancia de Hamming fraccional promedio entre las respuestas \textit{golden}
+de los 20~desafíos diferentes para cada duración, tal como se definió en la
+Sección~\ref{sec:metricas_calc}. Un valor cercano a 50\,\% indica que el
+PLPUF genera respuestas suficientemente diversas ante desafíos
+distintos~\cite{hori_2011_pseudolfsr}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig/res_inter_hd.pdf}
+  \caption{Distancia de Hamming inter-desafío (como porcentaje de los
+    128~bits) en función de la duración de activación~$c$ (media $\pm
+    1\sigma$, $n=10$). La línea discontinua roja indica el ideal de 50\,\%.}
+  \label{fig:res_inter_hd}
+\end{figure}
+
+Como se muestra en la Figura~\ref{fig:res_inter_hd}, la HD inter-desafío
+para $c = 1$ es de $48.48 \pm 0.06$\,\%, cercana al ideal de 50\,\%. Sin
+embargo, a medida que~$c$ aumenta, la métrica disminuye progresivamente
+hasta $37.93 \pm 0.29$\,\% para $c = 10$. Este comportamiento sugiere que
+con duraciones mayores, la oscilación del lazo tiende a converger hacia
+patrones parcialmente comunes entre desafíos diferentes, reduciendo la
+diversidad de las respuestas.
+
+Este resultado es consistente con las observaciones de
+Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs}, quienes demostraron que
+duraciones de activación elevadas incrementan la predictibilidad entre
+instancias de PLPUF. En la práctica, la configuración $c = 1$ ofrece la
+mejor combinación de confiabilidad (98.97\,\%) y diversidad inter-desafío
+(48.48\,\%), mientras que valores de~$c \geq 5$ sacrifican ambas
+propiedades.
+
+% ============================================================================
+\section{Análisis detallado a \texorpdfstring{$c = 5$}{c = 5}}
+\label{sec:res_detallado}
+% ============================================================================
+
+La duración $c = 5$ se seleccionó como punto de análisis detallado por
+representar un caso intermedio entre alta confiabilidad (93.38\,\%) y
+variabilidad moderada (BER de 6.62\,\%).
+
+% ---------------------------------------------------------------------------
+\subsection{Estabilidad de bits}
+\label{sec:res_estabilidad}
+
+El mapa de estabilidad de bits clasifica cada posición de la respuesta de
+128~bits según la fracción de repeticiones que coinciden con la respuesta
+\textit{golden}. De las 10~corridas, se obtuvo un promedio de
+$39.5 \pm 3.8$ bits estables ($\geq 95$\,\% de confiabilidad individual) y
+apenas $0.5 \pm 0.5$ bits ruidosos ($< 80$\,\% de confiabilidad), lo que
+indica que ningún bit del PLPUF presenta un comportamiento
+sistemáticamente defectuoso.
+
+En aplicaciones prácticas de generación de claves, los bits con baja
+estabilidad pueden enmascararse o corregirse mediante algoritmos de datos
+auxiliares (\textit{Helper Data Algorithms})~\cite{delvaux_2015_helper}. Los
+resultados indican que para $c = 5$, aproximadamente el 31\,\% de los bits
+(40 de 128) son suficientemente estables para uso directo sin corrección de
+errores, mientras que los bits restantes requerirían mecanismos de
+estabilización.
+
+% ---------------------------------------------------------------------------
+\subsection{Histograma de HD intra-dispositivo}
+\label{sec:res_histograma}
+
+El histograma de la distancia de Hamming entre evaluaciones frescas y las
+respuestas \textit{golden} para $c = 5$ muestra una distribución concentrada
+en el rango de 0 a 25~bits, con la moda en el intervalo de 5 a 9~bits.
+Ninguna de las 200~muestras por corrida (20~desafíos $\times$ 10~muestras)
+excedió los 29~bits de distancia, lo que confirma que las respuestas del
+PLPUF, aunque no perfectamente reproducibles a $c = 5$, permanecen dentro de
+un rango de variabilidad acotado y predecible.
+
+% ============================================================================
+\section{Efecto avalancha}
+\label{sec:res_avalanche}
+% ============================================================================
+
+El efecto avalancha mide la sensibilidad de la PUF a cambios mínimos en el
+desafío: al invertir un solo bit del desafío, idealmente el 50\,\% de los
+bits de la respuesta debería cambiar~\cite{maiti_2012_systematic}. La
+Figura~\ref{fig:res_avalanche} presenta los resultados del análisis de
+avalancha realizado a $c = 5$.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fig/res_avalanche.pdf}
+  \caption{Efecto avalancha del PLPUF a $c = 5$: porcentaje de bits que
+    cambian en la respuesta al invertir un solo bit del desafío (media $\pm
+    1\sigma$, $n=10$). La línea discontinua roja indica el ideal de 50\,\% y
+    la línea punteada verde el promedio observado.}
+  \label{fig:res_avalanche}
+\end{figure}
+
+El efecto avalancha promedio observado fue de $8.43 \pm 1.15$\,\%,
+significativamente inferior al ideal de 50\,\%. Este resultado indica que al
+modificar un solo bit del desafío, en promedio solo $\sim$10.8 de los
+128~bits de la respuesta cambian. La distribución entre posiciones de bit es
+relativamente uniforme (rango de $\sim$2\,\% a $\sim$16\,\% por posición),
+sin posiciones que exhiban sensibilidad nula.
+
+Este comportamiento es una limitación conocida de la arquitectura PLPUF y ha
+sido documentado en la literatura.
+Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs} atribuyen el bajo efecto
+avalancha a la estructura de retroalimentación Fibonacci del PLPUF: un
+cambio en un solo bit del desafío afecta directamente solo una celda de la
+cadena, y la propagación del cambio hacia las celdas vecinas depende de la
+duración de activación y de la conectividad limitada de las compuertas XOR.
+A diferencia de las funciones \textit{hash} criptográficas, que están
+diseñadas específicamente para maximizar la difusión, el PLPUF opera como un
+oscilador físico cuya propagación de cambios está restringida por la
+topología del circuito.
+
+Hori~et~al.~\cite{hori_2011_pseudolfsr} no reportaron mediciones de
+avalancha en su trabajo original, pero la estructura matemática del polinomio
+primitivo $p(x) = x^{128} + x^{126} + x^{102} + x^{99} + 1$ implica que
+solo tres posiciones de retroalimentación XOR conectan secciones distantes de
+la cadena, limitando la difusión lateral.
+
+% ============================================================================
+\section{Comparación con resultados de referencia}
+\label{sec:res_comparacion}
+% ============================================================================
+
+La Tabla~\ref{tab:comparacion} compara los resultados obtenidos en este
+trabajo con los reportados por Hori~et~al.~\cite{hori_2011_pseudolfsr} en
+la evaluación original del PLPUF sobre FPGAs Virtex-5.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparación de resultados con la evaluación de referencia de
+  Hori~et~al.~\cite{hori_2011_pseudolfsr}.}
+\label{tab:comparacion}
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcc}
+\hline
+\textbf{Parámetro} &
+\textbf{Este trabajo} &
+\textbf{Hori et al.~\cite{hori_2011_pseudolfsr}} \\
+\hline
+Plataforma FPGA       & Artix-7 (\texttt{XC7A35T}) & Virtex-5 (\texttt{XC5VLX30}) \\
+Frecuencia de reloj   & 100\,MHz           & 24\,MHz \\
+Ancho del PLPUF       & 128~bits           & 128~bits \\
+Dispositivos evaluados & 1                 & 16 \\
+Desafíos por dispositivo & 20              & 100 \\
+Repeticiones por CRP  & 50                 & 100 \\
+HD intra ($c=1$)      & 1.31~bits          & 1.76~bits \\
+Confiabilidad ($c=1$) & 98.97\,\%          & $\sim$98.6\,\% \\
+HD inter-desafío ($c=1$) & 48.48\,\%       & --- \\
+HD inter-dispositivo  & No evaluada        & $\sim$50\,\% \\
+\hline
+\end{tabular}
+\end{table}
+
+Los resultados de este trabajo son consistentes con la referencia en las
+métricas comparables:
+
+\begin{itemize}
+  \item La HD intra-dispositivo para $c = 1$ (1.31~bits) es incluso inferior
+    a la reportada por Hori~et~al. (1.76~bits), lo que sugiere que la
+    combinación de la familia Artix-7 y la frecuencia de 100\,MHz produce
+    respuestas ligeramente más estables.
+
+  \item La confiabilidad para $c = 1$ (98.97\,\%) es comparable a la de
+    referencia ($\sim$98.6\,\%), ambas por encima del umbral del 95\,\%.
+
+  \item La relación inversa entre~$c$ y la confiabilidad observada en este
+    trabajo reproduce el patrón documentado por
+    Hori~et~al.~\cite{hori_2011_pseudolfsr}: duraciones cortas favorecen la
+    reproducibilidad, mientras que duraciones largas incrementan la
+    variabilidad.
+\end{itemize}
+
+La principal diferencia metodológica es la ausencia de evaluación
+inter-dispositivo, lo que impide calcular la unicidad según la
+Ecuación~\ref{eq:uniqueness}. Sin embargo, la HD inter-desafío de 48.48\,\%
+($c = 1$) indica que el PLPUF genera respuestas suficientemente diversas
+ante desafíos distintos dentro del mismo dispositivo, lo cual es un
+indicador positivo de la capacidad de diferenciación.
+
+% ============================================================================
+\section{Discusión general}
+\label{sec:res_discusion}
+% ============================================================================
+
+Los resultados experimentales permiten extraer las siguientes observaciones
+principales:
+
+\begin{enumerate}
+  \item \textbf{La duración de activación es el parámetro crítico del
+    PLPUF.} Los datos confirman que~$c$ controla el compromiso fundamental
+    entre confiabilidad y entropía. Para $c = 1$, se obtiene la máxima
+    confiabilidad (98.97\,\%) con la mejor diversidad inter-desafío
+    (48.48\,\%), a costa de una uniformidad ligeramente inferior (47.10\,\%).
+    Para $c \geq 5$, la confiabilidad cae por debajo del 95\,\%, lo que
+    requeriría mecanismos de corrección de errores para aplicaciones de
+    generación de claves~\cite{delvaux_2015_helper}.
+
+  \item \textbf{El PLPUF exhibe buena uniformidad.} Los valores de
+    uniformidad se mantienen en el rango de 47\,\% a 51\,\% para todas las
+    duraciones, indicando ausencia de sesgo estructural significativo en las
+    respuestas~\cite{maiti_2012_systematic}.
+
+  \item \textbf{El efecto avalancha es limitado.} Con un promedio de
+    8.43\,\%, el PLPUF no satisface el criterio estricto de avalancha
+    (50\,\%). Esta es una limitación inherente a la arquitectura PLPUF, como
+    documentaron Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs}, y debe
+    considerarse en el diseño de protocolos de seguridad que dependan de esta
+    propiedad.
+
+  \item \textbf{Las 10~corridas son altamente reproducibles.} Las
+    desviaciones estándar de todas las métricas son inferiores a 1 punto
+    porcentual (excepto la HD intra a duraciones altas), lo que confirma la
+    estabilidad del módulo y la robustez del protocolo de evaluación.
+
+  \item \textbf{La implementación es coherente con la literatura.} Los
+    valores de HD intra-dispositivo y confiabilidad son comparables a los
+    reportados por Hori~et~al.~\cite{hori_2011_pseudolfsr} para una
+    arquitectura idéntica (PLPUF de 128~bits con el mismo polinomio
+    primitivo), validando la correcta implementación del módulo en la
+    familia Artix-7.
+\end{enumerate}
+
+En resumen, la evaluación intra-dispositivo demuestra que el módulo PLPUF
+implementado en este proyecto funciona correctamente y exhibe propiedades
+estadísticas consistentes con las esperadas para esta arquitectura. La
+principal limitación de esta evaluación es la ausencia de pruebas
+inter-dispositivo, que serían necesarias para cuantificar la unicidad real
+del PLPUF y su capacidad de distinguir chips individuales en aplicaciones de
+autenticación~\cite{maiti_2012_systematic, wilde_2020_confidence}.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
