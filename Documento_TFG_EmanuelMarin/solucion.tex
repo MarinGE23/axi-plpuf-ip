@@ -642,19 +642,14 @@ el ciclo completo de evaluación (configurar desafío $\rightarrow$ iniciar
 $\rightarrow$ esperar $\rightarrow$ leer respuesta) en una sola llamada,
 simplificando el código de las aplicaciones de prueba.
 
-El siguiente fragmento muestra la implementación de esta función:
+La Figura \ref{fig:plpuf_evaluate} muestra la implementación de esta función:
 
-\begin{minted}[fontsize=\footnotesize, frame=single, linenos]{c}
-void Plpuf_Evaluate(axi_plpuf_t *inst,
-                    u32 C0, u32 C1, u32 C2, u32 C3,
-                    u32 Response[4])
-{
-    Plpuf_SetChallenge(inst, C0, C1, C2, C3);
-    Plpuf_Start(inst);
-    Plpuf_WaitDone(inst);
-    Plpuf_GetResponse(inst, Response);
-}
-\end{minted}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.3\textwidth]{fig/plpuf_evaluate}
+  \caption{Función \texttt{Plpuf\_Evaluate()}.}
+  \label{fig:plpuf_evaluate}
+\end{figure}
 
 % ---------------------------------------------------------------------------
 \subsection{Aplicación de validación básica (\texttt{test\_app1})}
