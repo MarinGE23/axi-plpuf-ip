@@ -5,20 +5,38 @@
 \vspace{2cm}
 \bigskip
 
-Pendiente...
+Este proyecto consiste en el diseño, implementación e integración de un módulo
+de Función Físicamente No Clonable basado en la arquitectura Pseudo-LFSR
+(PLPUF) como periférico dentro de un System-on-Chip (SoC) sobre FPGA. El
+módulo explota las variaciones físicas inherentes al proceso de fabricación del
+silicio para generar identificadores de hardware únicos de 128~bits, eliminando
+la necesidad de almacenar claves criptográficas en memorias no volátiles. El
+sistema completo integra el PLPUF como periférico AXI4-Lite controlado por el
+procesador suave MicroBlaze~V sobre la plataforma Basys~3 con FPGA Artix-7,
+permitiendo la evaluación automatizada de pares desafío-respuesta mediante
+comunicación UART.
 
-%Este proyecto consiste en la creación de un prototipo de una estación de predicción de fallas en unidades de ''balloon'' de catéteres cardiacos, por medio de procesamiento de imágenes utilizando una red neuronal convolucional, la cual aprende las características de las unidades por medio de fotografías tomadas de las unidades mientras se les aplica luz polarizada. El sistema completo consiste de una interfaz de usuario que le permite al operador ingresar sus credenciales, identificar las unidades, realizar la captura e importación de fotografías y realizar el análisis de forma automatizada, así cómo un hardware que permite sostener y rotas las unidades frente a una lampara de luz polarizada y tomar la fotografías de la unidad posicionada al presionar un botón en la interfaz de usuario del software.
+Para el desarrollo del proyecto se utilizó el lenguaje de descripción de
+hardware Verilog para la implementación del núcleo PLPUF y la interfaz
+AXI4-Lite, AMD Vivado para la síntesis, implementación y generación del
+\textit{bitstream}, y AMD Vitis para el desarrollo del \textit{firmware} de
+control en lenguaje C. La evaluación estadística del módulo se realizó mediante
+10~ejecuciones independientes sobre un mismo dispositivo FPGA, acumulando más
+de 140\,000 evaluaciones del PLPUF. Se midieron métricas estándar de la
+literatura: uniformidad (47--51\,\%), confiabilidad (98.97\,\% para duración de
+activación $c = 1$), distancia de Hamming intra-dispositivo (1.31~bits) y
+distancia de Hamming inter-desafío (48.48\,\%).
 
-%Para el desarrollo de este proyecto se utilizó el lenguaje de programación Python 3 y la biblioteca Tensorflow (más específicamente el API de Keras incluido en este) para la creación del modelo de la red neuronal, su entrenamiento y su implementación. Se utilizó la biblioteca pyQT5 para la creación de la interfaz de usuario, la biblioteca OpenCV para el control de la cámara que captura las imágenes y el almacenamiento en disco duro de estas. Se hizo uso de una plataforma Arduino UNO R3 para realizar el control de un motor paso a paso 28BYJ-48 por medio de un módulo controlador ULN2003, así cómo el envío y recibimiento de comandos por medio de su puerto UART.
-%Para la captura de la fotografías se utiliza un microscopio de mano Celestron Capture Pro 5MP compatible con USB.
+En este documento se detalla el proceso de diseño, implementación, integración y
+evaluación del sistema, incluyendo los fundamentos teóricos de las PUFs y las
+métricas de seguridad empleadas, la metodología de desarrollo, los resultados
+experimentales obtenidos y su comparación con la literatura de referencia.
+Los resultados demuestran que el módulo implementado exhibe propiedades
+estadísticas consistentes con las reportadas para la arquitectura PLPUF
+original, validando su correcta portabilidad a la familia FPGA Artix-7.
 
 
-%En este documento se detalla el proceso de diseño, creación, prueba y validación del sistema, los resultados obtenidos y las diferentes partes que lo componen. Cabe resaltar que detalles considerados cómo confidenciales por parte de la empresa serán omitidos por solicitud de la misma.
-
-
-\textbf{\newline Palabras clave: A, B, C, D, E} 
-
-%\textbf{\newline Palabras clave: Arduino, Celestron, Redes neuronales convolucionales, Procesamiento de imágenes, Luz polarizada, Visión por computadora, Catéter cardiaco, Tensorflow, Keras, OpenCV} 
+\textbf{\newline Palabras clave: FPGA, Artix-7, PUF, PLPUF, AXI4-Lite, MicroBlaze~V, seguridad de hardware, System-on-Chip, Verilog, sistemas embebidos}
 
 
 
@@ -27,20 +45,36 @@ Pendiente...
 \vspace{2cm}
 \bigskip
 
-Pending...
+This project consists of the design, implementation and integration of a
+Physical Unclonable Function module based on the Pseudo-LFSR (PLPUF)
+architecture as a peripheral within an FPGA-based System-on-Chip (SoC). The
+module exploits the inherent physical variations of the silicon manufacturing
+process to generate unique 128-bit hardware identifiers, eliminating the need
+to store cryptographic keys in non-volatile memories. The complete system
+integrates the PLPUF as an AXI4-Lite peripheral controlled by the MicroBlaze~V
+soft processor on the Basys~3 platform with an Artix-7 FPGA, enabling
+automated challenge-response pair evaluation through UART communication.
 
-%This project consists in the creation of a prototype station for failure prediction on balloon units for cardiac catheters using image processing, employing a convolutional neural network which learns the features of the units by pictures taken of these units while applying through them polarized light. The complete system consists of an user interface that allows the operator to input his credentials, identify the units, capture and import pictures and analyze the pictures automatically. Also, a hardware that allows to hold and rotate the units in front of the polarized light lamp and take the pictures of the positioned unit when a button in the user interface of the software is pressed.
+For the development of this project, the Verilog hardware description language
+was used for the implementation of the PLPUF core and the AXI4-Lite interface,
+AMD Vivado for synthesis, implementation and bitstream generation, and AMD
+Vitis for the development of the control firmware in C. The statistical
+evaluation of the module was performed through 10~independent runs on a single
+FPGA device, accumulating over 140,000 PLPUF evaluations. Standard metrics
+from the literature were measured: uniformity (47--51\,\%), reliability
+(98.97\,\% for activation duration $c = 1$), intra-device Hamming distance
+(1.31~bits), and inter-challenge Hamming distance (48.48\,\%).
 
-%For the development of this project the Python programming language and the Tensorflow library (the Keras API that it includes more specifically) were used for the creation of the neural network's model, it's training and implementation. PyQT5 library was used for the development of the user interface, OpenCV library for the camera control to take the pictures and disc storage of these. An Arduino UNO R3 platform was employed to control a 28BYJ-48 stepper motor using a ULN2003 controller, also the send and receiving of commands using the Arduino's UART port.
-%For the picture capture an USB compatible handheld Celestron Capture Pro 5MP microscope was used.
- 
-%This document details the design, creation, testing and validation process of the system, also the obtained results and the different parts that make it up. It fits to highlight that details considered as confidential by the company will be omitted as per it's request.
+This document details the design, implementation, integration and evaluation
+process of the system, including the theoretical foundations of PUFs and the
+security metrics employed, the development methodology, the experimental
+results obtained and their comparison with the reference literature. The
+results demonstrate that the implemented module exhibits statistical properties
+consistent with those reported for the original PLPUF architecture, validating
+its correct portability to the Artix-7 FPGA family.
 
 
-\textbf{\newline Keywords: A, B, C, D, E} 
-
-
-%\textbf{\newline Keywords: Arduino, Celestron, Convolutional Neural Networks, Image Processing, Polarized Light, Computer Vision, Cardiac Catheter, Tensorflow, Keras, OpenCV} 
+\textbf{\newline Keywords: FPGA, Artix-7, PUF, PLPUF, AXI4-Lite, MicroBlaze~V, hardware security, System-on-Chip, Verilog, embedded systems}
 
 
 %%% Local Variables: 
