@@ -133,7 +133,7 @@ orientada a periféricos de control con mapas de registros accesibles mediante
 \textit{memory-mapped I/O} (MMIO). AXI4-Lite restringe las transacciones a
 transferencias de una sola palabra (sin ráfagas) y elimina señales avanzadas
 como \texttt{AWLEN}, \texttt{AWSIZE} y \texttt{AWBURST}, lo que simplifica
-significativamente la lógica del esclavo~\cite{ug1037, ihi0022h}. Cada
+significativamente la lógica del esclavo~\cite{ihi0022h, ug1037}. Cada
 transacción se completa cuando el emisor activa \texttt{VALID} y el receptor
 responde con \texttt{READY} en el mismo ciclo de reloj.
 
@@ -230,8 +230,7 @@ periféricos personalizados~\cite{ug994}. El flujo típico de un proyecto en
 Vivado comprende: creación del \textit{block design}, generación de productos
 de salida de los IPs, síntesis lógica, implementación física (\textit{place
 and route}), verificación de restricciones temporales y generación del
-\textit{bitstream}~\cite{ug994}. Para integrar periféricos personalizados
-—como el módulo PLPUF de este proyecto—, Vivado ofrece un flujo de
+\textit{bitstream}~\cite{ug994}. Para integrar periféricos personalizados, como el módulo PLPUF de este proyecto, Vivado ofrece un flujo de
 empaquetado de IP que genera la descripción IP-XACT
 (\texttt{component.xml}), permitiendo que el periférico sea reutilizable en
 cualquier \textit{block design}~\cite{ug1037}.
@@ -262,19 +261,18 @@ Las Funciones Físicamente No Clonables (PUFs, por sus siglas en inglés
 hardware que explotan las variaciones microscópicas e incontrolables
 introducidas durante el proceso de fabricación de circuitos integrados para
 generar identificadores únicos y respuestas criptográficamente útiles
-\cite{handschuh_2011_hardware, shamsoshoara_2020_puf}. Estas variaciones, como diferencias en el voltaje de umbral de los transistores, el espesor del
+\cite{shamsoshoara_2020_puf, handschuh_2011_hardware}. Estas variaciones, como diferencias en el voltaje de umbral de los transistores, el espesor del
 óxido de compuerta o los retardos de propagación en las
 interconexiones, constituyen una fuente natural de entropía que es
 reproducible dentro del mismo dispositivo pero impredecible e imposible de
 replicar exactamente en otro chip, incluso del mismo lote de fabricación
-\cite{sudhanya_2016_silicon, anandakumar_2021_fpgapufs}.
+\cite{anandakumar_2021_fpgapufs, sudhanya_2016_silicon}.
 
 A diferencia de los mecanismos criptográficos convencionales, que dependen de
 claves almacenadas en memorias no volátiles (EEPROM, Flash, SRAM con
 respaldo de batería), las PUFs generan sus claves directamente desde las
 propiedades físicas del silicio, eliminando la necesidad de almacenamiento
-permanente de información sensible~\cite{handschuh_2011_hardware,
-hou_2019_lightweight}. Esta propiedad las hace intrínsecamente resistentes a
+permanente de información sensible~\cite{hou_2019_lightweight, handschuh_2011_hardware}. Esta propiedad las hace intrínsecamente resistentes a
 ataques físicos de extracción de claves y las posiciona como una alternativa
 prometedora para el establecimiento de raíces de confianza en hardware
 \cite{shamsoshoara_2020_puf}.
@@ -289,7 +287,7 @@ clonar~\cite{anandakumar_2021_fpgapufs}. La interacción con una PUF se
 realiza mediante un mecanismo de desafío-respuesta: ante un estímulo de
 entrada (desafío), la PUF produce una salida (respuesta) que depende de las
 características físicas únicas del dispositivo. Las propiedades esenciales que
-debe exhibir una PUF son~\cite{anandakumar_2021_fpgapufs, lata_2023_fpgapuf}:
+debe exhibir una PUF son~\cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}:
 
 \begin{itemize}
   \item \textbf{Reproducibilidad:} la respuesta a un desafío dado debe ser
@@ -336,7 +334,7 @@ principales~\cite{shamsoshoara_2020_puf, lata_2023_fpgapuf}:
 
 Desde la perspectiva de la arquitectura del circuito, las PUFs basadas en
 FPGA pueden clasificarse en tres familias principales
-\cite{anandakumar_2021_fpgapufs, lata_2023_fpgapuf}:
+\cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}:
 
 \begin{enumerate}
   \item \textbf{PUFs basadas en retardo:} explotan las diferencias en los
