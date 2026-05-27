@@ -1,0 +1,166 @@
+%% ---------------------------------------------------------------------------
+%% conclusiones.tex
+%% Conclusiones y recomendaciones
+%% ---------------------------------------------------------------------------
+
+\chapter{Conclusiones y recomendaciones}
+\label{ch:conclusiones}
+
+Este capítulo presenta las conclusiones derivadas del trabajo realizado, en
+términos del cumplimiento de los objetivos planteados, los hallazgos
+experimentales y el aporte global del proyecto a la línea de investigación
+en seguridad de hardware sobre FPGA. A continuación se exponen las
+recomendaciones de trabajo futuro orientadas a superar las limitaciones
+identificadas y a extender las capacidades del módulo desarrollado.
+
+\section{Conclusiones}
+
+El presente proyecto logró diseñar, implementar e integrar un módulo PLPUF
+programable dentro de un SoC basado en FPGA, cumpliendo satisfactoriamente
+el objetivo general propuesto. El módulo opera como periférico AXI4-Lite
+controlado por el procesador suave MicroBlaze~V sobre la plataforma Basys\,3
+con FPGA Artix-7, proporcionando una solución funcional, abierta y
+reproducible para la generación de identificadores de hardware basados en
+variaciones físicas del silicio. La integración alcanzada cubre todas las
+capas del sistema, desde la descripción HDL del núcleo PUF hasta el
+\textit{firmware} de evaluación y el \textit{dataset} resultante, lo cual
+constituye el principal aporte diferenciador respecto a las
+implementaciones aisladas reportadas en la
+literatura~\cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}.
+
+El núcleo PLPUF fue implementado exitosamente en Verilog con ancho
+parametrizable, configurado a 128~bits, empleando una cadena de inversores con
+retroalimentación tipo Fibonacci y una máquina de estados finitos de cuatro
+estados. La síntesis en AMD Vivado generó el \textit{bitstream} para la FPGA
+Artix-7, y las pruebas de validación funcional confirmaron que el módulo
+genera respuestas de 128~bits que varían con el desafío y la duración de
+activación, cumpliendo así el primer objetivo específico. El uso de los
+atributos de síntesis \texttt{DONT\_TOUCH} y
+\texttt{ALLOW\_COMBINATORIAL\_LOOPS} resultó esencial para preservar la
+integridad del lazo combinacional durante la optimización del sintetizador.
+
+La interfaz AXI4-Lite \textit{slave}, con un mapa de 12~registros de 32~bits
+para control, duración, desafío, respuesta y estado, operó correctamente en
+las 10~corridas de evaluación ejecutadas. La verificación de lectura y
+escritura de todos los registros, incluida la condición de solo lectura de los
+registros de respuesta, validó la integridad del protocolo de comunicación
+entre el procesador y el periférico, satisfaciendo el segundo objetivo
+específico.
+
+La integración completa del SoC en Vivado IP~Integrator, incluyendo
+MicroBlaze~V, memoria BRAM de 64\,KB, controlador UART, módulo de depuración
+MDM, generador de reloj y el periférico PLPUF, demostró ser estable y
+funcional. El desarrollo del \textit{firmware} de control en C mediante AMD
+Vitis, junto con el \textit{driver} de bajo nivel y las dos aplicaciones de
+prueba, permitió la ejecución autónoma de más de 140\,000~evaluaciones del
+PLPUF distribuidas en 10~corridas independientes, con comunicación estable a
+través de la UART. Este resultado confirma el cumplimiento del tercer
+objetivo específico.
+
+La evaluación del PLPUF mediante un protocolo exhaustivo basado en las
+métricas estándar de la
+literatura~\cite{hori_2011_pseudolfsr, maiti_2012_systematic} demostró que el
+módulo exhibe propiedades estadísticas coherentes con las esperadas para esta
+arquitectura. La uniformidad se mantuvo entre 47\,\% y 51\,\% para todas las
+duraciones de activación, indicando ausencia de sesgo estructural
+significativo~\cite{maiti_2012_systematic}. La confiabilidad superó el 95\,\%
+para duraciones $c \leq 4$, con un máximo de 98.97\,\% para $c = 1$, valor
+comparable al reportado por Hori~et~al.~\cite{hori_2011_pseudolfsr} para
+FPGAs Virtex-5. La distancia de Hamming inter-desafío alcanzó el 48.48\,\%
+para $c = 1$, cercana al ideal de 50\,\%, lo que indica que el PLPUF genera
+respuestas suficientemente diversas ante desafíos distintos. Estos resultados
+validan la correcta portabilidad de la arquitectura a la familia Artix-7 y
+satisfacen el cuarto objetivo específico.
+
+Los datos experimentales confirmaron que la duración de activación~$c$
+constituye el parámetro más crítico del PLPUF, al gobernar el compromiso
+fundamental entre confiabilidad y entropía. La configuración $c = 1$ ofrece la
+mejor combinación de métricas, mientras que valores de~$c \geq 5$ reducen la
+confiabilidad por debajo del umbral comúnmente
+aceptado~\cite{maiti_2012_systematic}. Esta observación es consistente con los
+riesgos documentados por Alsharkawy~et~al.~\cite{alsharkawy_2024_plpufs}
+respecto a duraciones elevadas.
+
+El efecto avalancha promedio de 8.43\,\% se situó significativamente por
+debajo del ideal de 50\,\%, lo cual constituye una limitación inherente a la
+topología de retroalimentación Fibonacci del
+PLPUF~\cite{alsharkawy_2024_plpufs}. Esta restricción debe considerarse en
+el diseño de protocolos criptográficos que dependan de alta difusión entre el
+desafío y la respuesta.
+
+La alta reproducibilidad entre las 10~corridas independientes, con
+desviaciones estándar inferiores a un punto porcentual en todas las métricas,
+valida tanto la estabilidad del módulo hardware como la robustez del protocolo
+de evaluación implementado. No obstante, la evaluación se limitó a un único
+dispositivo FPGA, por lo que no fue posible calcular la métrica de unicidad
+inter-dispositivo~\cite{wilde_2020_confidence}. La distancia de Hamming
+inter-desafío se utilizó como indicador indirecto de la capacidad de
+diferenciación del PLPUF.
+
+En síntesis, el proyecto cumplió con todos los objetivos propuestos y generó
+una plataforma completa, desde el diseño HDL hasta el software de evaluación
+y el \textit{dataset} de pares desafío-respuesta, que puede servir como base
+para futuras investigaciones en seguridad de hardware sobre FPGAs en
+entornos académicos y de investigación. El aporte del trabajo se sitúa en
+tres ejes principales: en el eje técnico, al ofrecer un núcleo IP
+parametrizable y reutilizable para la familia Artix-7 que no se identificó
+previamente en la literatura accesible; en el eje metodológico, al
+sistematizar un protocolo de evaluación intra-dispositivo reproducible
+basado en métricas estándar; y en el eje educativo, al proveer una
+plataforma abierta sobre la cual estudiantes e investigadores pueden
+experimentar con primitivas de seguridad de hardware sin depender de
+soluciones comerciales costosas o cerradas.
+
+% ---------------------------------------------------------------------------
+\section{Recomendaciones}
+
+A partir de las conclusiones expuestas, y considerando tanto las
+limitaciones declaradas como las oportunidades identificadas a lo largo del
+desarrollo, se proponen a continuación las siguientes recomendaciones para
+trabajos futuros. Estas se presentan ordenadas según su prioridad estimada
+en términos del valor añadido al estado actual del módulo.
+
+Se recomienda, en primer lugar, replicar las pruebas sobre múltiples placas
+Basys\,3, u otras placas con FPGA Artix-7, para calcular la unicidad
+inter-dispositivo y el alias de bit con intervalos de confianza
+estadísticamente robustos, tal como sugieren Wilde y
+Pehl~\cite{wilde_2020_confidence}. Esta evaluación permitiría cuantificar
+la capacidad real del PLPUF para distinguir chips individuales en escenarios
+de autenticación y constituiría el complemento natural más urgente del
+trabajo realizado.
+
+La evaluación realizada se ejecutó a temperatura ambiente y voltaje nominal.
+Para validar la confiabilidad del PLPUF en aplicaciones prácticas, es
+necesario caracterizar su comportamiento bajo variaciones de temperatura y
+fluctuaciones de voltaje, siguiendo las recomendaciones de
+Maiti~et~al.~\cite{maiti_2012_systematic}.
+
+Dado que la confiabilidad se degrada progresivamente para duraciones de
+activación $c \geq 2$, la incorporación de algoritmos de datos auxiliares
+(\textit{Helper Data Algorithms}) con códigos correctores de
+errores~\cite{delvaux_2015_helper} permitiría derivar claves criptográficas
+determinísticas a partir de las respuestas del PLPUF, incluso en
+configuraciones con BER moderado.
+
+El bajo efecto avalancha observado está directamente relacionado con la
+estructura del polinomio primitivo utilizado, que posee solo tres puntos de
+retroalimentación XOR. Se recomienda evaluar polinomios con mayor número de
+taps o funciones de retroalimentación no lineales, como propusieron
+Huang~et~al.~\cite{huang_2024_nlfsr}, para mejorar la difusión entre desafío
+y respuesta. Dado que el diseño es parametrizable y está empaquetado como núcleo IP, su
+portabilidad a familias FPGA de mayor capacidad, como Kintex-7 o UltraScale+,
+permitiría evaluar la influencia de la tecnología de fabricación sobre las
+métricas del PLPUF. Asimismo, resulta de interés explorar la compatibilidad
+con procesadores suaves alternativos al MicroBlaze~V.
+
+Finalmente, el módulo PLPUF y la infraestructura SoC desarrollados proveen la
+base necesaria para implementar protocolos de autenticación ligeros basados en
+PUFs, como los propuestos por Idriss~et~al.~\cite{idriss_2021_lightweight} y
+Hou~et~al.~\cite{hou_2023_modeling}. Se recomienda utilizar la plataforma
+como banco de pruebas para evaluar la viabilidad práctica de estos protocolos
+en sistemas embebidos con recursos limitados.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
