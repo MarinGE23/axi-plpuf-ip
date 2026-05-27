@@ -50,10 +50,10 @@
 \newcommand{\scriptAuthor}{Emanuel Antonio Marín Gutiérrez}
 
 % Título de la tesis
-\newcommand{\scriptTitle}{} 
+\newcommand{\scriptTitle}{Diseño e Integración de un Módulo PLPUF Programable para Sistemas Embebidos}
 
 % Keywords
-\newcommand{\scriptKeywords}{}
+\newcommand{\scriptKeywords}{FPGA, Artix-7, PUF, PLPUF, AXI4-Lite, MicroBlaze V, seguridad de hardware, System-on-Chip, Verilog, sistemas embebidos}
 
 % Descripción de la editorial
 \newcommand{\boxeditorial}{%
@@ -156,11 +156,13 @@
 
   \tableofcontents
   \clearpage
-  
-  %\listoffigures  
+
+  \pdfbookmark[1]{Índice de figuras}{Índice de figuras}
+  \listoffigures
   \clearpage
- 
-  %\listoftables                                         % List of tables
+
+  \pdfbookmark[1]{Índice de tablas}{Índice de tablas}
+  \listoftables
   \clearpage
 
 \ifdraft{%
@@ -169,8 +171,7 @@
 }{%
 }
 
-  %\include{notation}                                    % Notation
-  %\include{glosario}                                    % Abbreviation
+  \include{glosario}                                    % Abbreviation
 
   \parskip1.3ex                           % space between paragraphs
 

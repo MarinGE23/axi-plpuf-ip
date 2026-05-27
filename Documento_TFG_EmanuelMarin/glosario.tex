@@ -1,9 +1,8 @@
 %% ---------------------------------------------------------------------------
-%% paNotation.tex
+%% glosario.tex
 %%
-%% Notation
+%% Lista de símbolos y abreviaciones
 %%
-%% $Id: paNotation.tex,v 1.15 2004/03/30 05:55:59 alvarado Exp $
 %% ---------------------------------------------------------------------------
 
 \cleardoublepage
@@ -15,84 +14,99 @@
 }
 
 %%
-% Símbolos en la notación general
-% (es posible poner la declaración en el texto
+% Abreviaciones del proyecto AXI PLPUF IP
 %%
 
-%\symg[t]{$\sys{\cdot}$}{Transformación realizada por un sistema}
-%\symg[yscalar]{$y$}{Escalar.}
-%\symg[zconjugado]{$\conj{z}$}{Complejo conjugado de $z$}
-%\symg[rcomplexreal]{$\Re(z)$ o $z_{\Re}$}{Parte real del número complejo $z$}
-%\symg[icompleximag]{$\Im(z)$ o $z_{\Im}$}{Parte imaginaria del número
-                                    %    complejo $z$}
-%\symg[jimaginario]{$j$}{$j=\sqrt{-1}$}
-%\symg[xvector]{$\vct{x}$}{Vector. \newline\hspace{1mm}%
-%  $\vct{x}=\left[ x_1 \; x_2 \; \ldots \; x_n \right]^T =
-%  \begin{bmatrix}
-%    x_1 \\ x_2 \\ \vdots \\ x_n
-%  \end{bmatrix}$}
+\syma{AMBA}{\textit{Advanced Microcontroller Bus Architecture} -- Arquitectura de bus de microcontrolador avanzado}
 
-%\symg[amatrix]{$\mat{A}$}{Matriz. \newline\hspace{1mm}%
-%  $\mat{A} =
-%  \begin{bmatrix}
-%    a_{11} & a_{12} & \cdots & a_{1m}\\
-%    a_{21} & a_{22} & \cdots & a_{2m}\\
-%    \vdots & \vdots & \ddots & \vdots\\
-%    a_{n1} & a_{n2} & \cdots & a_{nm}\\
-%  \end{bmatrix}$}
+\syma{ASIC}{\textit{Application-Specific Integrated Circuit} -- Circuito integrado de aplicación específica}
 
-%\symg[C]{$\setC$}{Conjunto de los números complejos.}
+\syma{AXI}{\textit{Advanced eXtensible Interface} -- Interfaz extensible avanzada}
 
-%%
-% Algunas abreviaciones
-%%
+\syma{BER}{\textit{Bit Error Rate} -- Tasa de error de bit}
 
-\syma{MMPE}{Módulo Monitor de Plantas Eléctricas}
+\syma{BRAM}{\textit{Block RAM} -- Bloque de memoria RAM dentro de la FPGA}
 
-\syma{MQTT}{\textit{Message Queue Telemetry Transport}}
+\syma{BSP}{\textit{Board Support Package} -- Paquete de soporte de tarjeta}
 
-\syma{PCB}{\textit{Printed Circuit Board} -circuito impreso}
+\syma{CRP}{\textit{Challenge-Response Pair} -- Par desafío-respuesta}
 
-\syma{PLC}{\textit{Programmable Logic Controller} - Controlador lógico programable}
+\syma{DRC}{\textit{Design Rule Check} -- Verificación de reglas de diseño}
 
-\syma{FTP}{\textit{File Transfer Protocol} - Protocolo de transferencia de archivos}
+\syma{DSP}{\textit{Digital Signal Processor} -- Procesador digital de señales}
 
-\syma{RTU}{\textit{Remote Terminal Unit } - Unidad terminal remota}
+\syma{FAR}{\textit{False Acceptance Rate} -- Tasa de falsa aceptación}
 
-\syma{TCP}{\textit{Transmition Control Protocol} - Protocolo de control de transmisión}
+\syma{FF}{\textit{Flip-Flop} -- Biestable}
 
-\syma{IP}{\textit{Internet Protocol} - Protocolo de de Internet}
+\syma{FPGA}{\textit{Field Programmable Gate Array} -- Arreglo de compuertas programable en campo}
 
-\syma{SoC}{\textit{System on Chip} - Sistema en chip} 
+\syma{FRR}{\textit{False Rejection Rate} -- Tasa de falso rechazo}
 
-\syma{IoT}{\textit{Internet of Things} - Internet de las cosas} 
+\syma{FSM}{\textit{Finite State Machine} -- Máquina de estados finitos}
 
-\syma{JSON}{\textit{JavaScript Object Notation} - Notación de objeto de JavaScript} 
+\syma{HD}{\textit{Hamming Distance} -- Distancia de Hamming}
 
-\syma{QFN}{\textit{Quad Flat No-leads} - Cuadro plano sin cables} 
+\syma{HDA}{\textit{Helper Data Algorithm} -- Algoritmo de datos auxiliares}
 
-\syma{MAC}{\textit{Media Access Control} - Control de acceso a medios} 
+\syma{HDL}{\textit{Hardware Description Language} -- Lenguaje de descripción de hardware}
 
-\syma{GPIO}{\textit{General Purpose Input/Output,} - Entrada y salida de uso general} 
+\syma{IoT}{\textit{Internet of Things} -- Internet de las cosas}
 
-\syma{SPI}{\textit{Serial Peripheral Interface} - Interfaz periférica serial} 
+\syma{IP}{\textit{Intellectual Property} -- Propiedad intelectual (núcleo IP)}
 
-\syma{UART}{\textit{Universal Asynchronous Receiver-Transmitter} - Receptor y transmisor sincrónico universal}
+\syma{ISA}{\textit{Instruction Set Architecture} -- Arquitectura del conjunto de instrucciones}
 
-\syma{CRC}{\textit{Cyclic Redundancy Check} - Verificación de redundancia cíclica} 
+\syma{JTAG}{\textit{Joint Test Action Group} -- Estándar IEEE 1149.1 de depuración}
 
-\syma{PoE}{\textit{Power over Ethernet} - Alimentación a través de Ethernet} 
+\syma{LFSR}{\textit{Linear Feedback Shift Register} -- Registro de desplazamiento con retroalimentación lineal}
 
-\syma{URL}{\textit{Uniform Resource Locator} - Localizador uniforme de recursos} 
+\syma{LMB}{\textit{Local Memory Bus} -- Bus local de memoria}
 
-\syma{QoS}{\textit{Quality of Service} - calidad de servicio} 
+\syma{LUT}{\textit{Look-Up Table} -- Tabla de búsqueda}
 
-\syma{USB}{\textit{Universal Serial Bus } -  Bus serial universal} 
+\syma{MDM}{\textit{MicroBlaze Debug Module} -- Módulo de depuración de MicroBlaze}
+
+\syma{MMIO}{\textit{Memory-Mapped I/O} -- Entrada/salida mapeada en memoria}
+
+\syma{NCR}{\textit{Number of CRPs} -- Número de pares desafío-respuesta requeridos para modelar una PUF}
+
+\syma{NLFSR}{\textit{Non-Linear Feedback Shift Register} -- Registro de desplazamiento con retroalimentación no lineal}
+
+\syma{NLPUF}{\textit{Non-Linear PUF} -- PUF basada en lógica no lineal}
+
+\syma{PLL}{\textit{Phase-Locked Loop} -- Lazo de fase enganchada}
+
+\syma{PLPUF}{\textit{Pseudo-LFSR PUF} -- PUF basada en pseudo-LFSR}
+
+\syma{PRNG}{\textit{Pseudo-Random Number Generator} -- Generador de números pseudoaleatorios}
+
+\syma{PUF}{\textit{Physical Unclonable Function} -- Función físicamente no clonable}
+
+\syma{RISC-V}{\textit{Reduced Instruction Set Computer~V} -- Arquitectura abierta de conjunto de instrucciones reducido}
+
+\syma{RO-PUF}{\textit{Ring Oscillator PUF} -- PUF basada en oscilador de anillo}
+
+\syma{SoC}{\textit{System-on-Chip} -- Sistema en chip}
+
+\syma{SRAM}{\textit{Static Random Access Memory} -- Memoria estática de acceso aleatorio}
+
+\syma{TMR}{\textit{Triple Modular Redundancy} -- Redundancia modular triple}
+
+\syma{TTM}{\textit{Time to Model} -- Tiempo computacional para modelar una PUF}
+
+\syma{UART}{\textit{Universal Asynchronous Receiver-Transmitter} -- Receptor y transmisor asíncrono universal}
+
+\syma{XDC}{\textit{Xilinx Design Constraints} -- Archivo de restricciones de diseño}
+
+\syma{XOR}{\textit{Exclusive OR} -- Compuerta lógica O-exclusiva}
+
+\syma{XSA}{\textit{Xilinx Support Archive} -- Archivo de soporte de Xilinx}
 
 
 \printnomenclature[20mm]
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "paMain"
+%%% TeX-master: "main"
 %%% End:

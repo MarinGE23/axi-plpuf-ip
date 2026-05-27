@@ -755,6 +755,29 @@ arbitrarios y correlaciones realistas, superando las limitaciones de los
 enfoques que asumen respuestas independientes e idénticamente distribuidas
 (IID).
 
+% ============================================================================
+\section{Síntesis del marco teórico}
+\label{sec:teoria_sintesis}
+% ============================================================================
+
+El conjunto de fundamentos presentados en este capítulo constituye la base
+conceptual que sustenta el desarrollo del proyecto. La arquitectura
+\textit{System-on-Chip} basada en MicroBlaze~V y AXI4-Lite proporciona el
+soporte sobre el cual el módulo PLPUF se integra como periférico controlable
+por software, mientras que la plataforma Basys\,3 con FPGA Artix-7 ofrece
+los recursos y la entropía física necesarios para que la arquitectura
+PLPUF~\cite{hori_2011_pseudolfsr} produzca respuestas únicas y
+parametrizables mediante la duración de activación. Las métricas estadísticas
+estándar de la literatura~\cite{maiti_2012_systematic, wilde_2020_confidence,
+frisch_2023_practical} brindan el lenguaje cuantitativo con el cual se
+evaluará la calidad del módulo implementado y la comparabilidad de los
+resultados con la propuesta original.
+
+Con estos elementos teóricos definidos, el siguiente capítulo expone la
+metodología empleada para traducir la arquitectura del PLPUF en una
+implementación concreta sobre FPGA Artix-7, su empaquetado como núcleo IP
+AXI4-Lite y su integración dentro de un SoC controlado por MicroBlaze~V.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"

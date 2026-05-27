@@ -1,83 +1,105 @@
+%% ---------------------------------------------------------------------------
+%% resumen.tex
+%% Resumen y Abstract
+%% ---------------------------------------------------------------------------
 
-\textbf{\Huge\newline\newline\newline\newline\newline Resumen}
+\thispagestyle{empty}
+\cleardoublepage
 
+\begin{center}
+  \vspace*{1.5cm}
+  {\Huge\bfseries Resumen}
+\end{center}
 
-\vspace{2cm}
-\bigskip
+\vspace{1.5cm}
 
-Este proyecto consiste en el diseño, implementación e integración de un módulo
+Este proyecto presenta el diseño, implementación e integración de un módulo
 de Función Físicamente No Clonable basado en la arquitectura Pseudo-LFSR
-(PLPUF) como periférico dentro de un System-on-Chip (SoC) sobre FPGA. El
-módulo explota las variaciones físicas inherentes al proceso de fabricación del
-silicio para generar identificadores de hardware únicos de 128~bits, eliminando
-la necesidad de almacenar claves criptográficas en memorias no volátiles. El
-sistema completo integra el PLPUF como periférico AXI4-Lite controlado por el
-procesador suave MicroBlaze~V sobre la plataforma Basys~3 con FPGA Artix-7,
-permitiendo la evaluación automatizada de pares desafío-respuesta mediante
-comunicación UART.
+(PLPUF) como periférico dentro de un \textit{System-on-Chip} (SoC) sobre
+FPGA. El módulo explota las variaciones físicas inherentes al proceso de
+fabricación del silicio para generar identificadores de hardware únicos de
+128~bits, eliminando la necesidad de almacenar claves criptográficas en
+memorias no volátiles. El sistema completo integra el PLPUF como periférico
+AXI4-Lite controlado por el procesador suave MicroBlaze~V sobre la plataforma
+Basys\,3 con FPGA Artix-7, permitiendo la evaluación automatizada de pares
+desafío-respuesta mediante comunicación UART.
 
 Para el desarrollo del proyecto se utilizó el lenguaje de descripción de
 hardware Verilog para la implementación del núcleo PLPUF y la interfaz
 AXI4-Lite, AMD Vivado para la síntesis, implementación y generación del
 \textit{bitstream}, y AMD Vitis para el desarrollo del \textit{firmware} de
-control en lenguaje C. La evaluación estadística del módulo se realizó mediante
-10~ejecuciones independientes sobre un mismo dispositivo FPGA, acumulando más
-de 140\,000 evaluaciones del PLPUF. Se midieron métricas estándar de la
-literatura: uniformidad (47--51\,\%), confiabilidad (98.97\,\% para duración de
-activación $c = 1$), distancia de Hamming intra-dispositivo (1.31~bits) y
-distancia de Hamming inter-desafío (48.48\,\%).
+control en lenguaje~C. La evaluación estadística del módulo se realizó
+mediante 10~ejecuciones independientes sobre un mismo dispositivo FPGA,
+acumulando más de 140\,000~evaluaciones del PLPUF. Se midieron las métricas
+estándar de la literatura: uniformidad (47--51\,\%), confiabilidad (98.97\,\%
+para duración de activación $c = 1$), distancia de Hamming intra-dispositivo
+(1.31~bits) y distancia de Hamming inter-desafío (48.48\,\%).
 
-En este documento se detalla el proceso de diseño, implementación, integración y
-evaluación del sistema, incluyendo los fundamentos teóricos de las PUFs y las
-métricas de seguridad empleadas, la metodología de desarrollo, los resultados
-experimentales obtenidos y su comparación con la literatura de referencia.
-Los resultados demuestran que el módulo implementado exhibe propiedades
-estadísticas consistentes con las reportadas para la arquitectura PLPUF
-original, validando su correcta portabilidad a la familia FPGA Artix-7.
+En este documento se detalla el proceso de diseño, implementación,
+integración y evaluación del sistema, incluyendo los fundamentos teóricos de
+las PUFs y las métricas de seguridad empleadas, la metodología de
+desarrollo, los resultados experimentales obtenidos y su comparación con la
+literatura de referencia. Los resultados demuestran que el módulo
+implementado exhibe propiedades estadísticas consistentes con las reportadas
+para la arquitectura PLPUF original, validando su correcta portabilidad a la
+familia FPGA Artix-7 y aportando una plataforma abierta y reproducible para
+la investigación en seguridad de hardware basada en PUFs.
 
+\vspace{1cm}
 
-\textbf{\newline Palabras clave: FPGA, Artix-7, PUF, PLPUF, AXI4-Lite, MicroBlaze~V, seguridad de hardware, System-on-Chip, Verilog, sistemas embebidos}
+\noindent\textbf{Palabras clave:} FPGA, Artix-7, PUF, PLPUF, AXI4-Lite,
+MicroBlaze~V, seguridad de hardware, \textit{System-on-Chip}, Verilog,
+sistemas embebidos.
 
+\cleardoublepage
 
+\begin{center}
+  \vspace*{1.5cm}
+  {\Huge\bfseries Abstract}
+\end{center}
 
-\newpage
-\textbf{\Huge\newline\newline\newline\newline\newline Abstract}
-\vspace{2cm}
-\bigskip
+\vspace{1.5cm}
 
-This project consists of the design, implementation and integration of a
+This project presents the design, implementation and integration of a
 Physical Unclonable Function module based on the Pseudo-LFSR (PLPUF)
 architecture as a peripheral within an FPGA-based System-on-Chip (SoC). The
 module exploits the inherent physical variations of the silicon manufacturing
 process to generate unique 128-bit hardware identifiers, eliminating the need
 to store cryptographic keys in non-volatile memories. The complete system
-integrates the PLPUF as an AXI4-Lite peripheral controlled by the MicroBlaze~V
-soft processor on the Basys~3 platform with an Artix-7 FPGA, enabling
-automated challenge-response pair evaluation through UART communication.
+integrates the PLPUF as an AXI4-Lite peripheral controlled by the
+MicroBlaze~V soft processor on the Basys\,3 platform with an Artix-7 FPGA,
+enabling automated challenge-response pair evaluation through UART
+communication.
 
-For the development of this project, the Verilog hardware description language
-was used for the implementation of the PLPUF core and the AXI4-Lite interface,
-AMD Vivado for synthesis, implementation and bitstream generation, and AMD
-Vitis for the development of the control firmware in C. The statistical
-evaluation of the module was performed through 10~independent runs on a single
-FPGA device, accumulating over 140,000 PLPUF evaluations. Standard metrics
-from the literature were measured: uniformity (47--51\,\%), reliability
-(98.97\,\% for activation duration $c = 1$), intra-device Hamming distance
-(1.31~bits), and inter-challenge Hamming distance (48.48\,\%).
+For the development of this project, the Verilog hardware description
+language was used for the implementation of the PLPUF core and the AXI4-Lite
+interface, AMD Vivado for synthesis, implementation and bitstream
+generation, and AMD Vitis for the development of the control firmware in~C.
+The statistical evaluation of the module was performed through
+10~independent runs on a single FPGA device, accumulating over
+140\,000~PLPUF evaluations. Standard metrics from the literature were
+measured: uniformity (47--51\,\%), reliability (98.97\,\% for activation
+duration $c = 1$), intra-device Hamming distance (1.31~bits) and
+inter-challenge Hamming distance (48.48\,\%).
 
 This document details the design, implementation, integration and evaluation
 process of the system, including the theoretical foundations of PUFs and the
 security metrics employed, the development methodology, the experimental
 results obtained and their comparison with the reference literature. The
-results demonstrate that the implemented module exhibits statistical properties
-consistent with those reported for the original PLPUF architecture, validating
-its correct portability to the Artix-7 FPGA family.
+results demonstrate that the implemented module exhibits statistical
+properties consistent with those reported for the original PLPUF
+architecture, validating its correct portability to the Artix-7 FPGA family
+and providing an open and reproducible platform for hardware security
+research based on PUFs.
 
+\vspace{1cm}
 
-\textbf{\newline Keywords: FPGA, Artix-7, PUF, PLPUF, AXI4-Lite, MicroBlaze~V, hardware security, System-on-Chip, Verilog, embedded systems}
+\noindent\textbf{Keywords:} FPGA, Artix-7, PUF, PLPUF, AXI4-Lite,
+MicroBlaze~V, hardware security, System-on-Chip, Verilog, embedded systems.
 
+\cleardoublepage
 
-%%% Local Variables: 
+%%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
-%%% End: 
+%%% End:

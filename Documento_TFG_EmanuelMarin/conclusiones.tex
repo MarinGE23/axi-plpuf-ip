@@ -6,6 +6,13 @@
 \chapter{Conclusiones y recomendaciones}
 \label{ch:conclusiones}
 
+Este capítulo presenta las conclusiones derivadas del trabajo realizado, en
+términos del cumplimiento de los objetivos planteados, los hallazgos
+experimentales y el aporte global del proyecto a la línea de investigación
+en seguridad de hardware sobre FPGA. A continuación se exponen las
+recomendaciones de trabajo futuro orientadas a superar las limitaciones
+identificadas y a extender las capacidades del módulo desarrollado.
+
 \section{Conclusiones}
 
 El presente proyecto logró diseñar, implementar e integrar un módulo PLPUF
@@ -14,7 +21,12 @@ el objetivo general propuesto. El módulo opera como periférico AXI4-Lite
 controlado por el procesador suave MicroBlaze~V sobre la plataforma Basys\,3
 con FPGA Artix-7, proporcionando una solución funcional, abierta y
 reproducible para la generación de identificadores de hardware basados en
-variaciones físicas del silicio.
+variaciones físicas del silicio. La integración alcanzada cubre todas las
+capas del sistema, desde la descripción HDL del núcleo PUF hasta el
+\textit{firmware} de evaluación y el \textit{dataset} resultante, lo cual
+constituye el principal aporte diferenciador respecto a las
+implementaciones aisladas reportadas en la
+literatura~\cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}.
 
 El núcleo PLPUF fue implementado exitosamente en Verilog con ancho
 parametrizable, configurado a 128~bits, empleando una cadena de inversores con
@@ -88,18 +100,34 @@ diferenciación del PLPUF.
 En síntesis, el proyecto cumplió con todos los objetivos propuestos y generó
 una plataforma completa, desde el diseño HDL hasta el software de evaluación
 y el \textit{dataset} de pares desafío-respuesta, que puede servir como base
-para futuras investigaciones en seguridad de hardware sobre FPGAs en entornos
-académicos y de investigación.
+para futuras investigaciones en seguridad de hardware sobre FPGAs en
+entornos académicos y de investigación. El aporte del trabajo se sitúa en
+tres ejes principales: en el eje técnico, al ofrecer un núcleo IP
+parametrizable y reutilizable para la familia Artix-7 que no se identificó
+previamente en la literatura accesible; en el eje metodológico, al
+sistematizar un protocolo de evaluación intra-dispositivo reproducible
+basado en métricas estándar; y en el eje educativo, al proveer una
+plataforma abierta sobre la cual estudiantes e investigadores pueden
+experimentar con primitivas de seguridad de hardware sin depender de
+soluciones comerciales costosas o cerradas.
 
 % ---------------------------------------------------------------------------
 \section{Recomendaciones}
 
-Se recomienda replicar las pruebas sobre múltiples placas Basys\,3, u otras
-placas con FPGA Artix-7, para calcular la unicidad inter-dispositivo y el
-alias de bit con intervalos de confianza estadísticamente robustos, tal como
-sugieren Wilde y Pehl~\cite{wilde_2020_confidence}. Esta evaluación
-permitiría cuantificar la capacidad real del PLPUF para distinguir chips
-individuales en escenarios de autenticación.
+A partir de las conclusiones expuestas, y considerando tanto las
+limitaciones declaradas como las oportunidades identificadas a lo largo del
+desarrollo, se proponen a continuación las siguientes recomendaciones para
+trabajos futuros. Estas se presentan ordenadas según su prioridad estimada
+en términos del valor añadido al estado actual del módulo.
+
+Se recomienda, en primer lugar, replicar las pruebas sobre múltiples placas
+Basys\,3, u otras placas con FPGA Artix-7, para calcular la unicidad
+inter-dispositivo y el alias de bit con intervalos de confianza
+estadísticamente robustos, tal como sugieren Wilde y
+Pehl~\cite{wilde_2020_confidence}. Esta evaluación permitiría cuantificar
+la capacidad real del PLPUF para distinguir chips individuales en escenarios
+de autenticación y constituiría el complemento natural más urgente del
+trabajo realizado.
 
 La evaluación realizada se ejecutó a temperatura ambiente y voltaje nominal.
 Para validar la confiabilidad del PLPUF en aplicaciones prácticas, es
@@ -119,9 +147,7 @@ estructura del polinomio primitivo utilizado, que posee solo tres puntos de
 retroalimentación XOR. Se recomienda evaluar polinomios con mayor número de
 taps o funciones de retroalimentación no lineales, como propusieron
 Huang~et~al.~\cite{huang_2024_nlfsr}, para mejorar la difusión entre desafío
-y respuesta.
-
-Dado que el diseño es parametrizable y está empaquetado como núcleo IP, su
+y respuesta. Dado que el diseño es parametrizable y está empaquetado como núcleo IP, su
 portabilidad a familias FPGA de mayor capacidad, como Kintex-7 o UltraScale+,
 permitiría evaluar la influencia de la tecnología de fabricación sobre las
 métricas del PLPUF. Asimismo, resulta de interés explorar la compatibilidad

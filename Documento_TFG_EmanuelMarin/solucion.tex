@@ -38,9 +38,45 @@ subsiguiente.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.4\textwidth]{fig/methodology_phases.png}
-  \caption{Metodología secuencial por fases del proyecto. Cada fase genera
-    entregables que constituyen la entrada de la fase siguiente.}
+  \begin{tikzpicture}[
+      font=\small,
+      phase/.style={
+        rectangle, draw=black!70, thick, rounded corners=2pt,
+        minimum width=3cm, minimum height=1.4cm,
+        fill=blue!8, align=center
+      },
+      deliv/.style={
+        rectangle, draw=black!50, dashed,
+        minimum width=3cm, minimum height=1.4cm,
+        fill=gray!5, align=center, font=\scriptsize
+      },
+      arrow/.style={-{Latex[length=2.5mm,width=2mm]}, thick, black!70},
+      darrow/.style={-{Latex[length=2mm,width=1.6mm]}, dashed, black!50}
+    ]
+    \node[phase] (f1) at (0,0)    {\textbf{Fase 1}\\Diseño HDL\\\footnotesize(OE1)};
+    \node[phase] (f2) at (3.6,0)  {\textbf{Fase 2}\\Interfaz AXI\\\footnotesize(OE2)};
+    \node[phase] (f3) at (7.2,0)  {\textbf{Fase 3}\\Integración SoC\\\footnotesize(OE3)};
+    \node[phase] (f4) at (10.8,0) {\textbf{Fase 4}\\Evaluación\\\footnotesize(OE4)};
+
+    \draw[arrow] (f1) -- (f2);
+    \draw[arrow] (f2) -- (f3);
+    \draw[arrow] (f3) -- (f4);
+
+    \node[deliv] (d1) at (0,-2.6)    {Código Verilog\\Reportes síntesis\\Simulación};
+    \node[deliv] (d2) at (3.6,-2.6)  {Esclavo AXI4-Lite\\Mapa de registros\\IP empaquetado};
+    \node[deliv] (d3) at (7.2,-2.6)  {\textit{Block design}\\\textit{Bitstream}\\\textit{Firmware} en C};
+    \node[deliv] (d4) at (10.8,-2.6) {\textit{Dataset} CRPs\\Métricas\\Figuras y análisis};
+
+    \draw[darrow] (f1) -- (d1);
+    \draw[darrow] (f2) -- (d2);
+    \draw[darrow] (f3) -- (d3);
+    \draw[darrow] (f4) -- (d4);
+
+    \node[font=\scriptsize\itshape, anchor=east, rotate=90] at (-2.2,-1.3) {Entregables};
+  \end{tikzpicture}
+  \caption{Metodología secuencial por fases del proyecto. Cada fase se
+    alinea con un objetivo específico (OE) y produce entregables verificables
+    que habilitan la fase siguiente.}
   \label{fig:methodology_phases}
 \end{figure}
 
@@ -760,7 +796,7 @@ La Figura \ref{fig:plpuf_evaluate} muestra la implementación de esta función:
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.2\textwidth]{fig/plpuf_evaluate.png}
+  \includegraphics[width=0.3\textwidth]{fig/plpuf_evaluate.png}
   \caption{Función \texttt{Plpuf\_Evaluate()}.}
   \label{fig:plpuf_evaluate}
 \end{figure}

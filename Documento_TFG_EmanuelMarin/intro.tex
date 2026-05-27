@@ -89,7 +89,7 @@ de dispositivos sin requerir almacenamiento permanente de claves criptográficas
 
 \subsection{Trabajos similares}
 
-La arquitectura Pseudo-LFSR PUF (PLPUF) fue propuesta originalmente por
+La arquitectura Pseudo-LFSR PUF (PLPUF) fue propuesta por
 Hori~et~al.~\cite{hori_2011_pseudolfsr}, quienes demostraron que una cadena
 de inversores con retroalimentación tipo Fibonacci, equivalente a un LFSR
 implementado de forma puramente combinacional, es capaz de generar respuestas
@@ -167,18 +167,39 @@ identificadores únicos de hardware \cite{sudhanya_2016_silicon}.
 
 \subsection{Justificación del problema}
 
-Actualmente no se dispone de un módulo PUF de código abierto, programable y compatible
-con el procesador suave MicroBlaze~V mediante la interfaz AXI. Muchas implementaciones
-reportadas en la literatura presentan limitaciones de accesibilidad, flexibilidad o
-integración dentro de arquitecturas modernas de sistemas embebidos, restringiendo su uso
-en entornos académicos y de investigación \cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}.
+Actualmente no se dispone de un módulo PUF de código abierto, programable y
+compatible con el procesador suave MicroBlaze~V mediante la interfaz AXI.
+Muchas implementaciones reportadas en la literatura presentan limitaciones de
+accesibilidad, flexibilidad o integración dentro de arquitecturas modernas
+de sistemas embebidos, restringiendo su uso en entornos académicos y de
+investigación~\cite{lata_2023_fpgapuf, anandakumar_2021_fpgapufs}. Esta
+brecha es especialmente significativa en el ámbito educativo, donde las
+soluciones comerciales se encuentran protegidas por licencias o patentes que
+las hacen inaccesibles para instituciones formativas y estudiantes en
+formación.
 
-El desarrollo de un módulo PLPUF programable e integrable directamente en un SoC permite
-eliminar la dependencia de almacenamiento persistente de secretos, mejorar la seguridad
-a nivel físico y habilitar plataformas experimentales para la evaluación de técnicas
-criptográficas emergentes \cite{delvaux_2015_helper, farha_2019_physical}. Asimismo,
-facilita su adopción en contextos educativos y prototipos de investigación dentro del
-ámbito nacional.
+El desarrollo de un módulo PLPUF programable e integrable directamente en un
+SoC permite eliminar la dependencia de almacenamiento persistente de
+claves, mejorar la seguridad a nivel físico y habilitar plataformas
+experimentales para la evaluación de técnicas criptográficas
+emergentes~\cite{delvaux_2015_helper, farha_2019_physical}. A diferencia de
+implementaciones aisladas del núcleo PUF, una solución integrada como
+periférico AXI permite ejercitar simultáneamente todas las capas del sistema
+(HDL, interfaz de bus, \textit{firmware}, comunicación serial y análisis de
+datos), proporcionando una plataforma realista para validar protocolos de
+autenticación basados en PUFs en condiciones equivalentes a un despliegue
+embebido real~\cite{idriss_2021_lightweight, hou_2023_modeling}.
+
+Adicionalmente, la arquitectura PLPUF resulta especialmente atractiva para
+este propósito debido a su compacidad y a la posibilidad de modificar la
+relación desafío-respuesta mediante un único parámetro (la duración de
+activación), lo cual la convierte en una primitiva versátil para experimentar
+con distintos compromisos entre confiabilidad y
+entropía~\cite{hori_2011_pseudolfsr, alsharkawy_2024_plpufs}. Finalmente, el
+desarrollo de este módulo facilita su adopción en contextos educativos y
+prototipos de investigación dentro del ámbito nacional, contribuyendo a la
+formación de ingenieros capacitados en el diseño de sistemas embebidos
+seguros, área estratégica para el desarrollo tecnológico del país.
 
 \subsection{Enunciado del problema}
 
@@ -188,6 +209,21 @@ volátiles, las cuales pueden ser extraídas mediante ataques físicos. Esta vul
 se ve agravada por la ausencia de módulos de seguridad de hardware abiertos,
 programables y fácilmente integrables mediante estándares como AXI en arquitecturas
 basadas en MicroBlaze~V dentro de FPGAs de la familia Artix-7.
+
+\subsection{Síntesis del problema}
+
+A partir del contexto, la justificación y el enunciado planteados, el problema
+puede sintetizarse en la siguiente pregunta de investigación: \textit{¿es
+posible diseñar, implementar e integrar un módulo PLPUF programable, abierto
+y reproducible, como periférico AXI4-Lite controlable por el procesador
+MicroBlaze~V sobre FPGA Artix-7, que satisfaga las propiedades estadísticas
+esperadas para una PUF de uso académico en seguridad de hardware?} Responder
+afirmativamente a esta pregunta exige no solo lograr una implementación HDL
+funcional, sino también demostrar, mediante un protocolo de evaluación
+sistemático y referenciado en la literatura, que el módulo exhibe
+uniformidad, confiabilidad y diversidad de respuestas comparables a las
+reportadas para la arquitectura PLPUF original
+\cite{hori_2011_pseudolfsr, maiti_2012_systematic}.
 
 
 % ---------------------------------------------------------------------------
@@ -251,6 +287,41 @@ asignada, lo que puede limitar parámetros como el ancho del PLPUF.
 que los resultados pueden no generalizarse a otros lotes de fabricación
 \cite{wilde_2020_confidence}.
 \end{itemize}
+
+% ---------------------------------------------------------------------------
+\section{Estructura del documento}
+
+El presente informe se organiza en cinco capítulos principales, un anexo y la
+lista de referencias bibliográficas. El Capítulo~\ref{ch:marco}, ``Marco de
+referencia teórico'', expone los fundamentos teóricos que sustentan el
+proyecto: la arquitectura de \textit{System-on-Chip} basada en MicroBlaze~V,
+el protocolo de comunicación AXI4-Lite, las características de la FPGA
+Artix-7 y la placa Basys\,3, los conceptos fundamentales de las PUFs con
+especial énfasis en la variante Pseudo-LFSR, y las métricas estadísticas
+empleadas para su evaluación.
+
+El Capítulo~\ref{ch:solucion}, ``Marco metodológico'', describe la
+metodología seguida para abordar el problema: la propuesta por fases ligada a
+cada objetivo específico, las herramientas de desarrollo utilizadas, una
+visión general del sistema, el diseño detallado del núcleo PLPUF en Verilog
+y de la interfaz AXI4-Lite, la integración del SoC en Vivado, el desarrollo
+del software de control en Vitis y el protocolo de evaluación estadística.
+
+El Capítulo~\ref{ch:trabajo}, ``Descripción del trabajo realizado'',
+presenta los resultados experimentales obtenidos. Se detallan la validación
+funcional del sistema, los resultados del barrido de duración de activación,
+el análisis detallado a una duración representativa, el efecto avalancha y
+la comparación de los resultados con la literatura de referencia.
+
+El Capítulo~\ref{ch:conclusiones}, ``Conclusiones y recomendaciones'',
+sintetiza los hallazgos del proyecto, evalúa el cumplimiento de los
+objetivos específicos y propone líneas de trabajo futuro orientadas a
+ampliar la evaluación inter-dispositivo, mejorar el efecto avalancha y
+desplegar protocolos de autenticación basados en el módulo desarrollado.
+
+Finalmente, el Anexo~1 presenta una reflexión sobre las implicaciones
+sociales y éticas del proyecto en el contexto contemporáneo de la seguridad
+informática y de hardware.
 
 %%% Local Variables:
 %%% mode: latex
