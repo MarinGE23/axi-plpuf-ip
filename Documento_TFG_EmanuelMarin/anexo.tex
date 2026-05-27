@@ -1,0 +1,89 @@
+\chapter{Implicaciones sociales y éticas del proyecto}
+\label{ch:anexo_etica}
+
+
+La seguridad no es un concepto abstracto. Detrás de cada dispositivo conectado
+a una red hay una persona, una familia, una institución o una comunidad que
+confía en que sus datos, su identidad y su integridad estarán protegidos. Cuando
+un ingeniero diseña un módulo de seguridad para sistemas embebidos, no está
+simplemente manipulando compuertas lógicas y registros: está asumiendo una
+responsabilidad directa sobre la confianza que otros depositarán en ese
+hardware. Este proyecto me confrontó con esa realidad desde el primer día.
+
+El Internet de las Cosas ha transformado la vida cotidiana de formas que hace
+dos décadas habrían parecido ciencia ficción. Dispositivos médicos que monitorean
+signos vitales, sensores industriales que controlan procesos críticos, cerraduras
+inteligentes que protegen hogares y sistemas vehiculares que toman decisiones en
+fracciones de segundo. Todos ellos comparten una característica común: operan en
+entornos físicamente accesibles, donde un atacante con las herramientas adecuadas
+puede intentar extraer claves, clonar identidades o manipular el comportamiento
+del dispositivo. La consecuencia de una falla de seguridad en estos contextos no
+se mide solamente en pérdidas económicas, sino en riesgos reales para la
+salud, la privacidad y la seguridad de las personas.
+
+Las Funciones Físicamente No Clonables representan un cambio de paradigma en la
+forma de abordar la seguridad del hardware. Al eliminar la necesidad de almacenar
+claves criptográficas en memorias que pueden ser leídas o copiadas, las PUFs
+ofrecen una capa de protección fundamentada en la física misma del silicio,
+imposible de replicar incluso por el fabricante original. Sin embargo, esta
+promesa tecnológica conlleva una responsabilidad ética significativa. Quien diseña
+e implementa una PUF debe ser riguroso en la evaluación de sus propiedades
+estadísticas, honesto en la comunicación de sus limitaciones y consciente de que
+una evaluación incompleta o sesgada puede generar una falsa sensación de
+seguridad con consecuencias potencialmente graves.
+
+Durante el desarrollo de este proyecto, una de las decisiones más difíciles fue
+aceptar y documentar abiertamente las limitaciones de la evaluación realizada. La
+ausencia de pruebas inter-dispositivo impide afirmar con certeza que el módulo
+PLPUF implementado sea capaz de distinguir chips individuales en un escenario de
+autenticación real. Habría sido tentador omitir esta limitación o minimizar su
+importancia, pero hacerlo habría comprometido la integridad del trabajo y,
+potencialmente, la seguridad de quienes en el futuro pudieran utilizar este
+módulo. La honestidad intelectual no es un lujo en ingeniería de seguridad: es
+un requisito ético fundamental.
+
+Otro aspecto que merece reflexión es la decisión de desarrollar este proyecto
+como una solución de código abierto. En el ámbito de la seguridad informática
+existe un debate permanente entre quienes abogan por la seguridad mediante la
+oscuridad y quienes defienden la transparencia como principio fundamental. Mi
+convicción, respaldada por décadas de experiencia en la comunidad criptográfica,
+es que un diseño de seguridad solo puede considerarse confiable cuando ha sido
+sometido al escrutinio público. Al publicar el código HDL, los controladores de
+software y los datos de evaluación, este proyecto invita a la comunidad académica
+a verificar, reproducir y mejorar los resultados. Esta apertura no debilita la
+seguridad; la fortalece.
+
+No obstante, la publicación de herramientas y conocimientos relacionados con la
+seguridad del hardware plantea inevitablemente el dilema del uso dual. El mismo
+conocimiento que permite diseñar una PUF robusta puede emplearse para identificar
+sus debilidades y explotarlas. Este dilema no es exclusivo de este proyecto ni de
+este campo; es inherente a toda la investigación en seguridad. La postura que
+adopto es que la contribución neta del conocimiento abierto es positiva: los
+defensores siempre necesitan más información que los atacantes, y la
+transparencia permite que la comunidad identifique y corrija vulnerabilidades
+antes de que sean explotadas.
+
+Desde una perspectiva social más amplia, este proyecto contribuye a la
+democratización de la seguridad del hardware. Las soluciones comerciales de
+seguridad en silicio suelen estar protegidas por patentes y licencias que las
+hacen inaccesibles para instituciones educativas, pequeñas empresas y países en
+desarrollo. Al proporcionar una plataforma completa, documentada y gratuita, se
+abre la posibilidad de que estudiantes e investigadores de cualquier parte del
+mundo puedan experimentar con técnicas de seguridad de hardware sin depender de
+costosas licencias o hardware propietario. En un contexto como el
+costarricense, donde la formación de ingenieros capaces de diseñar sistemas
+seguros es una necesidad estratégica, esta contribución adquiere un valor que
+trasciende lo puramente técnico.
+
+Finalmente, deseo reflexionar sobre el rol del ingeniero en la sociedad digital
+contemporánea. Vivimos en una era en la que la confianza en la tecnología es un
+pilar de la convivencia social. Cada vez que una persona utiliza un dispositivo
+conectado, está depositando implícitamente su confianza en los ingenieros que lo
+diseñaron, fabricaron y programaron. Esta confianza no debe tomarse a la ligera.
+Mi deber como ingeniero en computadores no se agota en la correcta
+implementación de un circuito o la optimización de una métrica: se extiende a la
+responsabilidad de garantizar que mi trabajo contribuya al bienestar de las
+personas y no se convierta, por negligencia o deshonestidad, en un instrumento
+de vulnerabilidad. Con este proyecto, he intentado honrar esa responsabilidad
+con rigor técnico, transparencia en los resultados y compromiso con la comunidad
+que algún día podría beneficiarse de este trabajo.

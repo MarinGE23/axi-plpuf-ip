@@ -1,0 +1,75 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Thu Apr  2 01:17:07 2026
+| Host         : Emanuel running 64-bit major release  (build 9200)
+| Command      : report_drc -file design_1_wrapper_drc_routed.rpt -pb design_1_wrapper_drc_routed.pb -rpx design_1_wrapper_drc_routed.rpx
+| Design       : design_1_wrapper
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 2
++-----------+----------+----------------------------+--------+
+| Rule      | Severity | Description                | Checks |
++-----------+----------+----------------------------+--------+
+| LUTLP-2   | Warning  | Combinatorial Loop Allowed | 1      |
+| RTSTAT-10 | Warning  | No routable loads          | 1      |
++-----------+----------+----------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+LUTLP-2#1 Warning
+Combinatorial Loop Allowed  
+256 LUT cells form a combinatorial loop. This can create a race condition. Timing analysis may not be accurate. The preferred resolution is to modify the design to remove combinatorial logic loops. This loop has been identified in the constraints as being known and understood by use of the ALLOW_COMBINATORIAL_LOOPS property on a net in the loop. The cells in the loop are: design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_1,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_10,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_11,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_12,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_13,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_14,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_15,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_2,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_3,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_4,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_5,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_6,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_7,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_8,
+design_1_i/axi_plpuf_0/inst/axi_plpuf_slave_lite_v1_0_S00_AXI_inst/plpuf_core_inst/core_in_inferred_i_9
+ (the first 15 of 256 listed).
+Related violations: <none>
+
+RTSTAT-10#1 Warning
+No routable loads  
+15 net(s) have no routable loads. The problem bus(es) and/or net(s) are design_1_i/axi_smc/inst/s00_nodes/s00_b_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m01_nodes/m01_ar_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m01_nodes/m01_w_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m01_nodes/m01_b_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/s00_nodes/s00_aw_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m00_nodes/m00_ar_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m00_nodes/m00_r_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/s00_nodes/s00_r_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/s00_nodes/s00_ar_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m01_nodes/m01_aw_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m00_nodes/m00_aw_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m01_nodes/m01_r_node/inst/mi_handler_m_sc_areset_pipe,
+design_1_i/axi_smc/inst/m00_nodes/m00_b_node/inst/mi_handler_m_sc_areset_pipe
+design_1_i/axi_smc/inst/m00_nodes/m00_w_node/inst/mi_handler_m_sc_areset_pipe.
+Related violations: <none>
+
+

@@ -1,0 +1,30 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Thu Apr  2 01:05:40 2026
+# Process ID         : 27512
+# Current directory  : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_dlmb_v10_0_synth_1
+# Command line       : vivado.exe -log design_1_dlmb_v10_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_dlmb_v10_0.tcl
+# Log file           : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_dlmb_v10_0_synth_1/design_1_dlmb_v10_0.vds
+# Journal file       : C:/Users/emari/Desktop/axi-plpuf-ip/vivado-axi-plpuf/vivado-axi-plpuf.runs/design_1_dlmb_v10_0_synth_1\vivado.jou
+# Running On         : Emanuel
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx  
+# CPU Frequency      : 2096 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 14968 MB
+# Swap memory        : 16194 MB
+# Total Virtual      : 31163 MB
+# Available Virtual  : 5488 MB
+#-----------------------------------------------------------
+source design_1_dlmb_v10_0.tcl -notrace
+create_project: Time (s): cpu = 00:00:24 ; elapsed = 00:00:50 . Memory (MB): peak = 496.977 ; gain = 210.785
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/emari/Desktop/axi-plpuf-ip/ip_repo/axi_plpuf_1_0'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
+INFO: [IP_Flow 19-4838] Using cached IP synthesis design for IP design_1_dlmb_v10_0, cache-ID = 1fff311666b8b6b0.
+INFO: [Common 17-206] Exiting Vivado at Thu Apr  2 01:07:03 2026...
