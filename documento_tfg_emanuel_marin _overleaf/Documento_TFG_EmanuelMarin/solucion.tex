@@ -312,6 +312,7 @@ continuación.
 
 \begin{figure}[htbp]
   \centering
+  \scalebox{0.80}{%
   \begin{tikzpicture}[
       font=\small,
       soc/.style={rectangle, draw=blue!60, thick, fill=blue!6,
@@ -327,61 +328,62 @@ continuación.
         minimum width=2.8cm, minimum height=1.4cm, align=center,
         rounded corners=2pt},
       arrow/.style={-{Latex[length=2.5mm,width=2mm]}, thick, black!70},
-      biarrow/.style={{Latex[length=2.5mm,width=2mm]}-{Latex[length=2.5mm,width=2mm]}, thick, black!70},
+      biarrow/.style={{Latex[length=2.5mm,width=2mm]}-{Latex[length=2.5mm,width=2mm]},
+        thick, black!70},
       step/.style={circle, draw=black!70, fill=white, inner sep=1pt,
         font=\scriptsize\bfseries, minimum size=14pt}
     ]
-
     % --- Computador anfitrión ---
-    \node[ext] (pc) at (-5.5, 0) {\textbf{Computador}\\
+    \node[ext] (pc) at (-6.5, 0) {
+      \textbf{Computador}\\
       \textbf{anfitrión}\\[-1pt]
       \scriptsize Terminal serial\\[-2pt]
-      \scriptsize Scripts Python};
-
+      \scriptsize Scripts Python
+    };
     % --- SoC boundary ---
     \draw[dashed, thick, black!40, rounded corners=6pt]
-      (-2.4, -3.2) rectangle (6.8, 2.6);
+      (-2.6, -4.0) rectangle (8.8, 3.2);
     \node[font=\footnotesize\itshape, anchor=north west, black!50]
-      at (-2.3, 2.5) {SoC -- FPGA Artix-7};
-
+      at (-2.5, 3.1) {SoC -- FPGA Artix-7};
     % --- SoC components ---
-    \node[soc] (mbv) at (2, 1.4) {\textbf{MicroBlaze~V}\\
-      \scriptsize RV32I, 100\,MHz};
-
-    \node[soc] (bram) at (5.2, 1.4) {\textbf{BRAM}\\
-      \scriptsize 64\,KB};
-
-    \node[soc] (smc) at (2, 0) {\textbf{SmartConnect}\\
-      \scriptsize AXI4-Lite};
-
-    \node[comm] (uart) at (-0.4, -1.8) {\textbf{UART Lite}\\
-      \scriptsize 9600 baud};
-
-    \node[plpuf] (puf) at (4.4, -1.8) {\textbf{AXI PLPUF}\\
-      \scriptsize 128 bits};
-
+    \node[soc] (mbv)  at (2.0,  2.0) {
+      \textbf{MicroBlaze~V}\\
+      \scriptsize RV32I, 100\,MHz
+    };
+    \node[soc] (bram) at (6.0,  2.0) {
+      \textbf{BRAM}\\
+      \scriptsize 64\,KB
+    };
+    \node[soc] (smc)  at (2.0,  0.0) {
+      \textbf{SmartConnect}\\
+      \scriptsize AXI4-Lite
+    };
     \node[soc, minimum width=1.6cm, minimum height=0.7cm]
-      (mdm) at (5.2, 0) {\scriptsize\textbf{MDM~V}};
-
+                (mdm) at (6.8,  0.0) {\scriptsize\textbf{MDM~V}};
+    \node[comm] (uart) at (-0.2, -2.4) {
+      \textbf{UART Lite}\\
+      \scriptsize 9600 baud
+    };
+    \node[plpuf] (puf) at (5.2, -2.4) {
+      \textbf{AXI PLPUF}\\
+      \scriptsize 128 bits
+    };
     % --- Connections ---
-    \draw[biarrow] (mbv) -- node[above, font=\scriptsize] {LMB} (bram);
-    \draw[arrow] (mbv) -- node[right, font=\scriptsize] {M\_AXI\_DP} (smc);
-    \draw[biarrow] (smc) -| (uart);
-    \draw[biarrow] (smc) -| (puf);
-    \draw[biarrow] (mbv) -- (mdm);
-
+    \draw[biarrow] (mbv)  -- node[above, font=\scriptsize] {LMB} (bram);
+    \draw[biarrow] (mbv)  -- node[right, font=\scriptsize] {M\_AXI\_DP} (smc);
+    \draw[biarrow] (smc)  -| (uart);
+    \draw[biarrow] (smc)  -| (puf);
+    \draw[biarrow] (mbv)  -- (mdm);
     % --- UART to PC ---
-    \draw[biarrow] (pc) -- node[above, font=\scriptsize] {USB-UART}
-                            node[below, font=\scriptsize] {} (uart);
-
+    \draw[biarrow] (pc) -- node[above, font=\scriptsize] {USB-UART} (uart);
     % --- Flow numbers ---
-    \node[step] at (2, -0.7)    {1};
-    \node[step] at (4.4, -0.7)  {2};
-    \node[step] at (4.4, -2.7)  {3};
-    \node[step] at (-0.4, -0.7) {4};
-    \node[step] at (-3.5, 0)    {5};
-
-  \end{tikzpicture}
+    \node[step] at (2.0, -0.85)  {1};
+    \node[step] at (5.2, -0.85)  {2};
+    \node[step] at (5.2, -3.3)   {3};
+    \node[step] at (-0.2, -0.85) {4};
+    \node[step] at (-4.4,  0.0)  {5};
+  \end{tikzpicture}%
+  }
   \caption{Diagrama general de la solución: sistema SoC con PLPUF integrado.
     Los colores agrupan los componentes por función y los números indican el
     flujo de operación.}
@@ -391,22 +393,22 @@ continuación.
 El sistema se compone de los siguientes grupos de componentes:
 
 \begin{itemize}
-  \item \textbf{Componentes del SoC} (\textcolor{blue!70}{azul}): el
+  \item \textbf{Componentes del SoC} (\textcolor{blue!70}{\textbf{azul}}): el
     procesador suave MicroBlaze~V ejecuta el software de control; la memoria
     BRAM almacena instrucciones y datos; el AXI SmartConnect interconecta el
     procesador con los periféricos; y el módulo de depuración MDM~V permite
     la carga de programas vía JTAG.
 
-  \item \textbf{Periférico PLPUF} (\textcolor{green!60!black}{verde}): el
+  \item \textbf{Periférico PLPUF} (\textcolor{green!60!black}{\textbf{verde}}): el
     módulo desarrollado en este proyecto, conectado como esclavo AXI4-Lite al
     SmartConnect. Contiene la cadena de inversores generadora de entropía, la
     FSM de control y los registros de interfaz.
 
-  \item \textbf{Comunicación} (\textcolor{orange!80!black}{naranja}): el
+  \item \textbf{Comunicación} (\textcolor{orange!80!black}{\textbf{naranja}}): el
     periférico AXI UART~Lite transmite los resultados al exterior a través
     del puerto USB-UART de la Basys\,3.
 
-  \item \textbf{Computador anfitrión} (\textcolor{red!60!black}{rojo}):
+  \item \textbf{Computador anfitrión} (\textcolor{red!60!black}{\textbf{rojo}}):
     recibe los datos por terminal serial y ejecuta los \textit{scripts} de
     Python para el análisis estadístico.
 \end{itemize}
@@ -420,7 +422,7 @@ Figura~\ref{fig:system_diagram}, es el siguiente:
     periférico PLPUF a través del bus AXI4-Lite vía el SmartConnect.
 
   \item[\ding{2}] El SmartConnect enruta la transacción AXI hacia el periférico
-    PLPUF, donde el software escribe el desafío en los registros CHAL\_0 a
+    PLPUF, donde se escribe el desafío en los registros CHAL\_0 a
     CHAL\_3, la duración en DURATION y el bit de inicio en CTRL.
 
   \item[\ding{3}] El núcleo \texttt{plpuf\_core} ejecuta la secuencia FSM:
@@ -466,6 +468,7 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
 
 \begin{figure}[htbp]
   \centering
+  \scalebox{0.80}{%
   \begin{tikzpicture}[
       font=\small,
       port/.style={font=\scriptsize\ttfamily},
@@ -476,7 +479,6 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       (0, 0) rectangle (5.5, -5.5);
     \node[font=\normalsize\bfseries] at (2.75, -0.4) {plpuf\_core};
     \draw[thick, black!30] (0, -0.8) -- (5.5, -0.8);
-
     % Input ports (left side)
     \foreach \y/\name/\width in {
       -1.3/clk/1,
@@ -489,7 +491,6 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       \node[port, anchor=east] at (-2.3, \y) {\name};
       \node[port, anchor=west, black!50] at (0.15, \y) {[\width]};
     }
-
     % Output ports (right side)
     \foreach \y/\name/\width in {
       -1.8/response/128,
@@ -500,11 +501,11 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       \node[port, anchor=west] at (7.8, \y) {\name};
       \node[port, anchor=east, black!50] at (5.35, \y) {[\width]};
     }
-
     % Labels
     \node[font=\scriptsize\itshape, black!50] at (-1.2, -5.0) {Entradas};
     \node[font=\scriptsize\itshape, black!50] at (6.7, -5.0) {Salidas};
-  \end{tikzpicture}
+  \end{tikzpicture}%
+  }
   \caption{Diagrama de primer nivel del módulo \texttt{plpuf\_core}: interfaz
     de puertos con anchos de señal.}
   \label{fig:plpuf_blackbox}
@@ -672,48 +673,48 @@ registros y el núcleo PLPUF.
         minimum width=3cm, minimum height=1.2cm, align=center,
         rounded corners=2pt},
       regblock/.style={rectangle, draw=orange!70, thick, fill=orange!6,
-        minimum width=3.2cm, minimum height=2.6cm, align=center,
+        minimum width=3.2cm, minimum height=3.0cm, align=center,
         rounded corners=2pt},
       coreblock/.style={rectangle, draw=green!60!black, thick, fill=green!6,
-        minimum width=3cm, minimum height=2.2cm, align=center,
+        minimum width=3cm, minimum height=3.0cm, align=center,
         rounded corners=2pt},
       arrow/.style={-{Latex[length=2mm,width=1.5mm]}, thick, black!70},
       biarrow/.style={{Latex[length=2mm,width=1.5mm]}-{Latex[length=2mm,width=1.5mm]}, thick, black!70},
       lbl/.style={font=\scriptsize\ttfamily}
     ]
-
     % AXI channels
-    \node[block] (axi) at (0, 0) {\textbf{Canales AXI}\\
+    \node[block] (axi) at (0, 0) {
+      \textbf{Canales AXI}\\
       \scriptsize AW, W, B, AR, R\\
-      \scriptsize \textit{handshake}};
-
+      \scriptsize \textit{handshake}
+    };
     % Register block
-    \node[regblock] (reg) at (4.5, 0) {\textbf{Registros}\\
+    \node[regblock] (reg) at (5.0, 0) {
+      \textbf{Registros}\\
       \scriptsize CTRL, STATUS\\
       \scriptsize DURATION\\
       \scriptsize CHAL\_0..3\\
-      \scriptsize RESP\_0..3};
-
+      \scriptsize RESP\_0..3
+    };
     % PLPUF core
-    \node[coreblock] (core) at (9, 0) {\textbf{plpuf\_core}\\
+    \node[coreblock] (core) at (10.0, 0) {
+      \textbf{plpuf\_core}\\
       \scriptsize Cadena inversores\\
-      \scriptsize FSM 4 estados};
-
-    % Arrows
+      \scriptsize FSM 4 estados
+    };
+    % AXI <-> Registros
     \draw[biarrow] (axi) -- node[above, lbl] {R/W} (reg);
-
-    \draw[arrow] (reg.east) ++(0, 0.5) -- ++(1.5, 0)
-      node[midway, above, lbl] {challenge}
-      node[midway, below, lbl] {duration, start};
-
-    \draw[arrow] (core.west) ++(0, -0.5) -- ++(-1.5, 0)
-      node[midway, above, lbl] {response}
-      node[midway, below, lbl] {done, busy};
-
-    % From SmartConnect label
-    \draw[arrow] (-2.5, 0) -- (axi.west)
+    % Registros -> plpuf_core: inputs (upper lane)
+    \draw[arrow] ([yshift=+10mm]reg.east) -- ([yshift=+10mm]core.west)
+      node[midway, above=2pt, lbl] {challenge}
+      node[midway, below=2pt, lbl] {duration, start};
+    % plpuf_core -> Registros: outputs (lower lane)
+    \draw[arrow] ([yshift=-10mm]core.west) -- ([yshift=-10mm]reg.east)
+      node[midway, above=2pt, lbl] {response}
+      node[midway, below=2pt, lbl] {done, busy};
+    % From SmartConnect
+    \draw[arrow] (-2.8, 0) -- (axi.west)
       node[midway, above, font=\scriptsize] {SmartConnect};
-
   \end{tikzpicture}
   \caption{Diagrama del diseño de la interfaz AXI4-Lite: los canales AXI
     comunican el bus con el bloque de registros, que a su vez controla el
@@ -824,6 +825,7 @@ en la Figura~\ref{fig:plpuf_hierarchy}.
 
 \begin{figure}[htbp]
   \centering
+  \scalebox{0.78}{%
   \begin{tikzpicture}[
       font=\small,
       outer/.style={rectangle, draw=black!60, thick, fill=blue!4,
@@ -835,51 +837,60 @@ en la Figura~\ref{fig:plpuf_hierarchy}.
       arrow/.style={-{Latex[length=2mm,width=1.5mm]}, thick, black!60},
       lbl/.style={font=\scriptsize\ttfamily}
     ]
-
     % Outer wrapper
-    \node[outer, minimum width=11cm, minimum height=6.8cm] (wrapper) at (5.5, -3.4) {};
+    \node[outer, minimum width=11cm, minimum height=7.6cm] (wrapper) at (5.5, -3.8) {};
     \node[font=\normalsize\bfseries, anchor=north] at (5.5, -0.15)
       {axi\_plpuf (wrapper)};
     \node[lbl, anchor=north east, black!40] at (11, -0.2)
       {Nivel 1};
-
     % Mid: AXI slave
-    \node[mid, minimum width=9.5cm, minimum height=4.6cm] (slave) at (5.5, -4.0) {};
+    \node[mid, minimum width=9.5cm, minimum height=5.2cm] (slave) at (5.5, -4.2) {};
     \node[font=\small\bfseries, anchor=north] at (5.5, -1.55)
       {S00\_AXI (esclavo AXI4-Lite)};
     \node[lbl, anchor=north east, black!40] at (10.2, -1.6)
       {Nivel 2};
-
-    % Contents of slave
+    % Contents of slave: Registros and FSM AXI (side by side, upper area)
     \node[rectangle, draw=orange!50, fill=orange!6, rounded corners=2pt,
-      minimum width=3cm, minimum height=1.2cm, align=center]
-      (regs) at (3.2, -3.2) {\scriptsize\textbf{Registros}\\
-        \scriptsize 11 activos / 16 ranuras};
-
+      minimum width=3cm, minimum height=1.4cm, align=center]
+      (regs) at (3.2, -3.0) {
+        \scriptsize\textbf{Registros}\\
+        \scriptsize CTRL, STATUS, DURATION\\
+        \scriptsize CHAL\_0..3, RESP\_0..3
+      };
     \node[rectangle, draw=blue!40, fill=blue!6, rounded corners=2pt,
-      minimum width=3cm, minimum height=1.2cm, align=center]
-      (fsm_axi) at (7.8, -3.2) {\scriptsize\textbf{FSM AXI}\\
-        \scriptsize Escritura / Lectura};
-
-    % Inner: plpuf_core
-    \node[inner, minimum width=4.5cm, minimum height=1.6cm] (core) at (5.5, -5.6) {};
-    \node[font=\small\bfseries] at (5.5, -5.3) {plpuf\_core};
-    \node[lbl, anchor=north east, black!40] at (7.7, -5.0) {Nivel 3};
-    \node[font=\scriptsize, black!50] at (5.5, -6.0)
+      minimum width=3cm, minimum height=1.4cm, align=center]
+      (fsm_axi) at (7.8, -3.0) {
+        \scriptsize\textbf{FSM AXI}\\
+        \scriptsize state\_write\\
+        \scriptsize state\_read
+      };
+    % Inner: plpuf_core (lower area, clear gap from upper blocks)
+    \node[inner, minimum width=5cm, minimum height=1.8cm]
+      (core) at (5.5, -5.8) {};
+    \node[font=\small\bfseries] at (5.5, -5.5) {plpuf\_core};
+    \node[lbl, anchor=north east, black!40] at (8.0, -5.1) {Nivel 3};
+    \node[font=\scriptsize, black!50] at (5.5, -6.1)
       {Cadena inversores + FSM + Contador};
-
-    % Arrows
-    \draw[arrow] (regs.south) -- ++(0, -0.6) -| (core.north west);
-    \node[lbl, black!50] at (2.3, -4.8) {challenge, duration, start};
-
-    \draw[arrow] (core.north east) |- (regs.south east);
-    \node[lbl, black!50] at (8.3, -4.8) {response, done, busy};
-
+    % --- Arrows ---
+    % Inputs: Registros -> plpuf_core (left lane, going down)
+    \draw[arrow] ([xshift=-5mm]regs.south) -- ++(0, -0.4)
+      -- ([xshift=-5mm]core.north);
+    \node[lbl, black!50, anchor=east] at (2.7, -4.55)
+      {challenge,};
+    \node[lbl, black!50, anchor=east] at (2.7, -4.85)
+      {duration, start};
+    % Outputs: plpuf_core -> Registros (right lane, going up)
+    \draw[arrow] ([xshift=+5mm]core.north) -- ++(0, +0.4)
+      -- ([xshift=+5mm]regs.south);
+    \node[lbl, black!50, anchor=west] at (3.7, -4.55)
+      {response,};
+    \node[lbl, black!50, anchor=west] at (3.7, -4.85)
+      {done, busy};
     % AXI port label on left
-    \draw[arrow] (-0.5, -3.2) -- (wrapper.west |- regs.west)
+    \draw[arrow] (-0.5, -3.0) -- (wrapper.west |- regs.west)
       node[midway, above, font=\scriptsize] {AXI4-Lite};
-
-  \end{tikzpicture}
+  \end{tikzpicture}%
+  }
   \caption{Jerarquía de módulos del IP AXI PLPUF: tres niveles de
     encapsulamiento con el \textit{wrapper}, el esclavo AXI4-Lite
     (registros y FSM AXI) y el núcleo PLPUF.}
