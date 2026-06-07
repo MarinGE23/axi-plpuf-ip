@@ -32,11 +32,17 @@ plt.rcParams.update({
     "grid.alpha": 0.3,
 })
 
-DATA_DIR = Path(r"C:\Users\emari\Desktop\axi-plpuf-ip\vitis-axi-plpuf"
-                r"\plpuf_test_app2\plpuf_test_app2_tests")
-FIG_DIR = Path(r"C:\Users\emari\Desktop\axi-plpuf-ip"
-               r"\Documento_TFG_EmanuelMarin\fig")
+# ----------------------------------------------------------------------
+# Relative paths to the directory where this script is located
+SCRIPT_DIR = Path(__file__).parent
+
+# DATA_DIR: go up two levels to 'axi-plpuf-ip' and then down to the data path
+DATA_DIR = SCRIPT_DIR.parent.parent / "vitis-axi-plpuf" / "plpuf_test_app2" / "plpuf_test_app2_tests"
+
+# FIG_DIR: subdirectory 'fig' within the same directory as the script
+FIG_DIR = SCRIPT_DIR / "fig"
 FIG_DIR.mkdir(exist_ok=True)
+# ----------------------------------------------------------------------
 
 NUM_RUNS = 10
 DUR_RANGE = range(1, 11)
@@ -176,7 +182,7 @@ ax.errorbar(durations, m_intra, yerr=s_intra, fmt="D-", capsize=4,
 ax.axhline(0, color="#059669", linestyle="--", linewidth=1.2,
            label="Ideal (0 bits)")
 ax.set_xlabel("Duración de activación $c$")
-ax.set_ylabel("Distancia de Hamming intra-dispositivo (bits)")
+ax.set_ylabel("HD intra-dispositivo (bits)")
 ax.set_xticks(durations)
 ax.set_ylim(-1, 20)
 ax.legend(loc="upper left")
@@ -196,7 +202,7 @@ ax.errorbar(durations, m_inter, yerr=s_inter, fmt="o-", capsize=4,
 ax.axhline(50, color="#DC2626", linestyle="--", linewidth=1.2,
            label="Ideal (50\\%)")
 ax.set_xlabel("Duración de activación $c$")
-ax.set_ylabel("Distancia de Hamming inter-desafío (\\%)")
+ax.set_ylabel("HD inter-desafío (\\%)")
 ax.set_xticks(durations)
 ax.set_ylim(34, 54)
 ax.legend(loc="lower left")
