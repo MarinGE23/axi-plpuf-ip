@@ -46,8 +46,8 @@ retrabajo sin beneficio significativo, dado que el alcance del proyecto
 estaba bien definido desde el anteproyecto y no se requería la
 participación de usuarios finales durante el desarrollo.
 
-Por estas razones, se adoptó una \textbf{metodología secuencial por
-fases} organizada en cuatro etapas, cada una alineada con un objetivo
+Por estas razones, se adoptó una metodología secuencial por
+fases organizada en cuatro etapas, cada una alineada con un objetivo
 específico del proyecto. La ejecución siguió el orden estricto
 Fase~1~$\rightarrow$~Fase~2~$\rightarrow$~Fase~3~$\rightarrow$~Fase~4,
 con puntos de verificación al final de cada fase para confirmar que los
@@ -479,6 +479,7 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       (0, 0) rectangle (5.5, -5.5);
     \node[font=\normalsize\bfseries] at (2.75, -0.4) {plpuf\_core};
     \draw[thick, black!30] (0, -0.8) -- (5.5, -0.8);
+
     % Input ports (left side)
     \foreach \y/\name/\width in {
       -1.3/clk/1,
@@ -488,9 +489,12 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       -4.1/start/1%
     }{
       \draw[arrow] (-2.2, \y) -- (0, \y);
-      \node[port, anchor=east] at (-2.3, \y) {\name};
-      \node[port, anchor=west, black!50] at (0.15, \y) {[\width]};
+      % bus-width sobre la flecha, fuera del cuadro
+      \node[port, anchor=south, black!50] at (-1.1, \y) {[\width]};
+      % nombre de la señal dentro del cuadro, pegado al borde izquierdo
+      \node[port, anchor=west] at (0.15, \y) {\name};
     }
+
     % Output ports (right side)
     \foreach \y/\name/\width in {
       -1.8/response/128,
@@ -498,9 +502,12 @@ módulo \texttt{plpuf\_core}, mostrando su interfaz externa como caja negra.
       -3.7/busy/1%
     }{
       \draw[arrow] (5.5, \y) -- (7.7, \y);
-      \node[port, anchor=west] at (7.8, \y) {\name};
-      \node[port, anchor=east, black!50] at (5.35, \y) {[\width]};
+      % bus-width sobre la flecha, fuera del cuadro
+      \node[port, anchor=south, black!50] at (6.6, \y) {[\width]};
+      % nombre de la señal dentro del cuadro, pegado al borde derecho
+      \node[port, anchor=east] at (5.35, \y) {\name};
     }
+
     % Labels
     \node[font=\scriptsize\itshape, black!50] at (-1.2, -5.0) {Entradas};
     \node[font=\scriptsize\itshape, black!50] at (6.7, -5.0) {Salidas};
@@ -673,10 +680,10 @@ registros y el núcleo PLPUF.
         minimum width=3cm, minimum height=1.2cm, align=center,
         rounded corners=2pt},
       regblock/.style={rectangle, draw=orange!70, thick, fill=orange!6,
-        minimum width=3.2cm, minimum height=3.0cm, align=center,
+        minimum width=3.2cm, minimum height=4.5cm, align=center,
         rounded corners=2pt},
       coreblock/.style={rectangle, draw=green!60!black, thick, fill=green!6,
-        minimum width=3cm, minimum height=3.0cm, align=center,
+        minimum width=3cm, minimum height=4.5cm, align=center,
         rounded corners=2pt},
       arrow/.style={-{Latex[length=2mm,width=1.5mm]}, thick, black!70},
       biarrow/.style={{Latex[length=2mm,width=1.5mm]}-{Latex[length=2mm,width=1.5mm]}, thick, black!70},
@@ -704,17 +711,26 @@ registros y el núcleo PLPUF.
     };
     % AXI <-> Registros
     \draw[biarrow] (axi) -- node[above, lbl] {R/W} (reg);
-    % Registros -> plpuf_core: inputs (upper lane)
+
+    % Registros -> plpuf_core: entradas
+    \draw[arrow] ([yshift=+18mm]reg.east) -- ([yshift=+18mm]core.west)
+      node[midway, above=2pt, lbl] {challenge};
     \draw[arrow] ([yshift=+10mm]reg.east) -- ([yshift=+10mm]core.west)
-      node[midway, above=2pt, lbl] {challenge}
-      node[midway, below=2pt, lbl] {duration, start};
-    % plpuf_core -> Registros: outputs (lower lane)
-    \draw[arrow] ([yshift=-10mm]core.west) -- ([yshift=-10mm]reg.east)
-      node[midway, above=2pt, lbl] {response}
-      node[midway, below=2pt, lbl] {done, busy};
+      node[midway, above=2pt, lbl] {duration};
+    \draw[arrow] ([yshift=+2mm]reg.east)  -- ([yshift=+2mm]core.west)
+      node[midway, above=2pt, lbl] {start};
+
+    % plpuf_core -> Registros: salidas
+    \draw[arrow] ([yshift=-6mm]core.west)  -- ([yshift=-6mm]reg.east)
+      node[midway, above=2pt, lbl] {response};
+    \draw[arrow] ([yshift=-13mm]core.west) -- ([yshift=-13mm]reg.east)
+      node[midway, above=2pt, lbl] {done};
+    \draw[arrow] ([yshift=-20mm]core.west) -- ([yshift=-20mm]reg.east)
+      node[midway, above=2pt, lbl] {busy};
+
     % From SmartConnect
     \draw[arrow] (-2.8, 0) -- (axi.west)
-      node[midway, above, font=\scriptsize] {SmartConnect};
+      node[near start, above, font=\scriptsize] {SmartConnect};
   \end{tikzpicture}
   \caption{Diagrama del diseño de la interfaz AXI4-Lite: los canales AXI
     comunican el bus con el bloque de registros, que a su vez controla el
@@ -825,7 +841,7 @@ en la Figura~\ref{fig:plpuf_hierarchy}.
 
 \begin{figure}[htbp]
   \centering
-  \scalebox{0.78}{%
+  \scalebox{0.70}{%
   \begin{tikzpicture}[
       font=\small,
       outer/.style={rectangle, draw=black!60, thick, fill=blue!4,
@@ -838,57 +854,67 @@ en la Figura~\ref{fig:plpuf_hierarchy}.
       lbl/.style={font=\scriptsize\ttfamily}
     ]
     % Outer wrapper
-    \node[outer, minimum width=11cm, minimum height=7.6cm] (wrapper) at (5.5, -3.8) {};
-    \node[font=\normalsize\bfseries, anchor=north] at (5.5, -0.15)
+    \node[outer, minimum width=12cm, minimum height=9.2cm]
+      (wrapper) at (6.0, -4.6) {};
+    \node[font=\normalsize\bfseries, anchor=north] at (6.0, -0.15)
       {axi\_plpuf (wrapper)};
-    \node[lbl, anchor=north east, black!40] at (11, -0.2)
-      {Nivel 1};
+    \node[lbl, anchor=north east, black!40] at (12, -0.2) {Nivel 1};
+
     % Mid: AXI slave
-    \node[mid, minimum width=9.5cm, minimum height=5.2cm] (slave) at (5.5, -4.2) {};
-    \node[font=\small\bfseries, anchor=north] at (5.5, -1.55)
+    \node[mid, minimum width=10.5cm, minimum height=7.5cm]
+      (slave) at (6.0, -5.0) {};
+    \node[font=\small\bfseries, anchor=north] at (6.0, -1.55)
       {S00\_AXI (esclavo AXI4-Lite)};
-    \node[lbl, anchor=north east, black!40] at (10.2, -1.6)
-      {Nivel 2};
-    % Contents of slave: Registros and FSM AXI (side by side, upper area)
+    \node[lbl, anchor=north east, black!40] at (11.2, -1.6) {Nivel 2};
+
+    % Registros bajados a y=-3.5 para separar del título
     \node[rectangle, draw=orange!50, fill=orange!6, rounded corners=2pt,
-      minimum width=3cm, minimum height=1.4cm, align=center]
-      (regs) at (3.2, -3.0) {
+      minimum width=3.2cm, minimum height=1.8cm, align=center]
+      (regs) at (5.0, -3.5) {
         \scriptsize\textbf{Registros}\\
         \scriptsize CTRL, STATUS, DURATION\\
         \scriptsize CHAL\_0..3, RESP\_0..3
       };
+
+    % FSM AXI alineado con regs
     \node[rectangle, draw=blue!40, fill=blue!6, rounded corners=2pt,
-      minimum width=3cm, minimum height=1.4cm, align=center]
-      (fsm_axi) at (7.8, -3.0) {
+      minimum width=3.0cm, minimum height=1.8cm, align=center]
+      (fsm_axi) at (9.5, -3.5) {
         \scriptsize\textbf{FSM AXI}\\
         \scriptsize state\_write\\
         \scriptsize state\_read
       };
-    % Inner: plpuf_core (lower area, clear gap from upper blocks)
-    \node[inner, minimum width=5cm, minimum height=1.8cm]
-      (core) at (5.5, -5.8) {};
-    \node[font=\small\bfseries] at (5.5, -5.5) {plpuf\_core};
-    \node[lbl, anchor=north east, black!40] at (8.0, -5.1) {Nivel 3};
-    \node[font=\scriptsize, black!50] at (5.5, -6.1)
+
+    % plpuf_core bajado en la misma proporción
+    \node[inner, minimum width=5.5cm, minimum height=2.0cm]
+      (core) at (5.0, -6.8) {};
+    \node[font=\small\bfseries] at (5.0, -6.45) {plpuf\_core};
+    \node[lbl, anchor=north east, black!40] at (7.7, -5.9) {Nivel 3};
+    \node[font=\scriptsize, black!50] at (5.0, -7.15)
       {Cadena inversores + FSM + Contador};
-    % --- Arrows ---
-    % Inputs: Registros -> plpuf_core (left lane, going down)
-    \draw[arrow] ([xshift=-5mm]regs.south) -- ++(0, -0.4)
-      -- ([xshift=-5mm]core.north);
-    \node[lbl, black!50, anchor=east] at (2.7, -4.55)
-      {challenge,};
-    \node[lbl, black!50, anchor=east] at (2.7, -4.85)
-      {duration, start};
-    % Outputs: plpuf_core -> Registros (right lane, going up)
-    \draw[arrow] ([xshift=+5mm]core.north) -- ++(0, +0.4)
-      -- ([xshift=+5mm]regs.south);
-    \node[lbl, black!50, anchor=west] at (3.7, -4.55)
-      {response,};
-    \node[lbl, black!50, anchor=west] at (3.7, -4.85)
-      {done, busy};
-    % AXI port label on left
-    \draw[arrow] (-0.5, -3.0) -- (wrapper.west |- regs.west)
+
+    % --- Flechas verticales ---
+    % regs.south ≈ y=-3.5-0.9=-4.4
+    % core.north ≈ y=-6.8+1.0=-5.8
+    % Tramo: -4.4 a -5.8 = 1.4cm
+    % Etiquetas en -4.7, -5.1, -5.5
+
+    % Carril izquierdo x=4.4: regs -> core
+    \draw[arrow] (4.4, -4.4) -- (4.4, -5.8);
+    \node[lbl, black!50, anchor=east] at (4.3, -4.7) {challenge};
+    \node[lbl, black!50, anchor=east] at (4.3, -5.1) {duration};
+    \node[lbl, black!50, anchor=east] at (4.3, -5.5) {start};
+
+    % Carril derecho x=5.6: core -> regs
+    \draw[arrow] (5.6, -5.8) -- (5.6, -4.4);
+    \node[lbl, black!50, anchor=west] at (5.7, -4.7) {response};
+    \node[lbl, black!50, anchor=west] at (5.7, -5.1) {done};
+    \node[lbl, black!50, anchor=west] at (5.7, -5.5) {busy};
+
+    % AXI4-Lite
+    \draw[arrow] (-2.0, -3.5) -- (wrapper.west |- regs.west)
       node[midway, above, font=\scriptsize] {AXI4-Lite};
+
   \end{tikzpicture}%
   }
   \caption{Jerarquía de módulos del IP AXI PLPUF: tres niveles de

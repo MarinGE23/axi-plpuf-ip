@@ -20,7 +20,7 @@ análisis empleadas, las abstracciones realizadas y las decisiones de diseño
 fundamentales que permitieron construir la plataforma de evaluación.
 
 % ---------------------------------------------------------------------------
-\subsection{OE1: Implementación del módulo PLPUF en HDL}
+\subsection{Implementación del módulo PLPUF en HDL}
 \label{sec:proc_hdl}
 
 El proceso de implementación del núcleo generador de entropía inició con la
@@ -46,7 +46,7 @@ las variaciones del proceso de fabricación) se preservara y pudiera ser
 explotado en el entorno digital del FPGA.
 
 % ---------------------------------------------------------------------------
-\subsection{OE2: Desarrollo de la interfaz AXI-slave}
+\subsection{Desarrollo de la interfaz AXI-slave}
 \label{sec:proc_axi}
 
 Para habilitar el control del módulo PLPUF desde un procesador en un sistema
@@ -71,7 +71,7 @@ Vivado IP Packager, estandarizando su instanciación para ser compatible con el
 flujo de diseño gráfico de sistemas.
 
 % ---------------------------------------------------------------------------
-\subsection{OE3: Integración del sistema SoC}
+\subsection{Integración del sistema SoC}
 \label{sec:proc_soc}
 
 La síntesis del sistema completo se realizó empleando la herramienta Vivado IP
@@ -97,13 +97,13 @@ tiempo de ejecución del experimento y redujo sustancialmente el volumen de dato
 transferidos hacia el computador anfitrión.
 
 % ---------------------------------------------------------------------------
-\subsection{OE4: Protocolo de evaluación estadística}
+\subsection{Protocolo de evaluación estadística}
 \label{sec:proc_eval}
 
 El proceso de análisis para validar el desempeño de seguridad del módulo requirió
 la definición y aplicación de un protocolo experimental riguroso, fundamentado en
 el marco sistemático propuesto por Maiti~et~al.~\cite{maiti_2012_systematic}.
-Se diseñó un experimento automatizado que ejecutó 10~corridas independientes
+Se diseñó un experimento automatizado que ejecutó 10~ejecuciones independientes
 sobre el sistema físico. Para estructurar adecuadamente el espacio de prueba,
 se estableció para cada corrida un barrido sobre 10~duraciones de activación
 diferentes ($c = 1, \ldots, 10$), evaluando en cada paso 20~desafíos
@@ -132,7 +132,7 @@ tablas y figuras que sustentan el grado de cumplimiento técnico y las
 implicaciones de la plataforma.
 
 % ---------------------------------------------------------------------------
-\subsection{Resultados de la implementación HDL (OE1)}
+\subsection{Implementación del módulo PLPUF en HDL}
 \label{sec:res_oe1}
 
 La validación del diseño HDL se centró en corroborar la viabilidad de
@@ -201,42 +201,42 @@ en detalle en la Sección~\ref{sec:res_oe4}). Dado que el circuito diseñado
 es estricta y puramente lógico digital estándar, la única forma de que sus
 salidas se asemejen a distribuciones pseudoaleatorias con proporciones de ceros y
 unos balanceadas ($\sim$50\,\%) es debido a que la lógica está explotando con
-éxito las minúsculas \textbf{variaciones físicas de los retardos} en los caminos de
+éxito las minúsculas variaciones físicas de los retardos en los caminos de
 los transistores. La ausencia de sesgo en las mediciones empíricas certifica
 que las restricciones impuestas en Vivado funcionaron y el PLPUF extrae la
 entropía inherente del hardware, en lugar de optimizarse hacia un estado constante.
 
 % ---------------------------------------------------------------------------
-\subsection{Pruebas de la interfaz AXI (OE2)}
+\subsection{Pruebas de la interfaz AXI}
 \label{sec:res_oe2}
 
-Antes de autorizar la evaluación masiva de seguridad, se realizaron pruebas de
+Antes de realizar la evaluación masiva de seguridad, se realizaron pruebas de
 validación funcional específicas (\texttt{test\_app1}) ejecutadas por el MicroBlaze~V
 para comprobar rigurosamente el protocolo de comunicación de la interfaz AXI-slave.
 
-Las pruebas ejecutadas y aprobadas en hardware incluyeron:
+En la Figura \ref{fig:results_test_app1} se reproduce la salida completa de la consola serie tras ejecutar la aplicación \texttt{test\_app1} en el hardware. Se observan claramente las cinco pruebas implementadas en el código:
+
 \begin{enumerate}
-  \item \textbf{Lectura y escritura de registros de configuración:} Se verificó
-    que el procesador pudiera escribir y recuperar sin alteraciones los valores
-    en los registros de DURATION y CHAL.
-  \item \textbf{Protección de lectura sobre registros de estado:} Se intentaron
-    ejecutar escrituras indebidas sobre los registros de RESP (respuesta). La
-    prueba comprobó que la interfaz AXI descartó estos datos, garantizando la
-    condición de \textit{read-only} del núcleo generador y su inmunidad ante
-    modificaciones por software.
-  \item \textbf{\textit{Soft reset} e indicadores de estado:} Se constató que
-    tras ejecutar una evaluación (donde la bandera \texttt{done} cambia a 1),
-    la emisión de un comando de \textit{soft reset} en el registro CTRL
-    condujo a una limpieza exitosa de las banderas y la correcta restauración
-    de la FSM al estado de reposo, indicando disponibilidad.
+  \item \textbf{Prueba de lectura/escritura de registros} (Test 1): Se escribe el valor 100 en el registro de duración y se lee posteriormente, obteniendo el mismo valor; análogamente, se escriben y leen sin alteración los registros de desafío (CHAL0 y CHAL1). Todos los pasos se muestran con el marcador \texttt{[PASS]}.
+  
+  \item \textbf{Evaluación única} (Test 2): Se lanza una operación PUF con un desafío fijo y se imprime la respuesta de 128 bits. La salida no es nula, lo que confirma que el núcleo genera una respuesta activa.
+  
+  \item \textbf{Prueba de repetibilidad} (Test 3): Se ejecuta cinco veces la misma operación (mismo desafío y misma duración, $c = 5$ por defecto). Las líneas etiquetadas como \texttt{Run:} muestran respuestas ligeramente diferentes en cada iteración.
+  
+  \item \textbf{Prueba de unicidad} (Test 4): Se comparan las respuestas para dos desafíos distintos. La salida muestra valores claramente diferentes (\texttt{Challenge A resp} vs. \texttt{Challenge B resp}), y el test declara \texttt{[PASS]} al no ser idénticas.
+  
+  \item \textbf{Barrido de duración} (Test 5): Se varía el parámetro de activación \(c\) de 1 a 10, y para cada valor se imprime la respuesta correspondiente. Se aprecia cómo cambia la salida al modificar la duración del pulso de activación.
 \end{enumerate}
 
-Estos resultados con diagnósticos \texttt{ALL PASS} en las 10~corridas certifican
-que el diseño de prioridad concurrente del mapa de registros opera sin anomalías,
-cumpliendo el OE2 con un canal confiable entre CPU y hardware dedicado.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.48\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app1.png}
+  \caption{Resultados obtenidos al ejecutar \texttt{test\_app1}.}
+  \label{fig:results_test_app1}
+\end{figure}
 
 % ---------------------------------------------------------------------------
-\subsection{Prueba de integración del SoC (OE3)}
+\subsection{Prueba de integración del SoC}
 \label{sec:res_oe3}
 
 La prueba integral del SoC se comprobó mediante la ejecución exitosa de la
@@ -251,15 +251,60 @@ transmitiendo los resultados hacia el computador anfitrión.
 
 La ejecución autónoma del protocolo permitió recolectar aproximadamente
 140\,000~respuestas del sistema de forma ininterrumpida. La estabilidad
-operacional lograda a lo largo de las 10~corridas independientes evidencia
+operacional lograda a lo largo de las 10~ejecuciones independientes evidencia
 una comunicación bidireccional USB-UART con cero pérdida de información.
 Esta prueba de resistencia (\textit{end-to-end}) constituye la evidencia
 definitiva del logro exitoso del OE3 y confirma la conformación de un
 sistema embebido estable, apto para el prototipado en seguridad de la
 información.
 
+Los resultados obtenidos para 1 de las 10 ejecuciones independientes de \texttt{test\_app2} se muestran en las Figuras~\ref{fig:results_test_app2_section_1} a~\ref{fig:results_test_app2_section_4}. En primer lugar, la Figura~\ref{fig:results_test_app2_section_1} recoge la verificación de la interfaz de registro y la funcionalidad de reinicio suave (\emph{soft reset}). Se observa que la lectura y escritura de los registros DURATION, CHAL\_0 y CHAL\_3 son correctas, mientras que el registro RESP\_0 se comporta como solo lectura (no permite escritura). Además, el reinicio suave limpia correctamente el bit \texttt{done} del registro de estado. Todos estos tests superan la validación, lo que confirma que el núcleo PLPUF responde adecuadamente a las transacciones del bus AXI y que la integración del sistema es sólida.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.65\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app2_section_1.png}
+  \caption{Verificación de la interfaz de registros y funcionalidad de reinicio suave.}
+  \label{fig:results_test_app2_section_1}
+\end{figure}
+
+La Figura~\ref{fig:results_test_app2_section_2} presenta el barrido de duración de activación \(c\) desde 1 hasta 10. En ella se aprecia claramente la compensación entre fiabilidad y unicidad: para valores pequeños de \(c\) (1 a 4) la fiabilidad es superior al 95\,\% (BER inferior al 5\,\%), mientras que la uniformidad se mantiene muy próxima al 50\,\% ideal. A medida que aumenta \(c\), la fiabilidad desciende gradualmente hasta el 89\,\% para \(c=10\), y el IntraHD (distancia de Hamming intra-dispositivo) crece hasta 15.67, lo que indica una mayor inestabilidad de la respuesta. Por otra parte, el InterHD (distancia de Hamming entre diferentes desafíos) se aleja del 50\,\% ideal a medida que \(c\) aumenta, pasando de un 48.46\,\% en \(c=1\) a un 37.65\,\% en \(c=10\). Esto sugiere que para valores altos de \(c\) la respuesta del PUF se vuelve menos única y más dependiente del desafío.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app2_section_2.png}
+  \caption{Barrido de duración de activación (\(c = 1 \ldots 10\)): uniformidad, fiabilidad, BER, IntraHD e InterHD.}
+  \label{fig:results_test_app2_section_2}
+\end{figure}
+
+La Figura~\ref{fig:results_test_app2_section_3_1} muestra las 50 respuestas crudas obtenidas para el primer desafío con \(c=5\), junto con la respuesta \emph{golden} calculada por mayoría de votos. Se observan pequeñas variaciones entre las diferentes evaluaciones, como era de esperar por la presencia de ruido y metaestabilidad. Estas variaciones son consistentes con el BER de 6.66\,\% reportado en la Figura~\ref{fig:results_test_app2_section_2} para \(c=5\).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app2_section_3_1.png}
+  \caption{Respuestas crudas (50 evaluaciones) y respuesta \emph{golden} (mayoría de votos) para el desafío 0 con \(c = 5\).}
+  \label{fig:results_test_app2_section_3_1}
+\end{figure}
+
+El análisis de estabilidad por bit y el histograma de distancias intra-dispositivo se presentan en la Figura~\ref{fig:results_test_app2_section_3_2}. En el mapa de estabilidad (parte superior) se asigna a cada bit un grado de fiabilidad del 0 (muy ruidoso) al 9 (muy estable). Se observa que 40 de los 128 bits son estables (fiabilidad \(\ge 95\,\%\)) y ningún bit es ruidoso (fiabilidad \(<80\,\%\)), lo que indica un comportamiento aceptable. El histograma de IntraHD (parte inferior) muestra que la mayoría de las distancias de Hamming entre una evaluación fresca y la respuesta \emph{golden} se concentran en los primeros 15 bits, con un máximo de 55 ocurrencias en el rango 5–9. No se registran distancias superiores a 29 bits, lo que confirma que las respuestas son bastante repetibles y que la mayoría de las variaciones son pequeñas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.68\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app2_section_3_2.png}
+  \caption{Mapa de estabilidad por bit (grado 9 = estable, 0 = ruidoso) e histograma de distancias de Hamming intra-dispositivo para \(c = 5\).}
+  \label{fig:results_test_app2_section_3_2}
+\end{figure}
+
+Finalmente, la Figura~\ref{fig:results_test_app2_section_4} evalúa el efecto avalancha para \(c=5\). Se mide la distancia de Hamming entre la respuesta \emph{golden} del desafío base y la obtenida al modificar un único bit del desafío. El promedio de cambio observado es tan solo del 9.13\,\%, muy alejado del 50\,\% ideal que caracterizaría una función criptográficamente fuerte. Esto indica que el PLPUF implementado no presenta un efecto avalancha satisfactorio, lo cual es esperable por tratarse de un PUF basado en osciladores de anillo no lineal (no es una función hash). Este resultado deberá tenerse en cuenta si se pretende utilizar el PUF en aplicaciones que requieran una alta sensibilidad al cambio del desafío.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Documento_TFG_EmanuelMarin/fig/results_test_app2_section_4.png}
+  \caption{Efecto avalancha para \(c = 5\): distancia de Hamming (en bits y porcentaje) al modificar cada bit del desafío.}
+  \label{fig:results_test_app2_section_4}
+\end{figure}
+
 % ---------------------------------------------------------------------------
-\subsection{Resultados de la evaluación de seguridad (OE4)}
+\subsection{Resultados de la evaluación de seguridad}
 \label{sec:res_oe4}
 
 Es importante señalar que todas las pruebas corresponden a una evaluación
@@ -268,7 +313,7 @@ Es importante señalar que todas las pruebas corresponden a una evaluación
 placas adicionales fue declarada en la Sección~\ref{chp:intro}. La unicidad se
 estima indirectamente mediante la distancia de Hamming inter-desafío.
 Los valores reportados a continuación corresponden a la media $\pm$
-desviación estándar calculadas sobre las 10~corridas independientes.
+desviación estándar calculadas sobre las 10~ejecuciones independientes.
 
 \subsubsection{Resultados del barrido de duración}
 
@@ -279,7 +324,7 @@ presenta estos mismos datos de forma gráfica.
 \begin{table}[htbp]
 \centering
 \caption{Resultados del barrido de duración (media $\pm$ desviación estándar,
-  $n=10$ corridas, 20~desafíos $\times$ 50~repeticiones por corrida).}
+  $n=10$ ejecuciones, 20~desafíos $\times$ 50~repeticiones por corrida).}
 \label{tab:sweep_results}
 \small
 \renewcommand{\arraystretch}{1.2}
@@ -312,7 +357,7 @@ $c$ &
   \includegraphics[width=\textwidth]{fig/res_summary_4panel.pdf}
   \caption{Resumen de métricas del PLPUF en función de la duración de
     activación~$c$. Las barras de error representan $\pm 1\sigma$ sobre
-    10~corridas independientes. (a)~Uniformidad, (b)~confiabilidad,
+    10~ejecuciones independientes. (a)~Uniformidad, (b)~confiabilidad,
     (c)~HD intra-dispositivo, (d)~HD inter-desafío.}
   \label{fig:res_summary}
 \end{figure}
@@ -330,7 +375,7 @@ comprobando el requerimiento analizado en la Sección~\ref{sec:res_oe1}.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{fig/res_uniformity.pdf}
+  \includegraphics[width=0.76\textwidth]{fig/res_uniformity.pdf}
   \caption{Uniformidad del PLPUF en función de la duración de activación~$c$
     (media $\pm 1\sigma$, $n=10$). La línea discontinua roja indica el valor
     ideal de 50\,\%.}
@@ -387,7 +432,7 @@ diversidad criptográfica en la firma de salida del PLPUF.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{fig/res_inter_hd.pdf}
+  \includegraphics[width=0.78\textwidth]{fig/res_inter_hd.pdf}
   \caption{Distancia de Hamming inter-desafío (como porcentaje de los
     128~bits) en función de la duración de activación~$c$ (media $\pm
     1\sigma$, $n=10$). La línea discontinua roja indica el ideal de 50\,\%.}
@@ -397,7 +442,7 @@ diversidad criptográfica en la firma de salida del PLPUF.
 \subsubsection{Análisis detallado a $c = 5$ y efecto avalancha}
 
 La duración $c = 5$ se seleccionó como punto representativo de análisis medio.
-Un análisis del mapa de estabilidad sobre las 10~corridas indicó un promedio
+Un análisis del mapa de estabilidad sobre las 10~ejecuciones indicó un promedio
 de $39.5 \pm 3.8$ bits altamente estables y apenas $0.5 \pm 0.5$ bits
 sistemáticamente ruidosos, requiriendo algoritmos correctores (Helper Data)
 para estabilización determinista en aplicaciones prácticas. El histograma
@@ -412,7 +457,7 @@ arquitectónicas del polinomio matemático de estructura Fibonacci implementado
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{fig/res_avalanche.pdf}
+  \includegraphics[width=0.80\textwidth]{fig/res_avalanche.pdf}
   \caption{Efecto avalancha del PLPUF a $c = 5$: porcentaje de bits que
     cambian en la respuesta al invertir un solo bit del desafío (media $\pm
     1\sigma$, $n=10$). La línea discontinua roja indica el ideal de 50\,\% y
