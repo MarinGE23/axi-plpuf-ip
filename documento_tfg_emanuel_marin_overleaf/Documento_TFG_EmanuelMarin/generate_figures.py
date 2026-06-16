@@ -129,7 +129,7 @@ ax.errorbar(durations, mean, yerr=std, fmt="o-", capsize=4,
             linewidth=1.8, label="Uniformidad promedio ($n=10$)")
 ax.axhline(50, color="#DC2626", linestyle="--", linewidth=1.2,
            label="Ideal (50\\%)")
-ax.set_xlabel("Duración de activación $c$")
+ax.set_xlabel("Duración de activación $c$ (ciclos de reloj)")
 ax.set_ylabel("Uniformidad (\\%)")
 ax.set_xticks(durations)
 ax.set_ylim(44, 54)
@@ -149,7 +149,7 @@ s_ber = ber.std(axis=0)
 ax1.errorbar(durations, m_rel, yerr=s_rel, fmt="s-", capsize=4,
              color="#2563EB", markerfacecolor="white", markeredgewidth=1.5,
              linewidth=1.8, label="Confiabilidad")
-ax1.set_xlabel("Duración de activación $c$")
+ax1.set_xlabel("Duración de activación $c$ (ciclos de reloj)")
 ax1.set_ylabel("Confiabilidad (\\%)", color="#2563EB")
 ax1.tick_params(axis="y", labelcolor="#2563EB")
 ax1.set_xticks(durations)
@@ -181,7 +181,7 @@ ax.errorbar(durations, m_intra, yerr=s_intra, fmt="D-", capsize=4,
             linewidth=1.8, label="HD intra-dispositivo promedio ($n=10$)")
 ax.axhline(0, color="#059669", linestyle="--", linewidth=1.2,
            label="Ideal (0 bits)")
-ax.set_xlabel("Duración de activación $c$")
+ax.set_xlabel("Duración de activación $c$ (ciclos de reloj)")
 ax.set_ylabel("HD intra-dispositivo (bits)")
 ax.set_xticks(durations)
 ax.set_ylim(-1, 20)
@@ -201,7 +201,7 @@ ax.errorbar(durations, m_inter, yerr=s_inter, fmt="o-", capsize=4,
             label="HD inter-desafío promedio ($n=10$)")
 ax.axhline(50, color="#DC2626", linestyle="--", linewidth=1.2,
            label="Ideal (50\\%)")
-ax.set_xlabel("Duración de activación $c$")
+ax.set_xlabel("Duración de activación $c$ (ciclos de reloj)")
 ax.set_ylabel("HD inter-desafío (\\%)")
 ax.set_xticks(durations)
 ax.set_ylim(34, 54)
@@ -230,7 +230,7 @@ ax.axhline(50, color="#DC2626", linestyle="--", linewidth=1.2,
            label="Ideal (50\\%)")
 ax.axhline(avg_aval, color="#059669", linestyle="-.", linewidth=1.5,
            label=f"Promedio observado ({avg_aval:.2f}\\%)")
-ax.set_xlabel("Posición del bit invertido en el desafío")
+ax.set_xlabel("Posición del bit invertido en el desafío (índice de bit)")
 ax.set_ylabel("Cambio en la respuesta (\\%)")
 ax.set_xticks(range(0, num_bits, 4))
 ax.set_ylim(0, 55)
@@ -265,7 +265,7 @@ ax.errorbar(durations, intra_hd.mean(0), yerr=intra_hd.std(0),
             fmt="D-", capsize=3, color="#7C3AED", markerfacecolor="white",
             markeredgewidth=1.2, linewidth=1.5)
 ax.set_ylabel("HD intra (bits)")
-ax.set_xlabel("Duración $c$")
+ax.set_xlabel("Duración $c$ (ciclos)")
 ax.set_ylim(-1, 20)
 ax.set_title("(c) HD intra-dispositivo")
 
@@ -275,7 +275,7 @@ ax.errorbar(durations, inter_hd_pct.mean(0), yerr=inter_hd_pct.std(0),
             markeredgewidth=1.2, linewidth=1.5)
 ax.axhline(50, color="#DC2626", ls="--", lw=1)
 ax.set_ylabel("HD inter-desafío (\\%)")
-ax.set_xlabel("Duración $c$")
+ax.set_xlabel("Duración $c$ (ciclos)")
 ax.set_ylim(34, 54)
 ax.set_title("(d) HD inter-desafío")
 
