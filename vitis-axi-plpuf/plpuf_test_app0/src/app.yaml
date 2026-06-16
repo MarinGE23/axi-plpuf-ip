@@ -1,0 +1,4 @@
+domain_path: C:\Users\emari\Desktop\axi-plpuf-ip\vitis-axi-plpuf\platform\export\platform\sw\standalone_microblaze_riscv_0
+app_src_dir: C:\Xilinx\2025.1\Vitis\data\embeddedsw\lib\sw_apps\hello_world
+template: hello_world
+lang: c

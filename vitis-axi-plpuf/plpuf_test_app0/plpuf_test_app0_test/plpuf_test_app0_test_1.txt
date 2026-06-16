@@ -1,0 +1,52 @@
+Opened with baud rate: 9600
+
+========================================
+   PLPUF Bare-Metal Validation Test
+   (raw MMIO, no BSP / no Xil_* / no stdio)
+========================================
+
+PLPUF base = 0x44a00000
+UART  base = 0x40600000
+
+--- Test 1: Register read/write ---
+  Wrote DURATION=100, read back=100 [PASS]
+  Wrote CHAL0=0xAAAAAAAA, read=0xaaaaaaaa [PASS]
+  Wrote CHAL1=0xBBBBBBBB, read=0xbbbbbbbb [PASS]
+
+--- Test 2: Single evaluation ---
+  Response: 6a072198_c4533f4d_db6d515a_67616533
+  Hamming weight = 63 / 128
+  Non-zero response [PASS]
+
+--- Test 3: Repeatability (5 runs, same challenge) ---
+  Run: 6a072b98_c5512d45_db6d515a_67616533
+  Run: 6a172198_c4532d5d_db69555a_e7616d37
+  Run: 6a072998_c4532f4d_db69555a_67616533
+  Run: 6a972199_84536f1d_5b69575a_c5636d37
+  Run: 6a172198_c4536d5d_db69575a_c7616d37
+  Golden (majority): 6a172198_c4532d5d_db69555a_e7616d37
+  Max bit drift = 12 / 128 bits
+  Reliability   = 95 %
+  Repeatability (similarity) [PASS]
+
+--- Test 4: Different challenge ---
+  Challenge A resp: 6a072198_c4533f4d_db6d515a_67616533
+  Challenge B resp: 22e222b9_557967f5_5455d55d_45f5a80f
+  Different responses [PASS]
+
+--- Test 5: Duration sweep (c = 1..10) ---
+  c= 1: feca26b5_054931a9_2511579b_100b72ca
+  c= 2: 2da7a686_9b5514b3_9ad75335_5b3da1b7
+  c= 3: 0eb6ca23_77496d51_4b393925_765591d2
+  c= 4: 380a8b0d_99d45db6_d554b736_34d7355b
+  c= 5: 6a016b98_c5513544_db6d515a_67616533
+  c= 6: 69faa136_d5515176_d45db4d5_75a75396
+  c= 7: 1ceac48b_3d4f5511_573d55d3_49555b31
+  c= 8: a1cd4fae_695f7585_c3517755_11249535
+  c= 9: 6aa21ccc_c15c6d89_59547554_c9551249
+  c=10: 03eaab16_59550516_d1f5155c_755455d1
+
+========================================
+   Bare-metal test complete
+   PLPUF driven purely via AXI4-Lite MMIO
+========================================

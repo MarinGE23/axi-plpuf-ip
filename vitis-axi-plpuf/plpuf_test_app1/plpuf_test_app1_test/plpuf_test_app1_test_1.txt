@@ -1,0 +1,43 @@
+========================================
+   PLPUF Basic Validation Test
+========================================
+
+[INIT] Driver initialized, base = 0x44A00000
+
+--- Test 1: Register read/write ---
+  Wrote duration = 100, read back = 100  [PASS]
+  Wrote CHAL0=0xAAAAAAAA, read=0xAAAAAAAA  [PASS]
+  Wrote CHAL1=0xBBBBBBBB, read=0xBBBBBBBB  [PASS]
+
+--- Test 2: Single evaluation ---
+  Response: 6A072B98_C4513D4D_DB6D515A_67616533
+  Non-zero response: [PASS]
+
+--- Test 3: Repeatability (5 runs, same challenge) ---
+  Run: 6A072998_C451394D_DB6D555A_67616533
+  Run: 6A072198_C4536D4D_DB69575A_67616D37
+  Run: 6A016A98_C5513544_DB6D515A_67296533
+  Run: 6A017A98_C5512544_DB6D515A_67296533
+  Run: 6A072198_C4533D4D_DB69575A_67616533
+  Repeatability: [FAIL - responses differ]
+
+--- Test 4: Different challenge ---
+  Challenge A resp: 6A072B98_C4513D4D_DB6D515A_67616533
+  Challenge B resp: 026B6AE8_590527D1_D5545555_670FE461
+  Different responses: [PASS]
+
+--- Test 5: Duration sweep (c = 1..10) ---
+  c= 1: FECA26B5_054931A9_2511579B_100B72CA
+  c= 2: 29A7A686_9B5714B7_9AD75335_5335A1B7
+  c= 3: 0F96DA27_77496D55_4B393965_665593D2
+  c= 4: 380A0B0D_9DD45DB6_D554B716_34D7355B
+  c= 5: 6A972199_84536D5D_DB69575A_C5636D37
+  c= 6: 69FAA136_55515177_D45DB4D5_75A71396
+  c= 7: 16C29D8E_3D4C5471_172D5D52_5B575A67
+  c= 8: B1870FAF_094D7494_C3D177D5_5124D514
+  c= 9: 68AA1C7E_414F2C9F_5D557114_415DD349
+  c=10: 036AAB16_59511516_D8D51554_555C1551
+
+========================================
+   Test complete
+========================================
